@@ -42,6 +42,27 @@ class Actividad extends CActiveRecord
 	{
 		return 'actividad';
 	}
+        
+        //Se habilita extension CAdvancedArBehavior para relación m:m
+        public function behaviors(){
+          return array( 'CAdvancedArBehavior' => array(
+            'class' => 'application.extensions.CAdvancedArBehavior'));
+        }
+        
+        //arreglo con indicadores seleccionados en form
+        public $IndicadoresIds = array();
+        
+        //se agregan id de indicadores seleccionados en el arreglo IndicadoresIds
+        public function afterFind()
+        {
+            if (!empty($this->indicadores))
+            {
+                foreach ($this->indicadores as $n => $indicador)
+                    $this->IndicadoresIds[] = $indicador->id_indicador;
+            }
+
+            parent::afterFind();
+        }
 
 	/**
 	 * @return array validation rules for model attributes.
