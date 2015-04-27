@@ -1,6 +1,8 @@
 <?php $form=$this->beginWidget('booster.widgets.TbActiveForm',array(
 	'id'=>'planificacion-form',
 	'enableAjaxValidation'=>false,
+        'htmlOptions' => array(
+        'enctype' => 'multipart/form-data')
 )); ?>
 
 <p class="help-block">Datos con <span class="required">*</span> son requeridos.</p>
@@ -37,7 +39,8 @@
             $end_child="]},]},";  
             $oa=OA::model()->findAll("id_asignatura='LE01'");
             $string_indicadores='';
-
+            
+            //Form de Creacion
             if ($model->id_planificacion==null){
                 foreach ($oa as $data){
                     $codigooa=substr($data->id_OA,4,8);
@@ -51,6 +54,7 @@
                     $string_indicadores='';
                 }                
             }
+            //Form de Update
             else{
                 $var=array();
                 $indicadores_seleccionados=PlanificacionTieneIndicador::model()->findAll("id_planificacion=".$model->id_planificacion);
@@ -163,14 +167,47 @@
 	<?php echo $form->textAreaGroup($model,'conocimientos', array('widgetOptions'=>array('htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'span8')))); ?>
 
 	<?php //echo $form->textFieldGroup($model,'id_evaluacion',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5')))); ?>
-        <label class="control-label">Evaluación</label>        
+<label class="control-label">Evaluación</label></br>       
         <?php echo $form->dropDownList($model,'id_evaluacion', CHtml::listData(Evaluacion::model()->findAll(), 'id_evaluacion','nombre_evaluacion'),array('empty'=>'Seleccione Evaluación')); ?> 
-        
-<div class="form-actions">
+</br>
+            <?php
+            //Form de Update
+            if ($model->id_planificacion!=null){
+                $cont=1;
+                $checkbox='';
+                $material_apoyo=MaterialApoyo::model()->findAll("id_planificacion=".$model->id_planificacion);
+                foreach($material_apoyo as $doc){
+                    $checkbox=$checkbox.'<input type="checkbox" name="Planificacion[id_doc'.$cont.']" value='.'"'.$doc->id_material_apoyo.'"'.'/>';               
+                    $checkbox=$checkbox.'<a href='.'"'.$doc->url.'"'.'target="_blank">'.$doc->nombre_material_apoyo.'</a><br/>';
+                    $cont=$cont+1;
+                }
+                if($cont>1){
+                    echo '</br><label class="control-label">Eliminar - Material de Apoyo</label></br>';
+                    echo $checkbox;               
+                }
+                
+            }
+            ?>
+</br><label class="control-label">Agregar - Material de Apoyo</label></br>
+<?php
+            
+            $this->widget('CMultiFileUpload', array(
+                'model'=>$model,
+                        'name'=>'Planificacion',
+                'attribute'=>'Planificacion',
+                'accept'=>'jpg|gif|png|doc|docx|xls|xlsx|ppt|pptx|pdf',
+                'options'=>array(),
+                'denied'=>'Archivo no soportado',
+                'max'=>10, // max 10 files  
+                        'duplicate'=>'Archivo duplicado',
+  		));
+            ?>
+    
+<div class="form-actions"></br></p>
 	<?php $this->widget('booster.widgets.TbButton', array(
 			'buttonType'=>'submit',
 			'context'=>'primary',
-			'label'=>$model->isNewRecord ? 'Crear Planificación' : 'Save',
+			'label'=>$model->isNewRecord ? 'Crear Planificación' : 'Modificar Planificación',
 		)); ?>
 </div>
 

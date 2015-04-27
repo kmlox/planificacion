@@ -64,10 +64,13 @@ class PlanificacionController extends Controller
 	{
             PlanificacionController::loadjscss();
             $model=new Planificacion;
-
+            
+         
             if(isset($_POST['Planificacion']))
             {
 		$model->attributes=$_POST['Planificacion'];
+                
+                
 		if($model->save())
                 {
                     /*Se agrega relación m:m dentro del if save() ya que de esta forma se 
@@ -87,6 +90,58 @@ class PlanificacionController extends Controller
                         }
                         $tok = strtok(" ,");  
                     }
+                    
+                    //SUBIR ARCHIVOS
+                    $archivos = CUploadedFile::getInstancesByName('Planificacion');
+                    
+                    //Se consulta que la cantidad de archivos sea superior a cero para realizar subida
+                    if (isset($archivos) && count($archivos) > 0) {
+                        // Procedimiento de subida de archivos
+                        foreach ($archivos as $doc => $pic) {
+                            //borrar?echo $pic->name.'<br />';
+                            //Ruta donde se almacena archivo /user-documents/%id_usuario/%id_planificacion
+                            $ruta='/user-documents/'.Yii::app()->user->name.'/'.$id_planificacion.'/';
+                            $path=Yii::getPathOfAlias('webroot').$ruta;
+                            $namedoc=$pic->name;
+                                                        
+                            /*Utiliza tabulador y nueva línea como caracteres de tokenización 
+                            para quitar espacio en el nombre del archivo */
+                            $url='';
+                            $tok2 = strtok($namedoc, " ");
+                            while ($tok2 !== false) {
+                                if($url==''){
+                                    $url=$tok2;
+                                }
+                                else{
+                                     $url=$url.'%20'.$tok2;
+                                }                               
+                                $tok2 = strtok("");  
+                            }
+                            
+                            //crea carpeta si no existe
+                            if(!is_dir($path))
+                            {
+                                //comandos php
+                                mkdir($path,0,true);
+                                chmod($path,0775);
+                            }
+
+                            if ($pic->saveAs($path.$namedoc)){
+                                // Se almacenan los archivos y se almacena en el modelo
+
+                                $img_add = new Planificacion();
+                                $img_add->save(); // Realizado
+                                
+                                Yii::app()->db->createCommand()->insert('material_apoyo',
+                                array('id_planificacion'=>$id_planificacion,'url'=>'/planificacion'.$ruta.$url,'nombre_material_apoyo'=>$namedoc));
+                            }
+                            else{
+                                //Si existe algun error en la subida
+                                echo 'Error al subir archivos';
+                            }
+                        }
+                    }
+                   
                     $this->redirect(array('view','id'=>$model->id_planificacion));
                 }
             }
@@ -125,7 +180,74 @@ class PlanificacionController extends Controller
                        $tok = strtok(" ,");                            
                    }
                 }
-               
+                
+                //SUBIR ARCHIVOS
+                $archivos = CUploadedFile::getInstancesByName('Planificacion');
+                    
+                //Se consulta que la cantidad de archivos sea superior a cero para realizar subida
+                if (isset($archivos) && count($archivos) > 0) {
+                    // Procedimiento de subida de archivos
+                    foreach ($archivos as $doc => $pic) {
+                        //borrar?echo $pic->name.'<br />';
+                        //Ruta donde se almacena archivo /user-documents/%id_usuario/%id_planificacion
+                        $ruta='/user-documents/'.Yii::app()->user->name.'/'.$id_planificacion.'/';
+                        $path=Yii::getPathOfAlias('webroot').$ruta;
+                        $namedoc=$pic->name;
+                                                        
+                        /*Utiliza tabulador y nueva línea como caracteres de tokenización 
+                        para quitar espacio en el nombre del archivo */
+                        $url='';
+                        $tok2 = strtok($namedoc, " ");
+                        while ($tok2 !== false) {
+                            if($url==''){
+                                $url=$tok2;
+                            }
+                            else{
+                                $url=$url.'%20'.$tok2;
+                            }                               
+                            $tok2 = strtok("");  
+                        }
+                            
+                        //crea carpeta si no existe
+                        if(!is_dir($path))
+                        {
+                            //comandos php
+                            mkdir($path,0,true);
+                            chmod($path,0775);
+                        }                        
+                        if ($pic->saveAs($path.$namedoc)){
+                            // Se almacenan los archivos y se almacena en el modelo
+                            $img_add = new Planificacion();
+                            $img_add->save(); // Realizado
+                            
+                            //Se almacenan las url codificada en la tabla material_apoyo
+                            Yii::app()->db->createCommand()->insert('material_apoyo',
+                            array('id_planificacion'=>$id_planificacion,'url'=>'/planificacion'.$ruta.$url,'nombre_material_apoyo'=>$namedoc));
+                        }
+                        else{
+                            //Si existe algun error en la subida
+                            echo 'Error al subir archivos';
+                        }
+                    }
+                }
+                   
+                //ELIMINAR ARCHIVOS
+                $cont=1;
+                while(!empty($_POST['Planificacion']['id_doc'.$cont])) {
+                    Yii::app()->db->createCommand()->delete('material_apoyo','id_material_apoyo=:id', array(':id'=>$_POST['Planificacion']['id_doc'.$cont]));                                
+                    $cont=$cont+1;
+                }
+                /*
+                $id_doc=$_POST['Planificacion']['id_doc'];
+                Yii::app()->db->createCommand()->delete('material_apoyo','id_material_apoyo=:id', array(':id'=>$id_doc));                                
+                */
+                
+                if(!empty($_POST['Planificacion']['id_doc'])) {
+                    while(!empty($_POST['Planificacion']['id_doc'])) {
+                        Yii::app()->db->createCommand()->delete('material_apoyo','id_material_apoyo=:id', array(':id'=>$_POST['Planificacion']['id_doc']));                                
+                    }
+                }
+                
                 if($model->save())
                     $this->redirect(array('view','id'=>$model->id_planificacion));
             }

@@ -126,7 +126,7 @@ class Planificacion extends CActiveRecord
 			'cMOs' => array(self::MANY_MANY, 'CMO', 'planificacion_tiene_CMO(id_planificacion, id_CMO)'),
 			'oFVs' => array(self::MANY_MANY, 'OFV', 'planificacion_tiene_OFV(id_planificacion, id_OFV)'),
 			'indicadors' => array(self::MANY_MANY, 'Indicador', 'planificacion_tiene_indicador(id_planificacion, id_indicador)'),
-			'materialApoyos' => array(self::MANY_MANY, 'MaterialApoyo', 'planificacion_tiene_material_apoyo(id_planificacion, id_material_apoyo)'),
+			'materialApoyos' => array(self::HAS_MANY, 'MaterialApoyo','id_planificacion'),
 			'revisions' => array(self::HAS_MANY, 'Revision', 'id_planificacion'),
                         'relUsuario'=> array(self::BELONGS_TO, 'Usuario', 'id_profesor'),
                 );
