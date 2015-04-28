@@ -51,6 +51,7 @@ return false;
 		'fecha',
 		/*
 		'contenido',
+		'nombre_documento',
 		'url_documento',
 		*/
 array(

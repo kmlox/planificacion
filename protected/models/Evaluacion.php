@@ -11,14 +11,15 @@
  * @property string $nombre_evaluacion
  * @property string $fecha
  * @property string $contenido
+ * @property string $nombre_documento
  * @property string $url_documento
  *
  * The followings are the available model relations:
- * @property Actividad[] $actividads
  * @property Calificacion[] $calificacions
  * @property Asignatura $idAsignatura
  * @property Curso $idCurso
  * @property Profesor $idProfesor
+ * @property Planificacion[] $planificacions
  */
 class Evaluacion extends CActiveRecord
 {
@@ -43,10 +44,11 @@ class Evaluacion extends CActiveRecord
 			array('id_asignatura', 'length', 'max'=>4),
 			array('id_curso', 'length', 'max'=>3),
 			array('nombre_evaluacion', 'length', 'max'=>45),
+			array('nombre_documento', 'length', 'max'=>100),
 			array('url_documento', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_evaluacion, id_profesor, id_asignatura, id_curso, nombre_evaluacion, fecha, contenido, url_documento', 'safe', 'on'=>'search'),
+			array('id_evaluacion, id_profesor, id_asignatura, id_curso, nombre_evaluacion, fecha, contenido, nombre_documento, url_documento', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,11 +60,11 @@ class Evaluacion extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'actividads' => array(self::HAS_MANY, 'Actividad', 'id_evaluacion'),
 			'calificacions' => array(self::HAS_MANY, 'Calificacion', 'id_evaluacion'),
 			'idAsignatura' => array(self::BELONGS_TO, 'Asignatura', 'id_asignatura'),
 			'idCurso' => array(self::BELONGS_TO, 'Curso', 'id_curso'),
 			'idProfesor' => array(self::BELONGS_TO, 'Profesor', 'id_profesor'),
+			'planificacions' => array(self::HAS_MANY, 'Planificacion', 'id_evaluacion'),
 		);
 	}
 
@@ -79,6 +81,7 @@ class Evaluacion extends CActiveRecord
 			'nombre_evaluacion' => 'Nombre Evaluacion',
 			'fecha' => 'Fecha',
 			'contenido' => 'Contenido',
+			'nombre_documento' => 'Nombre Documento',
 			'url_documento' => 'Url Documento',
 		);
 	}
@@ -108,6 +111,7 @@ class Evaluacion extends CActiveRecord
 		$criteria->compare('nombre_evaluacion',$this->nombre_evaluacion,true);
 		$criteria->compare('fecha',$this->fecha,true);
 		$criteria->compare('contenido',$this->contenido,true);
+		$criteria->compare('nombre_documento',$this->nombre_documento,true);
 		$criteria->compare('url_documento',$this->url_documento,true);
 
 		return new CActiveDataProvider($this, array(

@@ -28,7 +28,7 @@ return false;
 <p>
 	Puede ocupar opcionalmente estos operadores (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>
 		&lt;&gt;</b>
-	or <b>=</b>) al principio de cada valor de búsqueda.
+	o <b>=</b>) al principio de cada valor de búsqueda.
 </p>
 
 <?php /* 

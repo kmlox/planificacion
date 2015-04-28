@@ -29,6 +29,10 @@
 	<br />
 
 	<?php /*
+	<b><?php echo CHtml::encode($data->getAttributeLabel('nombre_documento')); ?>:</b>
+	<?php echo CHtml::encode($data->nombre_documento); ?>
+	<br />
+
 	<b><?php echo CHtml::encode($data->getAttributeLabel('url_documento')); ?>:</b>
 	<?php echo CHtml::encode($data->url_documento); ?>
 	<br />

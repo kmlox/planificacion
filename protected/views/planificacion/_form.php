@@ -1,6 +1,7 @@
 <?php $form=$this->beginWidget('booster.widgets.TbActiveForm',array(
 	'id'=>'planificacion-form',
 	'enableAjaxValidation'=>false,
+        //activar widget subir archivos
         'htmlOptions' => array(
         'enctype' => 'multipart/form-data')
 )); ?>
@@ -171,6 +172,7 @@
         <?php echo $form->dropDownList($model,'id_evaluacion', CHtml::listData(Evaluacion::model()->findAll(), 'id_evaluacion','nombre_evaluacion'),array('empty'=>'Seleccione Evaluación')); ?> 
 </br>
             <?php
+            
             //Form de Update
             if ($model->id_planificacion!=null){
                 $cont=1;
@@ -183,12 +185,26 @@
                 }
                 if($cont>1){
                     echo '</br><label class="control-label">Eliminar - Material de Apoyo</label></br>';
-                    echo $checkbox;               
+                    echo $checkbox;                     
                 }
-                
             }
             ?>
-</br><label class="control-label">Agregar - Material de Apoyo</label></br>
+</br><label class="control-label">Agregar - Material de Apoyo</label>
+            <?php
+            $this->widget(
+                'booster.widgets.TbButton',
+                array(
+                    'label' => 'Detalles',
+                    'size' => 'extra_small',
+                    'context' => 'primary',
+                    'htmlOptions' => array(
+                        'onclick' => 'js:bootbox.alert("<strong>Soporta archivos:</strong></p>jpg, gif, png, doc, docx, xls, xlsx, ppt, pptx, pdf</p></p>'
+                        . '<strong>Máximo: 10 archivos en total</strong>")'
+                    ),
+                )
+            );
+            ?>
+</br>
 <?php
             
             $this->widget('CMultiFileUpload', array(
@@ -198,8 +214,8 @@
                 'accept'=>'jpg|gif|png|doc|docx|xls|xlsx|ppt|pptx|pdf',
                 'options'=>array(),
                 'denied'=>'Archivo no soportado',
-                'max'=>10, // max 10 files  
-                        'duplicate'=>'Archivo duplicado',
+                'max'=>10, // Máximo 10 archivos  
+                'duplicate'=>'Archivo duplicado',
   		));
             ?>
     

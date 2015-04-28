@@ -17,6 +17,8 @@
 
 		<?php echo $form->textAreaGroup($model,'contenido', array('widgetOptions'=>array('htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'span8')))); ?>
 
+		<?php echo $form->textFieldGroup($model,'nombre_documento',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>100)))); ?>
+
 		<?php echo $form->textAreaGroup($model,'url_documento', array('widgetOptions'=>array('htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'span8')))); ?>
 
 	<div class="form-actions">

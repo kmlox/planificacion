@@ -25,6 +25,7 @@ array('label'=>'Manage Evaluacion','url'=>array('admin')),
 		'nombre_evaluacion',
 		'fecha',
 		'contenido',
+		'nombre_documento',
 		'url_documento',
 ),
 )); ?>

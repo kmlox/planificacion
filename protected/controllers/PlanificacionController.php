@@ -98,9 +98,8 @@ class PlanificacionController extends Controller
                     if (isset($archivos) && count($archivos) > 0) {
                         // Procedimiento de subida de archivos
                         foreach ($archivos as $doc => $pic) {
-                            //borrar?echo $pic->name.'<br />';
                             //Ruta donde se almacena archivo /user-documents/%id_usuario/%id_planificacion
-                            $ruta='/user-documents/'.Yii::app()->user->name.'/'.$id_planificacion.'/';
+                            $ruta='/user-documents/'.Yii::app()->user->name.'/planificacion/'.$id_planificacion.'/';
                             $path=Yii::getPathOfAlias('webroot').$ruta;
                             $namedoc=$pic->name;
                                                         
@@ -122,8 +121,8 @@ class PlanificacionController extends Controller
                             if(!is_dir($path))
                             {
                                 //comandos php
-                                mkdir($path,0,true);
-                                chmod($path,0775);
+                                mkdir($path,0777,true);
+                                chmod($path,0777);
                             }
 
                             if ($pic->saveAs($path.$namedoc)){
@@ -183,15 +182,13 @@ class PlanificacionController extends Controller
                 
                 //SUBIR ARCHIVOS
                 $archivos = CUploadedFile::getInstancesByName('Planificacion');
-                    
+                $ruta='/user-documents/'.Yii::app()->user->name.'/planificacion/'.$id_planificacion.'/';
+                $path=Yii::getPathOfAlias('webroot').$ruta;         
                 //Se consulta que la cantidad de archivos sea superior a cero para realizar subida
                 if (isset($archivos) && count($archivos) > 0) {
                     // Procedimiento de subida de archivos
                     foreach ($archivos as $doc => $pic) {
-                        //borrar?echo $pic->name.'<br />';
                         //Ruta donde se almacena archivo /user-documents/%id_usuario/%id_planificacion
-                        $ruta='/user-documents/'.Yii::app()->user->name.'/'.$id_planificacion.'/';
-                        $path=Yii::getPathOfAlias('webroot').$ruta;
                         $namedoc=$pic->name;
                                                         
                         /*Utiliza tabulador y nueva línea como caracteres de tokenización 
@@ -212,8 +209,8 @@ class PlanificacionController extends Controller
                         if(!is_dir($path))
                         {
                             //comandos php
-                            mkdir($path,0,true);
-                            chmod($path,0775);
+                            mkdir($path,0777,true);
+                            chmod($path,0777);
                         }                        
                         if ($pic->saveAs($path.$namedoc)){
                             // Se almacenan los archivos y se almacena en el modelo
@@ -234,20 +231,15 @@ class PlanificacionController extends Controller
                 //ELIMINAR ARCHIVOS
                 $cont=1;
                 while(!empty($_POST['Planificacion']['id_doc'.$cont])) {
+                    //eliminar archivo carpeta
+                    $url_doc=  MaterialApoyo::model()->findbyPk($_POST['Planificacion']['id_doc'.$cont])->nombre_material_apoyo;
+                    unlink($path.$url_doc);
+                    //eliminar archivo de la tabla material_apoyo
                     Yii::app()->db->createCommand()->delete('material_apoyo','id_material_apoyo=:id', array(':id'=>$_POST['Planificacion']['id_doc'.$cont]));                                
                     $cont=$cont+1;
                 }
-                /*
-                $id_doc=$_POST['Planificacion']['id_doc'];
-                Yii::app()->db->createCommand()->delete('material_apoyo','id_material_apoyo=:id', array(':id'=>$id_doc));                                
-                */
-                
-                if(!empty($_POST['Planificacion']['id_doc'])) {
-                    while(!empty($_POST['Planificacion']['id_doc'])) {
-                        Yii::app()->db->createCommand()->delete('material_apoyo','id_material_apoyo=:id', array(':id'=>$_POST['Planificacion']['id_doc']));                                
-                    }
-                }
-                
+               
+                //redireccion
                 if($model->save())
                     $this->redirect(array('view','id'=>$model->id_planificacion));
             }
@@ -265,7 +257,15 @@ class PlanificacionController extends Controller
 	public function actionDelete($id)
 	{
 		$this->loadModel($id)->delete();
-
+                //elimina carpeta donde se alojan documentos de la planificacion a eliminar
+                $id_planificacion= $id;  
+                $ruta='/user-documents/'.Yii::app()->user->name.'/planificacion/'.$id_planificacion;
+                $path=Yii::getPathOfAlias('webroot').$ruta;         
+                if (file_exists($path)) {
+                    //elimina por comando carpeta de archivos
+                    system('rm -rf ' . escapeshellarg($path));
+                }
+               
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
