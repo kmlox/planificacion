@@ -7,38 +7,70 @@
 )); ?>
 
 <p class="help-block">Datos con <span class="required">*</span> son requeridos.</p>
-
-<?php echo $form->errorSummary($model); ?>
-
+        <?php echo "FORM 2"?>
+        <?php echo $form->errorSummary($model); ?>
+    
 	<?php //id del profesor agregado de forma automática con variable sesion
         echo $form->hiddenField($model,'id_profesor', array('type'=>"hidden",'value'=>Yii::app()->user->name,)); ?>
 	
-	<?php echo $form->textFieldGroup($model,'id_asignatura',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>4)))); ?>
-
-	<?php echo $form->textFieldGroup($model,'id_grado',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>2)))); ?>
-
-	<?php echo $form->textFieldGroup($model,'id_curso',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>3)))); ?>
-
-	<?php echo $form->textFieldGroup($model,'fecha_creacion',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5')))); ?>
-
-	<?php echo $form->textFieldGroup($model,'fecha_modificacion',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5')))); ?>
-
-	<?php echo $form->textFieldGroup($model,'tipo',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>10)))); ?>
-
-	<?php echo $form->textFieldGroup($model,'estado',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>10)))); ?>
-
+	<?php //echo $form->textFieldGroup($model,'id_asignatura',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>4)))); 
+        echo $form->hiddenField($model,'id_asignatura', array('type'=>"hidden",'value'=>$id_asignatura)); ?>
+	
+	<?php //echo $form->textFieldGroup($model,'id_grado',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>2)))); 
+        echo $form->hiddenField($model,'id_grado', array('type'=>"hidden",'value'=>$id_grado)); ?>
+	
+	<?php //echo $form->textFieldGroup($model,'id_curso',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>3)))); 
+        echo $form->hiddenField($model,'id_curso', array('type'=>"hidden",'value'=>$id_curso)); ?>
+	
+	<?php //echo $form->textFieldGroup($model,'fecha_creacion',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5')))); 
+            //Form de Creacion
+            if ($model->id_planificacion==null){ 
+                echo $form->hiddenField($model,'fecha_creacion', array('type'=>"hidden",'value'=>date('d-m-Y H:i:s',time()))); 
+            }
+        ?>
+	
+	<?php //echo $form->textFieldGroup($model,'fecha_modificacion',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5')))); 
+        //Form de Creacion
+        if ($model->id_planificacion==null){ 
+            echo $form->hiddenField($model,'fecha_modificacion', array('type'=>"hidden",'value'=>date('d-m-Y H:i:s',time()))); 
+        }
+        ?>
+	<?php //echo $form->textFieldGroup($model,'tipo',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>10)))); 
+        echo $form->hiddenField($model,'tipo', array('type'=>"hidden",'value'=>$tipo)); ?>
+	
+	<?php //Form de Creacion
+            if ($model->id_planificacion==null){
+                echo $form->hiddenField($model,'estado', array('type'=>"hidden",'value'=>'Borrador')); 
+            }
+        ?>
 	<?php echo $form->datePickerGroup($model,'fecha_inicio',array('widgetOptions'=>array('options'=>array(),'htmlOptions'=>array('class'=>'span5')), 'prepend'=>'<i class="glyphicon glyphicon-calendar"></i>', 'append'=>'Click para seleccionar fecha')); ?>
 
 	<?php echo $form->datePickerGroup($model,'fecha_termino',array('widgetOptions'=>array('options'=>array(),'htmlOptions'=>array('class'=>'span5')), 'prepend'=>'<i class="glyphicon glyphicon-calendar"></i>', 'append'=>'Click para seleccionar fecha')); ?>
 
 <label class="control-label">Objetivos de Aprendizaje (OA)</label>
-        <?php 
+        <?php
+            //Se cargan todas los OA correspondientes a la asignatura de todas las unidades
+            $oa=OA::model()->findAll("id_asignatura='".$id_asignatura."'");
+            //se consulta si se seleccionó alguna unidad previamente en sección crear planificación
+            //y si el formulario es para creación, de otro modo se cargan todos los OA
+            if($model->id_planificacion==NULL&&$id_unidad!=null){
+            $oas = Yii::app()->db->createCommand("CALL filtro_unidad(".$id_unidad.',"'.$id_asignatura.'"'.")")->setFetchMode(PDO::FETCH_OBJ)->queryAll();               
+                       
+            $array_id=array();
+                
+            foreach($oas as $row){
+                    array_push($array_id, $row->id_OA);                   
+            }
+            //Se cargan las OA correspondientes a la unidad seleccionada en sección crear planificación
+            $oa = OA::model()->findAllByAttributes(array("id_OA"=>$array_id));
+                
+            }
+        
             echo '<a href="#" id="btnSelectAll">Seleccionar Todo</a>'
         . '-<a href="#" id="btnDeselectAll">Deseleccionar Todo</a>';
             $text='';
             $child='children: [{title: "Indicadores",children: [';
             $end_child="]},]},";  
-            $oa=OA::model()->findAll("id_asignatura='LE01'");
             $string_indicadores='';
             
             //Form de Creacion
@@ -155,17 +187,11 @@
 <div class="row">
 <textarea id="Planificacion_IndicadoresIds" name="Planificacion[IndicadoresIds]" rows="1" cols="1" style="display:none"></textarea>         
 </div>
-        <?php echo $form->textAreaGroup($model,'habilidades', array('widgetOptions'=>array('htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'span8')))); ?>
-
-	<?php echo $form->textAreaGroup($model,'actitudes', array('widgetOptions'=>array('htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'span8')))); ?>
-
-	<?php echo $form->textAreaGroup($model,'actividades', array('widgetOptions'=>array('htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'span8')))); ?>
+       	<?php echo $form->textAreaGroup($model,'actividades', array('widgetOptions'=>array('htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'span8')))); ?>
 
 	<?php echo $form->textAreaGroup($model,'recursos', array('widgetOptions'=>array('htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'span8')))); ?>
-
-	<?php echo $form->textAreaGroup($model,'conocimientos_previos', array('widgetOptions'=>array('htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'span8')))); ?>
-
-	<?php echo $form->textAreaGroup($model,'conocimientos', array('widgetOptions'=>array('htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'span8')))); ?>
+        
+        <?php echo $form->textAreaGroup($model,'habilidades', array('widgetOptions'=>array('htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'span8')))); ?>
 
 	<?php //echo $form->textFieldGroup($model,'id_evaluacion',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5')))); ?>
 <label class="control-label">Evaluación</label></br>       

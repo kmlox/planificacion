@@ -77,12 +77,23 @@ class Planificacion extends CActiveRecord
         
         protected function beforeSave()
         {
-            // convierte fecha español
+            // convierte fecha formato mysql
             $this->fecha_creacion = DateTime::createFromFormat('d-m-Y H:i:s', $this->fecha_creacion)->format('Y-m-d H:i:s');
             $this->fecha_modificacion = DateTime::createFromFormat('d-m-Y H:i:s', $this->fecha_modificacion)->format('Y-m-d H:i:s');
             $this->fecha_inicio = DateTime::createFromFormat('d-m-Y', $this->fecha_inicio)->format('Y-m-d');
             $this->fecha_termino = DateTime::createFromFormat('d-m-Y', $this->fecha_termino)->format('Y-m-d');
-
+            
+            switch ($this->tipo) {
+                case 'CC':
+                    $this->tipo='Clase a Clase';
+                    break;
+                 case 'U':
+                    $this->tipo='Unidad';
+                    break;
+                 case 'A':
+                    $this->tipo='Anual';
+                    break;
+            }
         return parent::beforeSave();
         }
 
@@ -96,7 +107,8 @@ class Planificacion extends CActiveRecord
 		return array(
 			array('id_profesor, id_asignatura, id_grado, id_curso, fecha_creacion, fecha_modificacion, tipo, fecha_inicio, fecha_termino', 'required'),
 			array('id_evaluacion', 'numerical', 'integerOnly'=>true),
-			array('id_profesor, tipo, estado', 'length', 'max'=>10),
+			array('id_profesor, estado', 'length', 'max'=>10),
+			array('tipo', 'length', 'max'=>13),
 			array('id_asignatura', 'length', 'max'=>4),
 			array('id_grado', 'length', 'max'=>2),
 			array('id_curso', 'length', 'max'=>3),

@@ -28,7 +28,7 @@ class PlanificacionController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura','SelectUnidad'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -232,16 +232,26 @@ class PlanificacionController extends Controller
                 $cont=1;
                 while(!empty($_POST['Planificacion']['id_doc'.$cont])) {
                     //eliminar archivo carpeta
-                    $url_doc=  MaterialApoyo::model()->findbyPk($_POST['Planificacion']['id_doc'.$cont])->nombre_material_apoyo;
+                    $url_doc=  MaterialApoyo::model()->findbyPk($$model['Planificacion']['id_doc'.$cont])->nombre_material_apoyo;
                     unlink($path.$url_doc);
                     //eliminar archivo de la tabla material_apoyo
-                    Yii::app()->db->createCommand()->delete('material_apoyo','id_material_apoyo=:id', array(':id'=>$_POST['Planificacion']['id_doc'.$cont]));                                
+                    Yii::app()->db->createCommand()->delete('material_apoyo','id_material_apoyo=:id', array(':id'=>$$model['Planificacion']['id_doc'.$cont]));                                
                     $cont=$cont+1;
                 }
-               
                 //redireccion
                 if($model->save())
+                {
+                    //fecha y hora actual
+                    $fecha_hora=date('Y-m-d H:i:s',time());
+
+                    Yii::app()->db->createCommand()
+                        ->update('planificacion',array(
+                            'fecha_modificacion'=>$fecha_hora,
+                        ),'id_planificacion=:id',array(':id'=>$id_planificacion));
+                    
                     $this->redirect(array('view','id'=>$model->id_planificacion));
+                    
+                }
             }
 
             $this->render('update',array(
@@ -268,7 +278,7 @@ class PlanificacionController extends Controller
                
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			$this->redirect(isset($$model['returnUrl']) ? $$model['returnUrl'] : array('admin'));
 	}
 
 	/**
@@ -342,4 +352,71 @@ class PlanificacionController extends Controller
             $cs->registerCssFile($baseUrl.'/css/sample.css');
             $cs->registerCssFile($baseUrl.'/css/ui.fancytree.css');
         }
+        //Metodo para seleccionar grado y cargar en el dropdownlist anidado.
+	//Se debe agregar m�todo en accessRules para poder ejecutar
+	public function actionSelectGrado(){
+
+		//array de tipo int perteneciente a clave primaria
+		$data=Grado::model()->findAll('id_nivel=:id_nivel',array(':id_nivel'=>(int) $_POST['id_nivel']));
+
+		$data=CHtml::listData($data,'id_grado','nombre_grado');
+
+		echo "<option value=''>Seleccione Grado</option>";
+		foreach ($data as $value=>$nombregrado)
+		echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombregrado),true);
+
+
+	}
+	//Metodo para seleccionar curso y cargar en el dropdownlist anidado.
+	//Se debe agregar método en accessRules para poder ejecutar
+	public function actionSelectCurso(){
+		//array de tipo string perteneciente a clave primaria
+		$data=Curso::model()->findAll('id_grado=:id_grado',array(':id_grado'=>(string) $_POST['id_grado']));
+		$data=CHtml::listData($data,'id_curso','nombre_curso');
+
+		echo "<option value=''>Seleccione Curso</option>";
+		foreach ($data as $value=>$nombrecurso)
+		echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombrecurso),true);
+		
+	}
+	
+	public function actionSelectAsignatura(){		
+		$id_curso=$_POST['id_curso'];
+		$grado=Curso::model()->findbyPk($id_curso)->id_grado;
+                $data=GradoTieneAsignatura::model()->findAll('id_grado='.'"'.$grado.'"');
+                
+                $array_id=array();
+                
+		foreach($data as $row){
+                    array_push($array_id, $row->id_asignatura);                   
+                }
+                
+                $result = Asignatura::model()->findAllByAttributes(array("id_asignatura"=>$array_id));
+                
+                $data=CHtml::listData($result,'id_asignatura','nombre_asignatura');
+		
+		echo "<option value=''>Seleccione Asignatura</option>";
+		foreach ($data as $value=>$nombreasig)
+		echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
+	}
+        
+        public function actionSelectUnidad(){		
+		$id_asignatura=(string)$_POST['id_asignatura'];
+                $total_unidades=Yii::app()->db->createCommand("SELECT total_unidades("."'".$id_asignatura."'".")")->queryScalar();    
+                        
+		  
+                $array_id=array();
+                
+		for($i=1;$i<=$total_unidades;$i++){
+                    array_push($array_id, $i);                   
+                }
+                
+                $result = Unidad::model()->findAllByAttributes(array("id_unidad"=>$array_id));
+                
+                $data=CHtml::listData($result,'id_unidad','nombre_unidad');
+		
+		echo "<option value=''>Seleccionar Todas</option>";
+		foreach ($data as $value=>$nombre_unidad)
+		echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombre_unidad),true);
+	}
 }

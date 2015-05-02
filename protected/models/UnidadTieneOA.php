@@ -1,30 +1,20 @@
 <?php
 
 /**
- * This is the model class for table "asignatura".
+ * This is the model class for table "unidad_tiene_OA".
  *
- * The followings are the available columns in table 'asignatura':
- * @property string $id_asignatura
- * @property string $nombre_asignatura
- *
- * The followings are the available model relations:
- * @property AE[] $aEs
- * @property CMO[] $cMOs
- * @property OA[] $oAs
- * @property OFV[] $oFVs
- * @property Actividad[] $actividads
- * @property Evaluacion[] $evaluacions
- * @property Grado[] $grados
- * @property Profesor[] $profesors
+ * The followings are the available columns in table 'unidad_tiene_OA':
+ * @property integer $id_unidad
+ * @property string $id_OA
  */
-class Asignatura extends CActiveRecord
+class UnidadTieneOA extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'asignatura';
+		return 'unidad_tiene_OA';
 	}
 
 	/**
@@ -35,12 +25,12 @@ class Asignatura extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_asignatura, nombre_asignatura', 'required'),
-			array('id_asignatura', 'length', 'max'=>4),
-			array('nombre_asignatura', 'length', 'max'=>45),
+			array('id_unidad, id_OA', 'required'),
+			array('id_unidad', 'numerical', 'integerOnly'=>true),
+			array('id_OA', 'length', 'max'=>8),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_asignatura, nombre_asignatura', 'safe', 'on'=>'search'),
+			array('id_unidad, id_OA', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,14 +42,6 @@ class Asignatura extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'aEs' => array(self::HAS_MANY, 'AE', 'id_asignatura'),
-			'cMOs' => array(self::HAS_MANY, 'CMO', 'id_asignatura'),
-			'oAs' => array(self::HAS_MANY, 'OA', 'id_asignatura'),
-			'oFVs' => array(self::HAS_MANY, 'OFV', 'id_asignatura'),
-			'actividads' => array(self::HAS_MANY, 'Actividad', 'id_asignatura'),
-			'evaluacions' => array(self::HAS_MANY, 'Evaluacion', 'id_asignatura'),
-			'grados' => array(self::MANY_MANY, 'Grado', 'grado_tiene_asignatura(id_asignatura, id_grado)'),
-			'profesors' => array(self::MANY_MANY, 'Profesor', 'profesor_has_asignatura(id_asignatura, id_profesor)'),
 		);
 	}
 
@@ -69,8 +51,8 @@ class Asignatura extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_asignatura' => 'Id Asignatura',
-			'nombre_asignatura' => 'Nombre Asignatura',
+			'id_unidad' => 'Id Unidad',
+			'id_OA' => 'Id Oa',
 		);
 	}
 
@@ -91,9 +73,9 @@ class Asignatura extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-                
-		$criteria->compare('id_asignatura',$this->id_asignatura,true);
-		$criteria->compare('nombre_asignatura',$this->nombre_asignatura,true);
+
+		$criteria->compare('id_unidad',$this->id_unidad);
+		$criteria->compare('id_OA',$this->id_OA,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -104,7 +86,7 @@ class Asignatura extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Asignatura the static model class
+	 * @return UnidadTieneOA the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

@@ -50,7 +50,7 @@ class TbSortableAction extends CAction
 	{
 		return Yii::app()->request->isPostRequest
 			&& Yii::app()->request->isAjaxRequest
-			&& isset($_POST['sortOrder']);
+			&& isset($$model['sortOrder']);
 	}
 
 	/**

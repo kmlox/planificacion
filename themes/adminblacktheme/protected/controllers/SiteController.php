@@ -87,9 +87,9 @@ class SiteController extends Controller
 		}
 
 		// collect user input data
-		if(isset($_POST['LoginForm']))
+		if(isset($$model['LoginForm']))
 		{
-			$model->attributes=$_POST['LoginForm'];
+			$model->attributes=$$model['LoginForm'];
 			// validate user input and redirect to the previous page if valid
 			if($model->validate() && $model->login())
 				$this->redirect(Yii::app()->user->returnUrl);

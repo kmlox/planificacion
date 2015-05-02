@@ -4,7 +4,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-array('label'=>'Crear Planificacion','url'=>array('create')),
+array('label'=>'Crear Planificacion','url'=>array('/crear')),
 array('label'=>'Administrar Planificaciones','url'=>array('admin')),
 );
 ?>
