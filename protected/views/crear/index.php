@@ -31,10 +31,13 @@
         */
         ?>
         <td width="531">
-          
-       
-  
-                   
+          <?php
+       $this->menu=array(
+array('label'=>'Lista de Planificaciones','url'=>array('planificacion/index')),
+array('label'=>'Administrar Planificaciones','url'=>array('admin')),
+);
+?>
+                 
     </tr>
   </table>
     
@@ -142,9 +145,8 @@
 		'label'=>'Crear planificación',
 	)); 
         echo CHtml::endForm();  
-        ?>
-        
-        </div>  
+        ?>        
+</div>  
 
 </body>
 </html>

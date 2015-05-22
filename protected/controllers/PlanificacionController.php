@@ -28,7 +28,7 @@ class PlanificacionController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura','SelectUnidad'),
+				'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura','SelectUnidad','revision'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -64,31 +64,87 @@ class PlanificacionController extends Controller
 	{
             PlanificacionController::loadjscss();
             $model=new Planificacion;
-            
          
             if(isset($_POST['Planificacion']))
             {
 		$model->attributes=$_POST['Planificacion'];
-                
-                
+               
 		if($model->save())
                 {
+                    $id_planificacion= $model->id_planificacion;     
+                    
                     /*Se agrega relación m:m dentro del if save() ya que de esta forma se 
                     obtiene la id de actividad, ya que se encuentra oculta, al ser incremental*/
-                    $indicadorselected=$_POST['Planificacion']['IndicadoresIds'];
-                    $id_planificacion= $model->id_planificacion;                 
-                    
-                    /*Utiliza tabulador y nueva línea como caracteres de tokenización 
-                    *ya que las id de indicadores vienen en una cadena de caracteres
-                    *separados por una coma*/
-                    $tok = strtok($indicadorselected, ",");
-                    while ($tok !== false) {
-                        /*se pregunta si es numerico ya que los id de indicadores
-                        * seleccionados son tipo INT */
-                        if(is_numeric($tok)){
-                            Yii::app()->db->createCommand()->insert('planificacion_tiene_indicador',array('id_planificacion'=>$id_planificacion,'id_indicador'=>$tok));
+                    if(!empty($_POST['Planificacion']['IndicadoresIds'])){
+                        $indicadorselected=$_POST['Planificacion']['IndicadoresIds'];
+                        /*Utiliza tabulador y nueva línea como caracteres de tokenización 
+                        *ya que las id de indicadores vienen en una cadena de caracteres
+                        *separados por una coma*/
+                        $tok = strtok($indicadorselected, ",");
+                        while ($tok !== false) {
+                            /*se pregunta si es numerico ya que los id de indicadores
+                            * seleccionados son tipo INT */
+                            if(is_numeric($tok)){
+                                Yii::app()->db->createCommand()->insert('planificacion_tiene_indicador',array('id_planificacion'=>$id_planificacion,'id_indicador'=>$tok));
+                            }
+                            $tok = strtok(" ,");  
                         }
-                        $tok = strtok(" ,");  
+                    }
+                    
+                    if(!empty($_POST['Planificacion']['EvaluacionesIds'])){
+                        $evaluacionselected=$_POST['Planificacion']['EvaluacionesIds'];
+                        /*Utiliza tabulador y nueva línea como caracteres de tokenización 
+                        *ya que las id de evaluaciones vienen en una cadena de caracteres
+                        *separados por una coma*/
+                        $tok = strtok($evaluacionselected, ",");
+                        while ($tok !== false) {
+                            /*se pregunta si es numerico ya que los id de indicadores
+                            * seleccionados son tipo INT */
+                            Yii::app()->db->createCommand()->insert('planificacion_tiene_evaluacion',array('id_planificacion'=>$id_planificacion,'id_evaluacion'=>$tok));
+                            $tok = strtok(" ,");  
+                        }
+                    }
+                    
+                    if(!empty($_POST['Planificacion']['CMOIds'])){
+                        $cmoselected=$_POST['Planificacion']['CMOIds'];
+                        /*Utiliza tabulador y nueva línea como caracteres de tokenización 
+                        *ya que las id de evaluaciones vienen en una cadena de caracteres
+                        *separados por una coma*/
+                        $tok = strtok($cmoselected, ",");
+                        while ($tok !== false) {
+                            /*se pregunta si es numerico ya que los id de indicadores
+                            * seleccionados son tipo INT */
+                            Yii::app()->db->createCommand()->insert('planificacion_tiene_CMO',array('id_planificacion'=>$id_planificacion,'id_CMO'=>$tok));
+                            $tok = strtok(" ,");  
+                        }
+                    }
+                    
+                    if(!empty($_POST['Planificacion']['OFVIds'])){
+                        $ofvselected=$_POST['Planificacion']['OFVIds'];
+                        /*Utiliza tabulador y nueva línea como caracteres de tokenización 
+                        *ya que las id de evaluaciones vienen en una cadena de caracteres
+                        *separados por una coma*/
+                        $tok = strtok($ofvselected, ",");
+                        while ($tok !== false) {
+                            /*se pregunta si es numerico ya que los id de indicadores
+                            * seleccionados son tipo INT */
+                            Yii::app()->db->createCommand()->insert('planificacion_tiene_OFV',array('id_planificacion'=>$id_planificacion,'id_OFV'=>$tok));
+                            $tok = strtok(" ,");  
+                        }
+                    }
+                                        
+                    if(!empty($_POST['Planificacion']['AEIds'])){
+                        $aeselected=$_POST['Planificacion']['AEIds'];
+                        /*Utiliza tabulador y nueva línea como caracteres de tokenización 
+                        *ya que las id de evaluaciones vienen en una cadena de caracteres
+                        *separados por una coma*/
+                        $tok = strtok($aeselected, ",");
+                        while ($tok !== false) {
+                            /*se pregunta si es numerico ya que los id de indicadores
+                            * seleccionados son tipo INT */                            
+                            Yii::app()->db->createCommand()->insert('planificacion_tiene_AE',array('id_planificacion'=>$id_planificacion,'id_AE'=>$tok));
+                            $tok = strtok(" ,");  
+                        }
                     }
                     
                     //SUBIR ARCHIVOS
@@ -164,20 +220,86 @@ class PlanificacionController extends Controller
             if(isset($_POST['Planificacion']))
             {
 		$model->attributes=$_POST['Planificacion'];
-		
-                $indicadorselected=$_POST['Planificacion']['IndicadoresIds'];
-                $id_planificacion= $model->id_planificacion;  
+		$id_planificacion= $model->id_planificacion; 
                 
-                /* Utiliza tabulador y nueva línea como caracteres de tokenización */
-                $tok = strtok($indicadorselected, ",");
-                if($tok !== false){
+                /*Se agrega relación m:m dentro del if save() ya que de esta forma se 
+                obtiene la id de actividad, ya que se encuentra oculta, al ser incremental*/
+                if(!empty($_POST['Planificacion']['IndicadoresIds'])){
+                    $indicadorselected=$_POST['Planificacion']['IndicadoresIds'];
+                    /*Utiliza tabulador y nueva línea como caracteres de tokenización 
+                    *ya que las id de indicadores vienen en una cadena de caracteres
+                    *separados por una coma*/
+                    $tok = strtok($indicadorselected, ",");
                     Yii::app()->db->createCommand()->delete('planificacion_tiene_indicador', 'id_planificacion=:id_planificacion', array(':id_planificacion'=>$id_planificacion));
                     while ($tok !== false) {
-                       if(is_numeric($tok)){
-                           Yii::app()->db->createCommand()->insert('planificacion_tiene_indicador',array('id_planificacion'=>$id_planificacion,'id_indicador'=>$tok));
-                       }
-                       $tok = strtok(" ,");                            
-                   }
+                        /*se pregunta si es numerico ya que los id de indicadores
+                        * seleccionados son tipo INT */
+                        if(is_numeric($tok)){
+                            Yii::app()->db->createCommand()->insert('planificacion_tiene_indicador',array('id_planificacion'=>$id_planificacion,'id_indicador'=>$tok));
+                        }
+                        $tok = strtok(" ,");  
+                    }
+                }
+
+                if(!empty($_POST['Planificacion']['EvaluacionesIds'])){
+                    $evaluacionselected=$_POST['Planificacion']['EvaluacionesIds'];
+                    /*Utiliza tabulador y nueva línea como caracteres de tokenización 
+                    *ya que las id de evaluaciones vienen en una cadena de caracteres
+                    *separados por una coma*/
+                    $tok = strtok($evaluacionselected, ",");
+                    Yii::app()->db->createCommand()->delete('planificacion_tiene_evaluacion', 'id_planificacion=:id_planificacion', array(':id_planificacion'=>$id_planificacion));
+                    while ($tok !== false) {
+                        /*se pregunta si es numerico ya que los id de indicadores
+                        * seleccionados son tipo INT */
+                        Yii::app()->db->createCommand()->insert('planificacion_tiene_evaluacion',array('id_planificacion'=>$id_planificacion,'id_evaluacion'=>$tok));
+                        $tok = strtok(" ,");  
+                    }
+                }
+
+                if(!empty($_POST['Planificacion']['CMOIds'])){
+                    $cmoselected=$_POST['Planificacion']['CMOIds'];
+                    /*Utiliza tabulador y nueva línea como caracteres de tokenización 
+                    *ya que las id de evaluaciones vienen en una cadena de caracteres
+                    *separados por una coma*/
+                    $tok = strtok($cmoselected, ",");
+                    Yii::app()->db->createCommand()->delete('planificacion_tiene_CMO', 'id_planificacion=:id_planificacion', array(':id_planificacion'=>$id_planificacion));
+                    while ($tok !== false) {
+                        /*se pregunta si es numerico ya que los id de indicadores
+                        * seleccionados son tipo INT */
+                        Yii::app()->db->createCommand()->insert('planificacion_tiene_CMO',array('id_planificacion'=>$id_planificacion,'id_CMO'=>$tok));
+                        $tok = strtok(" ,");  
+                    }
+                }
+                
+                if(!empty($_POST['Planificacion']['OFVIds'])){
+                        $ofvselected=$_POST['Planificacion']['OFVIds'];
+                        /*Utiliza tabulador y nueva línea como caracteres de tokenización 
+                        *ya que las id de evaluaciones vienen en una cadena de caracteres
+                        *separados por una coma*/
+                        $tok = strtok($ofvselected, ",");
+                        Yii::app()->db->createCommand()->delete('planificacion_tiene_OFV', 'id_planificacion=:id_planificacion', array(':id_planificacion'=>$id_planificacion));
+                    
+                        while ($tok !== false) {
+                            /*se pregunta si es numerico ya que los id de indicadores
+                            * seleccionados son tipo INT */
+                            Yii::app()->db->createCommand()->insert('planificacion_tiene_OFV',array('id_planificacion'=>$id_planificacion,'id_OFV'=>$tok));
+                            $tok = strtok(" ,");  
+                        }
+                    }
+
+                if(!empty($_POST['Planificacion']['AEIds'])){
+                    $aeselected=$_POST['Planificacion']['AEIds'];
+                    /*Utiliza tabulador y nueva línea como caracteres de tokenización 
+                    *ya que las id de evaluaciones vienen en una cadena de caracteres
+                    *separados por una coma*/
+                    $tok = strtok($aeselected, ",");
+                    Yii::app()->db->createCommand()->delete('planificacion_tiene_AE', 'id_planificacion=:id_planificacion', array(':id_planificacion'=>$id_planificacion));
+                    while ($tok !== false) {
+                        /*se pregunta si es numerico ya que los id de indicadores
+                        * seleccionados son tipo INT */                            
+                        Yii::app()->db->createCommand()->insert('planificacion_tiene_AE',array('id_planificacion'=>$id_planificacion,'id_AE'=>$tok));
+                        $tok = strtok(" ,");  
+                    }
                 }
                 
                 //SUBIR ARCHIVOS
@@ -232,10 +354,10 @@ class PlanificacionController extends Controller
                 $cont=1;
                 while(!empty($_POST['Planificacion']['id_doc'.$cont])) {
                     //eliminar archivo carpeta
-                    $url_doc=  MaterialApoyo::model()->findbyPk($$model['Planificacion']['id_doc'.$cont])->nombre_material_apoyo;
+                    $url_doc=  MaterialApoyo::model()->findbyPk($_POST['Planificacion']['id_doc'.$cont])->nombre_material_apoyo;
                     unlink($path.$url_doc);
                     //eliminar archivo de la tabla material_apoyo
-                    Yii::app()->db->createCommand()->delete('material_apoyo','id_material_apoyo=:id', array(':id'=>$$model['Planificacion']['id_doc'.$cont]));                                
+                    Yii::app()->db->createCommand()->delete('material_apoyo','id_material_apoyo=:id', array(':id'=>$_POST['Planificacion']['id_doc'.$cont]));                                
                     $cont=$cont+1;
                 }
                 //redireccion
@@ -266,7 +388,12 @@ class PlanificacionController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+            $es_directivo=Directivo::model()->exists("id_directivo="."'".Yii::app()->user->id."'");
+            $es_profesor=Profesor::model()->exists("id_profesor="."'".Yii::app()->user->id."'");
+            $es_administrador=Administrador::model()->exists("id_administrador="."'".Yii::app()->user->id."'");
+            $es_planificacion_profesor= Planificacion::model()->exists("id_planificacion=".$id." and id_profesor="."'".Yii::app()->user->id."'");
+            if($es_administrador || $es_directivo || $es_planificacion_profesor){
+                $this->loadModel($id)->delete();
                 //elimina carpeta donde se alojan documentos de la planificacion a eliminar
                 $id_planificacion= $id;  
                 $ruta='/user-documents/'.Yii::app()->user->name.'/planificacion/'.$id_planificacion;
@@ -275,18 +402,36 @@ class PlanificacionController extends Controller
                     //elimina por comando carpeta de archivos
                     system('rm -rf ' . escapeshellarg($path));
                 }
-               
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
-			$this->redirect(isset($$model['returnUrl']) ? $$model['returnUrl'] : array('admin'));
+            }
+            
+            if($es_administrador || $es_directivo){
+                //if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+                if(!isset($_GET['ajax']))
+                    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+	    }
+            elseif($es_profesor){
+                header( 'Location: ../../profesor' ) ;
+            } 
 	}
 
 	/**
 	 * Lists all models.
 	 */
 	public function actionIndex()
-	{
-		$dataProvider=new CActiveDataProvider('Planificacion');
+	{       
+                $criteria=new CDbCriteria(array(
+                                /*
+                                'order'=>'status desc',
+                                'with'   => array('userToProject'=>array('alias'=>'user')),
+                                'condition'=>'status='.Project::STATUS_FINISHED.' OR user.id = 6',
+                                */
+                                'condition'=>'id_profesor="'.Yii::app()->user->id.'"',
+                        ));
+
+                $dataProvider=new CActiveDataProvider('Planificacion', array(
+                            'criteria'=>$criteria,
+                    ));
+		//$dataProvider=new CActiveDataProvider('Planificacion');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -382,35 +527,34 @@ class PlanificacionController extends Controller
 	
 	public function actionSelectAsignatura(){		
 		$id_curso=$_POST['id_curso'];
-		$grado=Curso::model()->findbyPk($id_curso)->id_grado;
-                $data=GradoTieneAsignatura::model()->findAll('id_grado='.'"'.$grado.'"');
-                
-                $array_id=array();
-                
-		foreach($data as $row){
-                    array_push($array_id, $row->id_asignatura);                   
-                }
-                
-                $result = Asignatura::model()->findAllByAttributes(array("id_asignatura"=>$array_id));
-                
-                $data=CHtml::listData($result,'id_asignatura','nombre_asignatura');
-		
-		echo "<option value=''>Seleccione Asignatura</option>";
-		foreach ($data as $value=>$nombreasig)
-		echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
-	}
+                $grado=Curso::model()->findbyPk($id_curso)->id_grado;
+                $data=Asignatura::model()->findAll('id_grado='.'"'.$grado.'"');
+
+                $data=CHtml::listData($data,'id_asignatura','nombre_asignatura');
+
+                echo "<option value=''>Seleccione Asignatura</option>";
+                foreach ($data as $value=>$nombreasig)
+                echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
+    }
         
         public function actionSelectUnidad(){		
 		$id_asignatura=(string)$_POST['id_asignatura'];
-                $total_unidades=Yii::app()->db->createCommand("SELECT total_unidades("."'".$id_asignatura."'".")")->queryScalar();    
-                        
-		  
-                $array_id=array();
                 
-		for($i=1;$i<=$total_unidades;$i++){
-                    array_push($array_id, $i);                   
+                $grado= Asignatura::model()->findbyPk($id_asignatura)->id_grado;
+                $total_unidades=0;
+                
+                if($grado=='1B'||$grado=='2B'||$grado=='3B'||$grado=='4B'||$grado=='5B'||$grado=='6B'){
+                    $total_unidades=Yii::app()->db->createCommand("SELECT total_unidades_c1("."'".$id_asignatura."'".")")->queryScalar();    
+                }
+                elseif ($grado=='7B'||$grado=='8B'||$grado=='1M'||$grado=='2M'||$grado=='3M'||$grado=='4M') {
+                    $total_unidades=Yii::app()->db->createCommand("SELECT total_unidades_c2("."'".$id_asignatura."'".")")->queryScalar();    
                 }
                 
+                
+                $array_id=array();
+                for($i=1;$i<=$total_unidades;$i++){
+                    array_push($array_id, $i);                   
+                }                
                 $result = Unidad::model()->findAllByAttributes(array("id_unidad"=>$array_id));
                 
                 $data=CHtml::listData($result,'id_unidad','nombre_unidad');
@@ -419,4 +563,15 @@ class PlanificacionController extends Controller
 		foreach ($data as $value=>$nombre_unidad)
 		echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombre_unidad),true);
 	}
+        
+        public function actionRevision($id){
+            $id_usuario=Yii::app()->user->name;
+            if(Planificacion::model()->findbyPk($id)->id_profesor==$id_usuario){
+                Yii::app()->db->createCommand()
+                ->update('planificacion', array(
+                    'estado'=>'Por aprobar',
+                ), 'id_planificacion=:id', array(':id'=>$id)); 
+            }
+            $this->redirect("../../profesor");
+        }
 }

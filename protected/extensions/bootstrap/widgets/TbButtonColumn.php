@@ -80,7 +80,9 @@ class TbButtonColumn extends CButtonColumn {
 		$options = isset($button['options']) ? $button['options'] : array();
 
 		if (!isset($options['title'])) {
+			/* Comentar para que no aparezca nombre en ingles: view, update, delete
 			$options['title'] = $label;
+			*/
 		}
 
 		if (!isset($options['data-toggle'])) {

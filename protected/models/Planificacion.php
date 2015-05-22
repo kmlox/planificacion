@@ -1,42 +1,5 @@
 <?php
 
-/**
- * This is the model class for table "planificacion".
- *
- * The followings are the available columns in table 'planificacion':
- * @property integer $id_planificacion
- * @property string $id_profesor
- * @property string $id_asignatura
- * @property string $id_grado
- * @property string $id_curso
- * @property string $fecha_creacion
- * @property string $fecha_modificacion
- * @property string $tipo
- * @property string $estado
- * @property string $fecha_inicio
- * @property string $fecha_termino
- * @property string $habilidades
- * @property string $actitudes
- * @property string $actividades
- * @property string $recursos
- * @property string $conocimientos_previos
- * @property string $conocimientos
- * @property integer $id_evaluacion
- *
- * The followings are the available model relations:
- * @property Avance[] $avances
- * @property Evaluacion $idEvaluacion
- * @property Asignatura $idAsignatura
- * @property Curso $idCurso
- * @property Profesor $idProfesor
- * @property Grado $idGrado
- * @property AE[] $aEs
- * @property CMO[] $cMOs
- * @property OFV[] $oFVs
- * @property Indicador[] $indicadors
- * @property MaterialApoyo[] $materialApoyos
- * @property Revision[] $revisions
- */
 class Planificacion extends CActiveRecord
 {
 	/**
@@ -55,16 +18,16 @@ class Planificacion extends CActiveRecord
         
         //arreglo con indicadores seleccionados en form
         public $IndicadoresIds = array();
-        
-        //se agregan id de indicadores seleccionados en el arreglo IndicadoresIds
-        public function afterFind()
+              
+        protected function afterFind()
         {
+            //se agregan id de indicadores seleccionados en el arreglo IndicadoresIds
             if (!empty($this->indicadores))
             {
                 foreach ($this->indicadores as $n => $indicador)
                     $this->IndicadoresIds[] = $indicador->id_indicador;
             }
-            
+                        
             // convierte fecha español
             $this->fecha_creacion = DateTime::createFromFormat('Y-m-d H:i:s', $this->fecha_creacion)->format('d-m-Y H:i:s');
             $this->fecha_modificacion = DateTime::createFromFormat('Y-m-d H:i:s', $this->fecha_modificacion)->format('d-m-Y H:i:s');
@@ -85,7 +48,7 @@ class Planificacion extends CActiveRecord
             
             switch ($this->tipo) {
                 case 'CC':
-                    $this->tipo='Clase a Clase';
+                    $this->tipo='Clase a clase';
                     break;
                  case 'U':
                     $this->tipo='Unidad';
@@ -106,16 +69,15 @@ class Planificacion extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id_profesor, id_asignatura, id_grado, id_curso, fecha_creacion, fecha_modificacion, tipo, fecha_inicio, fecha_termino', 'required'),
-			array('id_evaluacion', 'numerical', 'integerOnly'=>true),
 			array('id_profesor, estado', 'length', 'max'=>10),
 			array('tipo', 'length', 'max'=>13),
 			array('id_asignatura', 'length', 'max'=>4),
 			array('id_grado', 'length', 'max'=>2),
 			array('id_curso', 'length', 'max'=>3),
 			array('habilidades, actitudes, actividades, recursos, conocimientos_previos, conocimientos', 'safe'),
-			// The following rule is used by search().
+                        // The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_planificacion, id_profesor, id_asignatura, id_grado, id_curso, fecha_creacion, fecha_modificacion, tipo, estado, fecha_inicio, fecha_termino, habilidades, actitudes, actividades, recursos, conocimientos_previos, conocimientos, id_evaluacion', 'safe', 'on'=>'search'),
+			array('id_planificacion, id_profesor, id_asignatura, id_grado, id_curso, fecha_creacion, fecha_modificacion, tipo, estado, fecha_inicio, fecha_termino, habilidades, actitudes, actividades, recursos, conocimientos_previos, conocimientos', 'safe', 'on'=>'search'),
 		
                     );
 	}
@@ -129,7 +91,7 @@ class Planificacion extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'avances' => array(self::HAS_MANY, 'Avance', 'id_planificacion'),
-			'idEvaluacion' => array(self::BELONGS_TO, 'Evaluacion', 'id_evaluacion'),
+			'idEvaluacion' => array(self::MANY_MANY,  'Evaluacion', 'planificacion_tiene_evaluacion(id_planificacion, id_evaluacion)'),
 			'relAsignatura' => array(self::BELONGS_TO, 'Asignatura', 'id_asignatura'),
 			'relCurso' => array(self::BELONGS_TO, 'Curso', 'id_curso'),
 			'idProfesor' => array(self::BELONGS_TO, 'Profesor', 'id_profesor'),
@@ -167,7 +129,6 @@ class Planificacion extends CActiveRecord
 			'recursos' => 'Recursos',
 			'conocimientos_previos' => 'Conocimientos Previos',
 			'conocimientos' => 'Conocimientos',
-			'id_evaluacion' => 'Id Evaluacion',
 		);
 	}
 
@@ -206,7 +167,6 @@ class Planificacion extends CActiveRecord
 		$criteria->compare('recursos',$this->recursos,true);
 		$criteria->compare('conocimientos_previos',$this->conocimientos_previos,true);
 		$criteria->compare('conocimientos',$this->conocimientos,true);
-		$criteria->compare('id_evaluacion',$this->id_evaluacion);
                 
                 $criteria->with =array('relUsuario','relAsignatura','relGrado','relCurso');
                 

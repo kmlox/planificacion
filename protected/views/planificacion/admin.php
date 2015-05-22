@@ -4,10 +4,13 @@ $this->breadcrumbs=array(
 	'Administrar',
 );
 
+/*
 $this->menu=array(
 array('label'=>'Lista de Planificaciones','url'=>array('index')),
-array('label'=>'Crear Planificacion','url'=>array('create')),
+array('label'=>'Crear Planificacion','url'=>array('/crear')),
 );
+ * 
+ */
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -43,7 +46,7 @@ echo CHtml::link('Búsqueda avanzada','#',array('class'=>'search-button btn')); 
 'id'=>'planificacion-grid',
 'dataProvider'=>$model->search(),
 'filter'=>$model,
-'summaryText' => 'Mostrando {end} resultados',
+'summaryText' => 'Mostrando de {start} al {end} - {count} total',
 //'Mostrando {start} de {end} resultados {count} resultados',
 //'ajaxUpdate'=>false,
 'columns'=>array(
@@ -98,7 +101,13 @@ echo CHtml::link('Búsqueda avanzada','#',array('class'=>'search-button btn')); 
 		'id_evaluacion',
 		*/
 array(
-'class'=>'booster.widgets.TbButtonColumn',
-),
+//'class'=>'booster.widgets.TbButtonColumn',
+'class' => 'CButtonColumn',
+           'template' => '{view}{delete}',
+                 'viewButtonUrl' =>'Yii::app()->createUrl("/planificacion/".$data->primaryKey)',
+                 'viewButtonImageUrl'=>Yii::app()->request->baseUrl.'/images/web/detalles.png',
+                 'deleteButtonUrl' =>'Yii::app()->createUrl("/planificacion/delete",array("id" => $data->primaryKey))',
+                 'deleteButtonImageUrl'=>Yii::app()->request->baseUrl.'/images/web/eliminar.png', 
+        ),    
 ),
 )); ?>

@@ -4,17 +4,11 @@
 $this->pageTitle=Yii::app()->name;
 ?>
 
-<h1>Welcome to <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h1>
+<h1>Bienvenido a <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h1>
 
-<p>Congratulations! You have successfully created your Yii application.</p>
+<p> Planificaciones Curriculares, en base a objetivos y contenidos de aprendizaje aprobados por el Ministerio 
+    de Educaci&oacuten. Generando finalmente un resumen completo de sus actividades.</p>
 
-<p>You may change the content of this page by modifying the following two files:</p>
-<ul>
-	<li>View file: <code><?php echo __FILE__; ?></code></li>
-	<li>Layout file: <code><?php echo $this->getLayoutFile('main'); ?></code></li>
-</ul>
+<p>Es una herramienta donde puede hacer an&aacutelisis de los resultados en las calificaciones de sus alumnos, por intermedio de gr&aacuteficos por curso y por <br />
+  cada uno de los estudiantes.</p>
 
-<p>For more details on how to further develop this application, please read
-the <a href="http://www.yiiframework.com/doc/">documentation</a>.
-Feel free to ask in the <a href="http://www.yiiframework.com/forum/">forum</a>,
-should you have any questions.</p>

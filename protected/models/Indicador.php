@@ -7,10 +7,12 @@
  * @property integer $id_indicador
  * @property string $descripcion_indicador
  * @property string $id_oa
+ * @property string $id_profesor
  *
  * The followings are the available model relations:
- * @property Actividad[] $actividads
+ * @property Profesor $idProfesor
  * @property OA $idOa
+ * @property Planificacion[] $planificacions
  */
 class Indicador extends CActiveRecord
 {
@@ -32,9 +34,10 @@ class Indicador extends CActiveRecord
 		return array(
 			array('descripcion_indicador, id_oa', 'required'),
 			array('id_oa', 'length', 'max'=>8),
+			array('id_profesor', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_indicador, descripcion_indicador, id_oa', 'safe', 'on'=>'search'),
+			array('id_indicador, descripcion_indicador, id_oa, id_profesor', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -46,8 +49,9 @@ class Indicador extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'actividads' => array(self::MANY_MANY, 'Actividad', 'actividad_tiene_indicador(id_indicador, id_actividad)'),
-			'idOa' => array(self::BELONGS_TO, 'OA', 'id_oa'),
+			'idProfesor' => array(self::BELONGS_TO, 'Profesor', 'id_profesor'),
+			'relOa' => array(self::BELONGS_TO, 'OA', 'id_oa'),
+			'planificacions' => array(self::MANY_MANY, 'Planificacion', 'planificacion_tiene_indicador(id_indicador, id_planificacion)'),
 		);
 	}
 
@@ -60,6 +64,7 @@ class Indicador extends CActiveRecord
 			'id_indicador' => 'Id Indicador',
 			'descripcion_indicador' => 'Descripcion Indicador',
 			'id_oa' => 'Id Oa',
+			'id_profesor' => 'Id Profesor',
 		);
 	}
 
@@ -84,6 +89,7 @@ class Indicador extends CActiveRecord
 		$criteria->compare('id_indicador',$this->id_indicador);
 		$criteria->compare('descripcion_indicador',$this->descripcion_indicador,true);
 		$criteria->compare('id_oa',$this->id_oa,true);
+		$criteria->compare('id_profesor',$this->id_profesor,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

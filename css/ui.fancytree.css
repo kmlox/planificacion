@@ -30,7 +30,7 @@ ul.fancytree-container {
   min-height: 0%;
   position: relative;
   /* Altura del contenedor */
-  height: 200px;
+  height: 100px;
 }
 ul.fancytree-container ul {
   padding: 0 0 0 16px;

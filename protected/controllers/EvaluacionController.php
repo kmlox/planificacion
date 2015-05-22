@@ -26,8 +26,8 @@ class EvaluacionController extends Controller
     public function accessRules()
     {
         return array(
-        array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+                        array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -68,7 +68,7 @@ class EvaluacionController extends Controller
 
         if(isset($_POST['Evaluacion']))
         {
-            $model->attributes=$$model['Evaluacion'];
+            $model->attributes=$_POST['Evaluacion'];
             if($model->save()){
                 //SUBIR ARCHIVOS
                     $archivos = CUploadedFile::getInstancesByName('Evaluacion');
@@ -246,7 +246,7 @@ class EvaluacionController extends Controller
     */
     public function actionIndex()
     {
-        $dataProvider=new CActiveDataProvider('Evaluacion');
+        $dataProvider=new CActiveDataProvider('Evaluacion',array('criteria'=>array('condition'=>'id_profesor='.'"'.Yii::app()->user->name.'"')));
         $this->render('index',array(
             'dataProvider'=>$dataProvider,
         ));
@@ -267,6 +267,45 @@ class EvaluacionController extends Controller
         ));
     }
 
+    //Metodo para seleccionar grado y cargar en el dropdownlist anidado.
+    //Se debe agregar m�todo en accessRules para poder ejecutar
+    public function actionSelectGrado(){
+
+            //array de tipo int perteneciente a clave primaria
+            $data=Grado::model()->findAll('id_nivel=:id_nivel',array(':id_nivel'=>(int) $_POST['id_nivel']));
+
+            $data=CHtml::listData($data,'id_grado','nombre_grado');
+
+            echo "<option value=''>Seleccione Grado</option>";
+            foreach ($data as $value=>$nombregrado)
+            echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombregrado),true);
+
+
+    }
+    //Metodo para seleccionar curso y cargar en el dropdownlist anidado.
+	//Se debe agregar método en accessRules para poder ejecutar
+	public function actionSelectCurso(){
+		//array de tipo string perteneciente a clave primaria
+		$data=Curso::model()->findAll('id_grado=:id_grado',array(':id_grado'=>(string) $_POST['id_grado']));
+		$data=CHtml::listData($data,'id_curso','nombre_curso');
+
+		echo "<option value=''>Seleccione Curso</option>";
+		foreach ($data as $value=>$nombrecurso)
+		echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombrecurso),true);
+		
+	}
+        public function actionSelectAsignatura(){		
+		$id_curso=$_POST['id_curso'];
+                $grado=Curso::model()->findbyPk($id_curso)->id_grado;
+                $data=Asignatura::model()->findAll('id_grado='.'"'.$grado.'"');
+
+                $data=CHtml::listData($data,'id_asignatura','nombre_asignatura');
+
+                echo "<option value=''>Seleccione Asignatura</option>";
+                foreach ($data as $value=>$nombreasig)
+                echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
+    }
+    
     /**
     * Returns the data model based on the primary key given in the GET variable.
     * If the data model is not found, an HTTP exception will be raised.

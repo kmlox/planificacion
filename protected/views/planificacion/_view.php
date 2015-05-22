@@ -40,5 +40,9 @@
 	<?php echo CHtml::link(CHtml::encode("Ver detalle"),array('view','id'=>$data->id_planificacion)); ?>
 	<br />
         
+        <p></p>
+        <strong>-----------------------------------------</strong>
+        <p></p>
+        
 
 </div>

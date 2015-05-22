@@ -23,11 +23,11 @@
 <div class="container" id="page">
 
 	<div id="header">
-		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
+		<div id="logo"><?php //echo CHtml::encode(Yii::app()->name); ?></div>
 	</div><!-- header -->
 
 	<div id="mainmenu">
-		<?php $this->widget('zii.widgets.CMenu',array(
+		<?php /* $this->widget('zii.widgets.CMenu',array(
 			'items'=>array(
 				array('label'=>'Home', 'url'=>array('/site/index')),
 				array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
@@ -35,7 +35,60 @@
 				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 				array('label'=>'Salir', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 			),
-		)); ?>
+		)); */ ?>
+            <?php
+                $this->widget(
+                    'booster.widgets.TbNavbar',
+                    array(
+                        'type' => 'inverse',
+                        'brand' => 'Planificación Curricular',
+                        'brandUrl' => '#',
+                        'collapse' => true, // requires bootstrap-responsive.css
+                        'fixed' => false,
+                        'fluid' => true,
+                        'items' => array(
+                            array(
+                                'class' => 'booster.widgets.TbMenu',
+                                'type' => 'navbar',
+                                'items' => array(
+                                    array('label' => 'Inicio', 'url' => array('/site/index'), 'active' => true),
+                                    array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
+                                    array('label' => 'Acerca de', 'url' => array('/site/page', 'view'=>'about')),
+                                    array('label'=>'Contacto', 'url'=>array('/site/contact')),
+                                    array(
+                                        'label' => 'Planificación Curricular',
+                                        'url' => '#',
+                                        'visible'=>!Yii::app()->user->isGuest,
+                                        'items' => array(
+                                            array('label' => 'Crear Planificación', 'url' => '/planificacion/index.php/crear'),
+                                            array('label' => 'Another action', 'url' => '#'),
+                                            array(
+                                                'label' => 'Something else here',
+                                                'url' => '#'
+                                            ),
+                                            '---',
+                                            array('label' => 'NAV HEADER'),
+                                            array('label' => 'Separated link', 'url' => '#'),
+                                            array(
+                                                'label' => 'One more separated link',
+                                                'url' => '#'
+                                            ),
+                                        )
+                                    ),
+                                ),
+                            ),
+                            array(
+                                'class' => 'booster.widgets.TbMenu',
+                                'type' => 'navbar',
+                                'htmlOptions' => array('class' => 'pull-right'),
+                                'items' => array(
+                                    array('label'=>'Salir', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest),                                                                                                     
+                                ),
+                            ),
+                        ),   
+                    )
+                );
+            ?>
 	</div><!-- mainmenu -->
 	<?php if(isset($this->breadcrumbs)):?>
 		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
@@ -48,9 +101,8 @@
 	<div class="clear"></div>
 
 	<div id="footer">
-		Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
-		All Rights Reserved.<br/>
-		<?php echo Yii::powered(); ?>
+		Copyright &copy; <?php echo date('Y'); ?> <br/>
+		Todos los derechos reservados.<br/>		
 	</div><!-- footer -->
 
 </div><!-- page -->

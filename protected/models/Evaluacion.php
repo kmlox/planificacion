@@ -30,6 +30,22 @@ class Evaluacion extends CActiveRecord
 	{
 		return 'evaluacion';
 	}
+        
+        protected function afterFind()
+        {
+            // convierte fecha español
+            $this->fecha = DateTime::createFromFormat('Y-m-d', $this->fecha)->format('d-m-Y');
+            parent::afterFind();
+        }
+        
+        protected function beforeSave()
+        {
+            // convierte fecha formato mysql
+            $this->fecha = DateTime::createFromFormat('d-m-Y', $this->fecha)->format('Y-m-d');
+            
+            return parent::beforeSave();
+        }
+
 
 	/**
 	 * @return array validation rules for model attributes.
@@ -61,11 +77,12 @@ class Evaluacion extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'calificacions' => array(self::HAS_MANY, 'Calificacion', 'id_evaluacion'),
-			'idAsignatura' => array(self::BELONGS_TO, 'Asignatura', 'id_asignatura'),
-			'idCurso' => array(self::BELONGS_TO, 'Curso', 'id_curso'),
+			'relAsignatura' => array(self::BELONGS_TO, 'Asignatura', 'id_asignatura'),
+			'relCurso' => array(self::BELONGS_TO, 'Curso', 'id_curso'),
 			'idProfesor' => array(self::BELONGS_TO, 'Profesor', 'id_profesor'),
-			'planificacions' => array(self::HAS_MANY, 'Planificacion', 'id_evaluacion'),
-		);
+			'planificacions' => array(self::MANY_MANY, 'Planificacion', 'planificacion_tiene_evaluacion(id_evaluacion, id_planificacion)'),
+                        'relUsuario'=> array(self::BELONGS_TO, 'Usuario', 'id_profesor'),
+                );
 	}
 
 	/**
@@ -105,7 +122,7 @@ class Evaluacion extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id_evaluacion',$this->id_evaluacion);
-		$criteria->compare('id_profesor',$this->id_profesor,true);
+		//$criteria->compare('id_profesor',$this->id_profesor,true);
 		$criteria->compare('id_asignatura',$this->id_asignatura,true);
 		$criteria->compare('id_curso',$this->id_curso,true);
 		$criteria->compare('nombre_evaluacion',$this->nombre_evaluacion,true);
@@ -113,6 +130,11 @@ class Evaluacion extends CActiveRecord
 		$criteria->compare('contenido',$this->contenido,true);
 		$criteria->compare('nombre_documento',$this->nombre_documento,true);
 		$criteria->compare('url_documento',$this->url_documento,true);
+                
+                $criteria->with =array('relUsuario');
+                
+                $criteria->addSearchCondition('LOWER(relUsuario.nombre_usuario)',strtolower($this->id_profesor));
+                
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -11,6 +11,14 @@ array('label'=>'Administrar Planificaciones','url'=>array('admin')),
 ?>
 
 <h1>Crear Planificación</h1>
+<h2 align="center">
+    <?php 
+    $nombre_asig=Asignatura::model()->findbyPK($_POST['id_asignatura'])->nombre_asignatura;
+    $nombre_gra=Grado::model()->findbyPK($_POST['id_grado'])->nombre_grado;          
+    $nombre_cur=Curso::model()->findbyPK($_POST['id_curso'])->nombre_curso;
+    echo $nombre_asig." - ".$nombre_gra." ".$nombre_cur;
+    ?>
+</h2></br>
 
 <?php 
 $nivel=$_POST['id_nivel'];

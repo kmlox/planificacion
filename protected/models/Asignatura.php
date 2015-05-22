@@ -6,15 +6,16 @@
  * The followings are the available columns in table 'asignatura':
  * @property string $id_asignatura
  * @property string $nombre_asignatura
+ * @property string $id_grado
  *
  * The followings are the available model relations:
  * @property AE[] $aEs
  * @property CMO[] $cMOs
  * @property OA[] $oAs
  * @property OFV[] $oFVs
- * @property Actividad[] $actividads
+ * @property Grado $idGrado
  * @property Evaluacion[] $evaluacions
- * @property Grado[] $grados
+ * @property Planificacion[] $planificacions
  * @property Profesor[] $profesors
  */
 class Asignatura extends CActiveRecord
@@ -35,12 +36,13 @@ class Asignatura extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_asignatura, nombre_asignatura', 'required'),
+			array('id_asignatura, nombre_asignatura, id_grado', 'required'),
 			array('id_asignatura', 'length', 'max'=>4),
 			array('nombre_asignatura', 'length', 'max'=>45),
+			array('id_grado', 'length', 'max'=>2),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_asignatura, nombre_asignatura', 'safe', 'on'=>'search'),
+			array('id_asignatura, nombre_asignatura, id_grado', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,10 +58,10 @@ class Asignatura extends CActiveRecord
 			'cMOs' => array(self::HAS_MANY, 'CMO', 'id_asignatura'),
 			'oAs' => array(self::HAS_MANY, 'OA', 'id_asignatura'),
 			'oFVs' => array(self::HAS_MANY, 'OFV', 'id_asignatura'),
-			'actividads' => array(self::HAS_MANY, 'Actividad', 'id_asignatura'),
+			'idGrado' => array(self::BELONGS_TO, 'Grado', 'id_grado'),
 			'evaluacions' => array(self::HAS_MANY, 'Evaluacion', 'id_asignatura'),
-			'grados' => array(self::MANY_MANY, 'Grado', 'grado_tiene_asignatura(id_asignatura, id_grado)'),
-			'profesors' => array(self::MANY_MANY, 'Profesor', 'profesor_has_asignatura(id_asignatura, id_profesor)'),
+			'planificacions' => array(self::HAS_MANY, 'Planificacion', 'id_asignatura'),
+			'profesors' => array(self::MANY_MANY, 'Profesor', 'profesor_tiene_asignatura(id_asignatura, id_profesor)'),
 		);
 	}
 
@@ -71,6 +73,7 @@ class Asignatura extends CActiveRecord
 		return array(
 			'id_asignatura' => 'Id Asignatura',
 			'nombre_asignatura' => 'Nombre Asignatura',
+			'id_grado' => 'Id Grado',
 		);
 	}
 
@@ -91,9 +94,10 @@ class Asignatura extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-                
+
 		$criteria->compare('id_asignatura',$this->id_asignatura,true);
 		$criteria->compare('nombre_asignatura',$this->nombre_asignatura,true);
+		$criteria->compare('id_grado',$this->id_grado,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

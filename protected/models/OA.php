@@ -7,9 +7,11 @@
  * @property string $id_OA
  * @property string $descripcion_OA
  * @property string $id_asignatura
+ * @property string $id_profesor
  *
  * The followings are the available model relations:
  * @property Asignatura $idAsignatura
+ * @property Profesor $idProfesor
  * @property Indicador[] $indicadors
  * @property Unidad[] $unidads
  */
@@ -34,9 +36,10 @@ class OA extends CActiveRecord
 			array('id_OA, descripcion_OA, id_asignatura', 'required'),
 			array('id_OA', 'length', 'max'=>8),
 			array('id_asignatura', 'length', 'max'=>4),
+			array('id_profesor', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_OA, descripcion_OA, id_asignatura', 'safe', 'on'=>'search'),
+			array('id_OA, descripcion_OA, id_asignatura, id_profesor', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -49,6 +52,7 @@ class OA extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'idAsignatura' => array(self::BELONGS_TO, 'Asignatura', 'id_asignatura'),
+			'idProfesor' => array(self::BELONGS_TO, 'Profesor', 'id_profesor'),
 			'indicadors' => array(self::HAS_MANY, 'Indicador', 'id_oa'),
 			'unidads' => array(self::MANY_MANY, 'Unidad', 'unidad_tiene_OA(id_OA, id_unidad)'),
 		);
@@ -63,6 +67,7 @@ class OA extends CActiveRecord
 			'id_OA' => 'Id Oa',
 			'descripcion_OA' => 'Descripcion Oa',
 			'id_asignatura' => 'Id Asignatura',
+			'id_profesor' => 'Id Profesor',
 		);
 	}
 
@@ -87,6 +92,7 @@ class OA extends CActiveRecord
 		$criteria->compare('id_OA',$this->id_OA,true);
 		$criteria->compare('descripcion_OA',$this->descripcion_OA,true);
 		$criteria->compare('id_asignatura',$this->id_asignatura,true);
+		$criteria->compare('id_profesor',$this->id_profesor,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

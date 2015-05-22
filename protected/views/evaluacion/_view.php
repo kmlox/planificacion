@@ -1,19 +1,24 @@
 <div class="view">
 
-		<b><?php echo CHtml::encode($data->getAttributeLabel('id_evaluacion')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id_evaluacion),array('view','id'=>$data->id_evaluacion)); ?>
+	<b><?php echo "Profesor"; ?>:</b>
+	<?php $nombre_profesor=Usuario::model()->findbyPk($data->id_profesor)->nombre_usuario;
+            echo $nombre_profesor;
+        ?>
+       	<br />
+
+	<b><?php echo "Asignatura" ?>:</b>
+	<?php $nombre_asignatura=Asignatura::model()->findbyPk($data->id_asignatura)->nombre_asignatura;
+        echo $nombre_asignatura;
+        ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id_profesor')); ?>:</b>
-	<?php echo CHtml::encode($data->id_profesor); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id_asignatura')); ?>:</b>
-	<?php echo CHtml::encode($data->id_asignatura); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id_curso')); ?>:</b>
-	<?php echo CHtml::encode($data->id_curso); ?>
+	<b><?php echo "Curso" ?>:</b>
+	<?php         
+        $nombre_curso=Curso::model()->findbyPk($data->id_curso)->nombre_curso;
+        $id_grado=Curso::model()->findbyPk($data->id_curso)->id_grado;
+        $nombre_grado= Grado::model()->findbyPk($id_grado)->nombre_grado;
+        echo $nombre_grado.' "'.$nombre_curso.'"';
+        ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('nombre_evaluacion')); ?>:</b>
@@ -28,15 +33,12 @@
 	<?php echo CHtml::encode($data->contenido); ?>
 	<br />
 
-	<?php /*
-	<b><?php echo CHtml::encode($data->getAttributeLabel('nombre_documento')); ?>:</b>
-	<?php echo CHtml::encode($data->nombre_documento); ?>
+	<b></b>
+	<?php echo CHtml::link(CHtml::encode("Ver detalle"),array('view','id'=>$data->id_evaluacion)); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('url_documento')); ?>:</b>
-	<?php echo CHtml::encode($data->url_documento); ?>
-	<br />
-
-	*/ ?>
+        
+        <p></p>
+        <strong>-----------------------------------------</strong>
+        <p></p>
 
 </div>

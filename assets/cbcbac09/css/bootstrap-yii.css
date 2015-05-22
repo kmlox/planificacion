@@ -258,11 +258,15 @@ span.required {
 /* Responsive Tables */
 table th {
     font-weight: bold;
+    border-color:white;
+    padding: 5px 2px;
+    text-align: center; 
 }
 
-table td, table th {
+table td {
     padding: 9px 10px;
-    text-align: left;
+    text-align: left; 
+    border: 2px solid black;   
 }
 
 /* Mobile */

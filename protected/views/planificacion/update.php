@@ -14,7 +14,7 @@ $this->breadcrumbs=array(
 	?>
 
 <h1>Modificar Planificación <?php //echo $model->id_planificacion; ?></h1>
-<h2>
+<h2 align="center">
     <?php 
     $nombre_asig=Asignatura::model()->findbyPK($model->id_asignatura)->nombre_asignatura;
     $nombre_gra=Grado::model()->findbyPK($model->id_grado)->nombre_grado;          

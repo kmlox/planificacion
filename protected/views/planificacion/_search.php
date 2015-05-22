@@ -37,8 +37,6 @@
 
 		<?php echo $form->textAreaGroup($model,'conocimientos', array('widgetOptions'=>array('htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'span8')))); ?>
 
-		<?php echo $form->textFieldGroup($model,'id_evaluacion',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5')))); ?>
-
 	<div class="form-actions">
 		<?php $this->widget('booster.widgets.TbButton', array(
 			'buttonType' => 'submit',

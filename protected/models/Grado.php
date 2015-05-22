@@ -9,9 +9,10 @@
  * @property integer $id_nivel
  *
  * The followings are the available model relations:
+ * @property Asignatura[] $asignaturas
  * @property Curso[] $cursos
  * @property Nivel $idNivel
- * @property Asignatura[] $asignaturas
+ * @property Planificacion[] $planificacions
  */
 class Grado extends CActiveRecord
 {
@@ -49,9 +50,10 @@ class Grado extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'asignaturas' => array(self::HAS_MANY, 'Asignatura', 'id_grado'),
 			'cursos' => array(self::HAS_MANY, 'Curso', 'id_grado'),
 			'idNivel' => array(self::BELONGS_TO, 'Nivel', 'id_nivel'),
-			'asignaturas' => array(self::MANY_MANY, 'Asignatura', 'grado_tiene_asignatura(id_grado, id_asignatura)'),
+			'planificacions' => array(self::HAS_MANY, 'Planificacion', 'id_grado'),
 		);
 	}
 
