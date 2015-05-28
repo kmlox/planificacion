@@ -77,7 +77,8 @@
 	<?php echo $form->textAreaGroup($model,'contenido', array('widgetOptions'=>array('htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'span8')))); ?>
 	
         <?php
-            $mensaje='';
+            $mensaje="<strong>Soporta archivos:</strong></p>jpg, gif, png, doc, docx, xls, xlsx, ppt, pptx, pdf</p></p>"
+                        ."<strong>Máximo: 1 archivo en total</strong>";
             //Form de Update
             if ($model->id_evaluacion!=null){
                 
@@ -87,11 +88,7 @@
                     
                     $mensaje="<strong>Soporta archivos:</strong></p>jpg, gif, png, doc, docx, xls, xlsx, ppt, pptx, pdf</p></p>"
                         ."<strong>Máximo: 1 archivo en total</p></p>Si sube un archivo, eliminará el archivo asociado anteriormente</strong>";
-                }
-                else{
-                    $mensaje="<strong>Soporta archivos:</strong></p>jpg, gif, png, doc, docx, xls, xlsx, ppt, pptx, pdf</p></p>"
-                        ."<strong>Máximo: 1 archivo en total</strong>";
-                }
+                }               
             }           
             ?>
 </br><label class="control-label">Agregar - Material de Apoyo</label>

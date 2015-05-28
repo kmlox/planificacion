@@ -70,8 +70,8 @@
             //Form de Creacion
             if ($model->id_planificacion==null){
                 foreach ($cmo as $data){
-                    $text=$text."{title:'".$data->descripcion_CMO."',folder:true,key:'".$data->id_CMO."',";
-
+                    $string_cmo=$string_cmo."{title:'".$data->descripcion_CMO."',folder:true,key:'".$data->id_CMO."'},";
+                   
                     $text=$text.$string_cmo;
                     $string_cmo='';
                 }                
@@ -199,8 +199,7 @@
             //Form de Creacion
             if ($model->id_planificacion==null){
                 foreach ($ofv as $data){
-                    $text=$text."{title:'".$data->descripcion_OFV."',folder:true,key:'".$data->id_OFV."',";
-
+                    $string_ofv=$string_ofv."{title:'".$data->descripcion_OFV."',folder:true,key:'".$data->id_OFV."'},";
                     $text=$text.$string_ofv;
                     $string_ofv='';
                 }                
@@ -330,8 +329,8 @@
             //Form de Creacion
             if ($model->id_planificacion==null){
                 foreach ($ae as $data){
-                    $text=$text."{title:'".$data->descripcion_AE."',folder:true,key:'".$data->id_AE."',";
-
+                    $string_ae=$string_ae."{title:'".$data->descripcion_AE."',folder:true,key:'".$data->id_AE."'},";
+                    
                     $text=$text.$string_ae;
                     $string_ae='';
                 }                

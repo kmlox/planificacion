@@ -38,7 +38,7 @@ $this->breadcrumbs=array(
 
 	<div class="row rememberMe" align="center">
 		<?php echo $form->checkBox($model,'rememberMe'); ?>
-		<?php echo $form->label($model,'rememberMe'); ?>
+		<?php echo '<p align="left">&nbsp;Recordar contraseña</p>'; ?>
 		<?php echo $form->error($model,'rememberMe'); ?>
 	</div>
 

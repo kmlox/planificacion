@@ -69,7 +69,8 @@ class Planificacion extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id_profesor, id_asignatura, id_grado, id_curso, fecha_creacion, fecha_modificacion, tipo, fecha_inicio, fecha_termino', 'required'),
-			array('id_profesor, estado', 'length', 'max'=>10),
+			array('id_profesor', 'length', 'max'=>10),
+                        array('estado', 'length', 'max'=>11),
 			array('tipo', 'length', 'max'=>13),
 			array('id_asignatura', 'length', 'max'=>4),
 			array('id_grado', 'length', 'max'=>2),

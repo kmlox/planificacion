@@ -28,7 +28,7 @@ class PlanificacionController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura','SelectUnidad','revision'),
+				'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura','SelectUnidad','Replanificaranual','Aprobaranual','Poraprobar','Replanificar','aprobar'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -217,7 +217,7 @@ class PlanificacionController extends Controller
             
             $model=$this->loadModel($id);
 
-            if(isset($_POST['Planificacion']))
+            if(isset($_POST['Planificacion'])&&$model->estado=='Borrador')
             {
 		$model->attributes=$_POST['Planificacion'];
 		$id_planificacion= $model->id_planificacion; 
@@ -388,11 +388,10 @@ class PlanificacionController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-            $es_directivo=Directivo::model()->exists("id_directivo="."'".Yii::app()->user->id."'");
-            $es_profesor=Profesor::model()->exists("id_profesor="."'".Yii::app()->user->id."'");
-            $es_administrador=Administrador::model()->exists("id_administrador="."'".Yii::app()->user->id."'");
-            $es_planificacion_profesor= Planificacion::model()->exists("id_planificacion=".$id." and id_profesor="."'".Yii::app()->user->id."'");
-            if($es_administrador || $es_directivo || $es_planificacion_profesor){
+            //$es_directivo=Directivo::model()->exists("id_directivo="."'".Yii::app()->user->id."'");
+            $model=$this->loadModel($id);
+
+            if($model->estado=='Borrador'){
                 $this->loadModel($id)->delete();
                 //elimina carpeta donde se alojan documentos de la planificacion a eliminar
                 $id_planificacion= $id;  
@@ -401,17 +400,10 @@ class PlanificacionController extends Controller
                 if (file_exists($path)) {
                     //elimina por comando carpeta de archivos
                     system('rm -rf ' . escapeshellarg($path));
-                }
+                }            
             }
+            header( 'Location: ../../profesor' ) ;
             
-            if($es_administrador || $es_directivo){
-                //if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-                if(!isset($_GET['ajax']))
-                    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-	    }
-            elseif($es_profesor){
-                header( 'Location: ../../profesor' ) ;
-            } 
 	}
 
 	/**
@@ -535,7 +527,7 @@ class PlanificacionController extends Controller
                 echo "<option value=''>Seleccione Asignatura</option>";
                 foreach ($data as $value=>$nombreasig)
                 echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
-    }
+        }
         
         public function actionSelectUnidad(){		
 		$id_asignatura=(string)$_POST['id_asignatura'];
@@ -564,7 +556,7 @@ class PlanificacionController extends Controller
 		echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombre_unidad),true);
 	}
         
-        public function actionRevision($id){
+        public function actionAprobaranual($id){
             $id_usuario=Yii::app()->user->name;
             if(Planificacion::model()->findbyPk($id)->id_profesor==$id_usuario){
                 Yii::app()->db->createCommand()
@@ -574,4 +566,52 @@ class PlanificacionController extends Controller
             }
             $this->redirect("../../profesor");
         }
+        
+         public function actionReplanificaranual($id){
+            $id_usuario=Yii::app()->user->name;
+            if(Planificacion::model()->findbyPk($id)->id_profesor==$id_usuario){
+                Yii::app()->db->createCommand()
+                ->update('planificacion', array(
+                    'estado'=>'Borrador',
+                ), 'id_planificacion=:id', array(':id'=>$id)); 
+            }
+            $this->redirect("../../profesor");
+        }
+        
+        public function actionPoraprobar(){
+            $curso=$_POST['curso'];
+            $asignatura=$_POST['asignatura'];
+            $profesor=$_POST['profesor'];
+            $tipo=$_POST['tipo'];
+            
+            Yii::app()->db->createCommand()->update('planificacion', array(
+                'estado'=>'Por aprobar'),
+                    'id_profesor=:id_profesor and id_asignatura=:id_asignatura and '
+                    . 'id_curso=:id_curso and tipo=:tipo', 
+                    array(':id_profesor'=>$profesor,':id_asignatura'=>$asignatura,
+                        ':id_curso'=>$curso,':tipo'=>$tipo)
+                    ); 
+            
+            
+            $this->redirect("../profesor");
+        }
+        
+        public function actionReplanificar(){
+            $curso=$_POST['curso'];
+            $asignatura=$_POST['asignatura'];
+            $profesor=$_POST['profesor'];
+            $tipo=$_POST['tipo'];
+            
+            Yii::app()->db->createCommand()->update('planificacion', array(
+                'estado'=>'Borrador'),
+                    'id_profesor=:id_profesor and id_asignatura=:id_asignatura and '
+                    . 'id_curso=:id_curso and tipo=:tipo', 
+                    array(':id_profesor'=>$profesor,':id_asignatura'=>$asignatura,
+                        ':id_curso'=>$curso,':tipo'=>$tipo)
+                    ); 
+            
+            
+            $this->redirect("../profesor");
+        }
+        
 }

@@ -4,13 +4,34 @@ $this->breadcrumbs=array(
 	$model->id_planificacion,    
 );
 
+// comprobar si existe al menos una fila que cumpla la condición especificada
+$es_profesor=Usuario::model()->exists("id_usuario="."'".Yii::app()->user->name."' and "."rol='profesor'");
+$es_utp=Usuario::model()->exists("id_usuario="."'".Yii::app()->user->name."' and "."rol='directivo'");
+$es_admin=Usuario::model()->exists("id_usuario="."'".Yii::app()->user->name."' and "."rol='admin'");
+
+if($model->estado=='Borrador'&& $es_profesor){
+    $this->menu=array(
+    array('label'=>'Lista de Planificaciones','url'=>array('index')),
+    array('label'=>'Crear Planificacion','url'=>array('/crear')),
+    array('label'=>'Modificar Planificacion','url'=>array('update','id'=>$model->id_planificacion)),
+    array('label'=>'Eliminar Planificacion','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id_planificacion),'confirm'=>'¿Esta ud seguro(a) que desea eliminar esta planificación?')),
+    array('label'=>'Administrar Planificaciones','url'=>array('admin')),
+    );
+}
+elseif ($model->estado!='Borrador'&&$es_profesor){
+    $this->menu=array(
+    array('label'=>'Lista de Planificaciones','url'=>array('index')),
+    array('label'=>'Crear Planificacion','url'=>array('/crear')),
+    array('label'=>'Administrar Planificaciones','url'=>array('admin')),
+    );
+}
+elseif ($es_utp || $es_admin) {
 $this->menu=array(
-array('label'=>'Lista de Planificaciones','url'=>array('index')),
-array('label'=>'Crear Planificacion','url'=>array('/crear')),
-array('label'=>'Modificar Planificacion','url'=>array('update','id'=>$model->id_planificacion)),
-array('label'=>'Eliminar Planificacion','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id_planificacion),'confirm'=>'¿Esta ud seguro(a) que desea eliminar esta planificación?')),
-array('label'=>'Administrar Planificaciones','url'=>array('admin')),
-);
+    array('label'=>'Lista de Planificaciones','url'=>array('index')),
+    array('label'=>'Administrar Planificaciones','url'=>array('admin')),
+    );
+}
+
 ?>
 
 <h1>Detalles de Planificacion<p>Profesor: <?php echo Usuario::model()->findbyPk($model->id_profesor)->nombre_usuario;?>

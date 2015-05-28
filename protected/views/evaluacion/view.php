@@ -9,7 +9,7 @@ array('label'=>'Lista de Evaluaciones','url'=>array('index')),
 array('label'=>'Crear Evaluación','url'=>array('create')),
 array('label'=>'Modificar Evaluación','url'=>array('update','id'=>$model->id_evaluacion)),
 array('label'=>'Eliminar Evaluación','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id_evaluacion),'confirm'=>'Are you sure you want to delete this item?')),
-array('label'=>'Administrar Evaluaciones','url'=>array('admin')),
+//array('label'=>'Administrar Evaluaciones','url'=>array('admin')),
 );
 ?>
 

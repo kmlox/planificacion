@@ -5,6 +5,15 @@ class SiteController extends Controller
 	/**
 	 * Declares class-based actions.
 	 */
+    
+        public function rules()
+        {
+
+            return array(
+                array('username','required','message'=>'ease enter a value for {attribute}.'),
+            );
+
+        }
 	public function actions()
 	{
 		return array(

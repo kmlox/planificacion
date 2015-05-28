@@ -21,7 +21,7 @@ class ImpresionController extends Controller
 			'users'=>array('@'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','anual','unidad','clase'),
+				'actions'=>array('create','update','anual','unidad','clase','index2','chart'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -48,6 +48,14 @@ class ImpresionController extends Controller
 	}
  * 
  */
+        public function actionChart()
+	{
+             $this->render('chart',
+                array(                
+                   // 'talleres'=>$talleres,                   
+                ));
+		
+	}
         
         public function actionAnual($id)
 	{
@@ -57,17 +65,37 @@ class ImpresionController extends Controller
             //Yii::app()->user->name
             $nombre_profesor= Usuario::model()->findbyPk($planificaciones->id_profesor)->nombre_usuario;
             $model_curso=Curso::model()->findbyPk($planificaciones->id_curso);
-            $nombre_grado=Grado::model()->findbyPk($model_curso->id_grado)->nombre_grado;
+            $grado=Grado::model()->findbyPk($model_curso->id_grado);
+            $id_grado=$grado->id_grado;
+            $nombre_grado=$grado->nombre_grado;
             $nombre_asignatura= Asignatura::model()->findbyPk($planificaciones->id_asignatura)->nombre_asignatura;
+            $estado=$planificaciones->estado;
             
-            $this->render('index',
+            if($id_grado=='1B'||$id_grado=='2B'||$id_grado=='3B'||$id_grado=='4B'||$id_grado=='5B'||$id_grado=='6B'){
+               $this->render('index',
                 array(                
                     'planificaciones'=>$planificaciones,
                     'nombre_curso'=>$nombre_grado." ".$model_curso->nombre_curso,
                     'nombre_asignatura'=>$nombre_asignatura,
                     'nombre_profesor'=>$nombre_profesor,
-                    'tipo'=>"Anual"
+                    'tipo'=>"Anual",
+                    'estado'=>$estado
                 ));
+            }
+            elseif ($id_grado=='7B'||$id_grado=='8B'||$id_grado=='1M'||$id_grado=='2M'||$id_grado=='3M'||$id_grado=='4M'){
+                $this->render('ciclo2',
+                array(                
+                    'planificaciones'=>$planificaciones,
+                    'nombre_curso'=>$nombre_grado." ".$model_curso->nombre_curso,
+                    'nombre_asignatura'=>$nombre_asignatura,
+                    'nombre_profesor'=>$nombre_profesor,
+                    'tipo'=>"Anual",
+                    'estado'=>$estado
+                ));                
+            }
+            
+            
+            
             
             /*            
             //PDF
@@ -93,12 +121,14 @@ class ImpresionController extends Controller
 	{
             $curso=$_POST['curso'];
             $asignatura=$_POST['asignatura'];
-            
-            $nombre_profesor= Usuario::model()->findbyPk(Yii::app()->user->name)->nombre_usuario;
+            $id_profesor=(string)$_POST['id_profesor'];
+            $nombre_profesor= Usuario::model()->findbyPk($id_profesor)->nombre_usuario;
             $model_curso=Curso::model()->findbyPk($curso);
-            $nombre_grado=Grado::model()->findbyPk($model_curso->id_grado)->nombre_grado;
+            $grado=Grado::model()->findbyPk($model_curso->id_grado);
+            $id_grado=$grado->id_grado;
+            $nombre_grado=$grado->nombre_grado;
             $nombre_asignatura= Asignatura::model()->findbyPk($asignatura)->nombre_asignatura;
-            
+            $estado=(string)$_POST['estado'];
             $this->layout="//layouts/main2";
             $planificaciones=Planificacion::model()->findAll("id_profesor="."'".Yii::app()->user->name."'"." and "."tipo='Unidad'".
                     " and "."id_curso="."'".$curso."'". " and "."id_asignatura="."'".$asignatura."'");
@@ -128,26 +158,43 @@ class ImpresionController extends Controller
             $mPDF1->Output();
             
             */
-            
-            $this->render('index',
+            if($id_grado=='1B'||$id_grado=='2B'||$id_grado=='3B'||$id_grado=='4B'||$id_grado=='5B'||$id_grado=='6B'){
+               $this->render('index',
                 array(                
                     'planificaciones'=>$planificaciones,
                     'nombre_curso'=>$nombre_grado." ".$model_curso->nombre_curso,
                     'nombre_asignatura'=>$nombre_asignatura,
                     'nombre_profesor'=>$nombre_profesor,
-                    'tipo'=>"Unidad"
-                ));
+                    'tipo'=>"Unidad",
+                    'estado'=>$estado
+                ));                
+            }
+            elseif ($id_grado=='7B'||$id_grado=='8B'||$id_grado=='1M'||$id_grado=='2M'||$id_grado=='3M'||$id_grado=='4M'){
+               $this->render('ciclo2',
+                array(                
+                    'planificaciones'=>$planificaciones,
+                    'nombre_curso'=>$nombre_grado." ".$model_curso->nombre_curso,
+                    'nombre_asignatura'=>$nombre_asignatura,
+                    'nombre_profesor'=>$nombre_profesor,
+                    'tipo'=>"Unidad",
+                    'estado'=>$estado
+                ));  
+            }
+            
 	}
         
         public function actionClase()
 	{
             $curso=$_POST['curso'];
             $asignatura=$_POST['asignatura'];
-            
-            $nombre_profesor= Usuario::model()->findbyPk(Yii::app()->user->name)->nombre_usuario;
+            $id_profesor=(string)$_POST['id_profesor'];
+            $nombre_profesor= Usuario::model()->findbyPk($id_profesor)->nombre_usuario;
             $model_curso=Curso::model()->findbyPk($curso);
-            $nombre_grado=Grado::model()->findbyPk($model_curso->id_grado)->nombre_grado;
+            $grado=Grado::model()->findbyPk($model_curso->id_grado);
+            $id_grado=$grado->id_grado;
+            $nombre_grado=$grado->nombre_grado;
             $nombre_asignatura= Asignatura::model()->findbyPk($asignatura)->nombre_asignatura;
+            $estado=(string)$_POST['estado'];
             
             $this->layout="//layouts/main2";
             $planificaciones=Planificacion::model()->findAll("id_profesor="."'".Yii::app()->user->name."'"." and "."tipo='Clase a clase'".
@@ -178,15 +225,29 @@ class ImpresionController extends Controller
             $mPDF1->Output();
             
             */
-            
-            $this->render('index',
+            if($id_grado=='1B'||$id_grado=='2B'||$id_grado=='3B'||$id_grado=='4B'||$id_grado=='5B'||$id_grado=='6B'){
+                $this->render('index',
                 array(                
                     'planificaciones'=>$planificaciones,
                     'nombre_curso'=>$nombre_grado." ".$model_curso->nombre_curso,
                     'nombre_asignatura'=>$nombre_asignatura,
                     'nombre_profesor'=>$nombre_profesor,
-                    'tipo'=>"Clase a clase"
-                ));		
+                    'tipo'=>"Clase a clase",
+                    'estado'=>$estado
+                ));
+            }
+            elseif ($id_grado=='7B'||$id_grado=='8B'||$id_grado=='1M'||$id_grado=='2M'||$id_grado=='3M'||$id_grado=='4M'){
+                $this->render('ciclo2',
+                array(                
+                    'planificaciones'=>$planificaciones,
+                    'nombre_curso'=>$nombre_grado." ".$model_curso->nombre_curso,
+                    'nombre_asignatura'=>$nombre_asignatura,
+                    'nombre_profesor'=>$nombre_profesor,
+                    'tipo'=>"Clase a clase",
+                    'estado'=>$estado
+                ));                
+            }
+            		
 	}
         
 	

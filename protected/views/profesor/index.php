@@ -71,31 +71,92 @@ array('label'=>'Crear Planificacion','url'=>array('/crear')),
             ?>
             </td>
             <td class="button-column">
-                <a class="view" title="" data-toggle="tooltip" 
-                   href=<?php echo "planificacion/".$datos_anual->id_planificacion?>
-                   data-original-title="Detalles">
-                    <i class="glyphicon glyphicon-eye-open"></i>
-                </a> 
-                <a class="update" title="" data-toggle="tooltip" 
-                   href= <?php echo "planificacion/update/".$datos_anual->id_planificacion?>                 
-                   data-original-title="Modificar">
-                    <i class="glyphicon glyphicon-pencil"></i>
-                </a> 
-                <a class="delete" title="" data-toggle="tooltip" 
-                   href=<?php echo "planificacion/delete/".$datos_anual->id_planificacion?>
-                   data-original-title="Eliminar">
-                    <i class="glyphicon glyphicon-trash"></i>
-                </a>
-                <a class="delete" title="" data-toggle="tooltip" 
-                   href=<?php echo "impresion/anual/".$datos_anual->id_planificacion?>
-                   data-original-title="Impresión">
-                    <i class="glyphicon glyphicon-print"></i>
-                </a>
-                <a class="delete" title="" data-toggle="tooltip" 
-                   href=<?php echo "planificacion/revision/".$datos_anual->id_planificacion?>
-                   data-original-title="Enviar">
+                
+                <?php 
+                
+                if($datos_anual->estado=='Borrador'){
+                    echo '<a class="delete" title="" data-toggle="tooltip"'.
+                    'href='."planificacion/aprobaranual/".$datos_anual->id_planificacion.' data-original-title="Enviar">
                     <i class="glyphicon glyphicon-check"></i>
-                </a>
+                    </a>';
+                    
+                    echo '<a class="view" title="" data-toggle="tooltip" 
+                   href='."planificacion/".$datos_anual->id_planificacion.'  
+                    data-original-title="Detalles">
+                    <i class="glyphicon glyphicon-eye-open"></i>
+                    </a>';
+                    
+                    echo '<a class="update" title="" data-toggle="tooltip" 
+                       href='."planificacion/update/".$datos_anual->id_planificacion.'                  
+                        data-original-title="Modificar">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </a>';
+                    echo '<a class="delete" title="" data-toggle="tooltip" 
+                       href='."planificacion/delete/".$datos_anual->id_planificacion.'
+                         data-original-title="Eliminar">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>';
+                    echo '<a class="delete" title="" data-toggle="tooltip" 
+                       href='."impresion/anual/".$datos_anual->id_planificacion.' 
+                        data-original-title="Impresión">
+                        <i class="glyphicon glyphicon-print"></i>
+                    </a>';                    
+                }
+                if($datos_anual->estado=='Por aprobar'){
+                    echo '<a class="delete" title="" data-toggle="tooltip"'.
+                    'href='."planificacion/replanificaranual/".$datos_anual->id_planificacion.' data-original-title="Replanificar">
+                    <i class="glyphicon glyphicon-check"></i>
+                    </a>';
+                    
+                    echo '<a class="view" title="" data-toggle="tooltip" 
+                   href='."planificacion/".$datos_anual->id_planificacion.' 
+                    data-original-title="Detalles">
+                    <i class="glyphicon glyphicon-eye-open"></i>
+                    </a>';
+                    
+                    echo '<a class="delete" title="" data-toggle="tooltip" 
+                       href='."impresion/anual/".$datos_anual->id_planificacion.' 
+                        data-original-title="Impresión">
+                        <i class="glyphicon glyphicon-print"></i>
+                    </a>';
+                } 
+                
+                if($datos_anual->estado=='Aprobado'){
+                    echo '<a class="view" title="" data-toggle="tooltip" 
+                   href='."planificacion/".$datos_anual->id_planificacion.' 
+                    data-original-title="Detalles">
+                    <i class="glyphicon glyphicon-eye-open"></i>
+                    </a>';
+                    
+                    echo '<a class="delete" title="" data-toggle="tooltip" 
+                       href='."impresion/anual/".$datos_anual->id_planificacion.' 
+                        data-original-title="Impresión">
+                        <i class="glyphicon glyphicon-print"></i>
+                    </a>';
+                    
+                    // comprobar si existe al menos una fila que cumpla la condición especificada
+                    $exists = Avance::model()->exists('id_planificacion='.$datos_anual->id_planificacion);
+                    if($exists==TRUE){
+                        $id_avance= Avance::model()->find('id_planificacion='.$datos_anual->id_planificacion)->id_avance;
+                        echo '<a class="delete" title="" data-toggle="tooltip" 
+                        href='."avance/update/".$id_avance.' 
+                        data-original-title="Modificar Registro de Avance">
+                        <i class="glyphicon glyphicon-refresh"></i>
+                        </a>';
+                    }
+                    else{
+                        echo '<a class="delete" title="" data-toggle="tooltip" 
+                        href='."avance/create/".$datos_anual->id_planificacion.' 
+                        data-original-title="Registro de Avance">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        </a>';
+                    }                       
+                    
+                } 
+                
+                ?>
+                
+                
             </td>
         </tr>  
          <?php $cont1=$cont1+1;} ?>
@@ -140,13 +201,54 @@ array('label'=>'Crear Planificacion','url'=>array('/crear')),
             <thead>
               <tr>           
             ';
+                 
+        $metodo='';
+        $value_button='';
+        $visible=TRUE;
+        $case='';
+        foreach($filtro_unidad as $datos){
+            if($datos->id_curso==$listado_unidad->id_curso &&
+                $datos->id_asignatura==$listado_unidad->id_asignatura){
+                $case=$datos->estado;
+                switch ($case) {
+                    case "Borrador":
+                        $metodo='poraprobar';
+                        $value_button='Enviar a Revisión';
+                        break;
+                    case "Por aprobar":
+                        $metodo='replanificar';
+                        $value_button='Replanificar';
+                        break;
+                    case "Aprobado":
+                        $metodo='#';
+                        $value_button='';
+                        $visible=FALSE;
+                        break;                   
+                }
+                                
+            }            
+        }
+        
          echo '
             <form action="impresion/unidad" method="post" target="_blank">
             <input type="hidden" name="curso" value="'.$listado_unidad->id_curso.'" />
             <input type="hidden" name="asignatura" value="'.$listado_unidad->id_asignatura.'" />
+            <input type="hidden" name="id_profesor" value="'.Yii::app()->user->name.'" />
+            <input type="hidden" name="estado" value="'.$case.'" />
             <input type="submit" value="Vista de Impresión" />
            </form>';
-           echo '
+        
+        if($visible==TRUE){
+            echo '
+                <form action="planificacion/'.$metodo.'" method="post">
+                <input type="hidden" name="curso" value="'.$listado_unidad->id_curso.'" />
+                <input type="hidden" name="asignatura" value="'.$listado_unidad->id_asignatura.'" />
+                <input type="hidden" name="profesor" value="'.Yii::app()->user->name.'" />
+                <input type="hidden" name="tipo" value="Unidad" />
+                <input type="submit" value="'.$value_button.'" />
+               </form>';
+        }
+        echo '
             </tr>
             <tr>
                 <th>Unidad N°</th>               
@@ -164,53 +266,87 @@ array('label'=>'Crear Planificacion','url'=>array('/crear')),
                 if($datos->id_curso==$listado_unidad->id_curso &&
                     $datos->id_asignatura==$listado_unidad->id_asignatura){
                 
-            echo '
-            <tr class="odd">           
-            <td>';            
-           
-            echo $cont1.'</td>';            
-            
-            echo '<td>'.$datos->fecha_inicio.'</td>';
-            echo '<td>'.$datos->fecha_termino.'</td>';
-            echo '<td>';
-             
-            if($datos->estado=="Borrador"){
-                echo '<span style="color:red;">Borrador</span>';                
-            }
-            elseif ($datos->estado=="Por aprobar") {
-                echo '<span style="color:blue;">Por aprobar</span>';  
-            }
-            elseif ($datos->estado=="Aprobado") {
-                echo '<span style="color:green;">Aprobado</span>';  
-            }
-            
-            echo '</td>';
-            echo '
-            <td class="button-column">
-                <a class="view" title="" data-toggle="tooltip" 
-                   href='; echo "planificacion/".$datos->id_planificacion;
-                   echo ' target="_blank" data-original-title="Detalles">
-                    <i class="glyphicon glyphicon-eye-open"></i>
-                </a> 
-                <a class="update" title="" data-toggle="tooltip" 
-                   href= '; echo "planificacion/update/".$datos->id_planificacion;                 
-                    echo ' data-original-title="Modificar">
-                    <i class="glyphicon glyphicon-pencil"></i>
-                </a> 
-                <a class="delete" title="" data-toggle="tooltip" 
-                   href='; echo "planificacion/delete/".$datos->id_planificacion;
-                    echo ' data-original-title="Eliminar">
-                    <i class="glyphicon glyphicon-trash"></i>
-                </a>
-                <a class="delete" title="" data-toggle="tooltip" 
-                   href='; echo "planificacion/revision/".$datos->id_planificacion;
-                   echo ' data-original-title="Enviar">
-                    <i class="glyphicon glyphicon-check"></i>
-                </a>            
-            </td>
-        </tr>';
+                    echo '
+                    <tr class="odd">           
+                    <td>';            
+
+                    echo $cont1.'</td>';            
+
+                    echo '<td>'.$datos->fecha_inicio.'</td>';
+                    echo '<td>'.$datos->fecha_termino.'</td>';
+                    echo '<td>';
+
+                    if($datos->estado=="Borrador"){
+                        echo '<span style="color:red;">Borrador</span>';  
+                        echo '</td>';
+                        echo '
+                        <td class="button-column">
+                            <a class="view" title="" data-toggle="tooltip" 
+                               href='."planificacion/".$datos->id_planificacion.
+                                ' target="_blank" data-original-title="Detalles">
+                                <i class="glyphicon glyphicon-eye-open"></i>
+                            </a> 
+                            <a class="update" title="" data-toggle="tooltip" 
+                               href= '."planificacion/update/".$datos->id_planificacion.
+                                ' data-original-title="Modificar">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                            </a> 
+                            <a class="delete" title="" data-toggle="tooltip" 
+                               href='."planificacion/delete/".$datos->id_planificacion.
+                                ' data-original-title="Eliminar">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>                        
+                        </td>
+                    </tr>';
+                    }
+                    elseif ($datos->estado=="Por aprobar") {
+                        echo '<span style="color:blue;">Por aprobar</span>'; 
+                        echo '</td>';
+                        echo '
+                        <td class="button-column">
+                            <a class="view" title="" data-toggle="tooltip" 
+                               href='."planificacion/".$datos->id_planificacion.
+                                ' target="_blank" data-original-title="Detalles">
+                                <i class="glyphicon glyphicon-eye-open"></i>
+                            </a>                                                    
+                        </td>
+                    </tr>';
+                    }
+                    elseif ($datos->estado=="Aprobado") {
+                        echo '<span style="color:green;">Aprobado</span>';  
+                        echo '</td>';
+                        echo '
+                        <td class="button-column">
+                            <a class="view" title="" data-toggle="tooltip" 
+                               href='."planificacion/".$datos->id_planificacion.
+                                ' target="_blank" data-original-title="Detalles">
+                                <i class="glyphicon glyphicon-eye-open"></i>
+                            </a> ';
+                            
+                            // comprobar si existe al menos una fila que cumpla la condición especificada
+                            $exists = Avance::model()->exists('id_planificacion='.$datos->id_planificacion);
+                            if($exists==TRUE){
+                                $id_avance= Avance::model()->find('id_planificacion='.$datos->id_planificacion)->id_avance;
+                                echo '<a class="delete" title="" data-toggle="tooltip" 
+                                href='."avance/update/".$id_avance.' 
+                                data-original-title="Modificar Registro de Avance">
+                                <i class="glyphicon glyphicon-refresh"></i>
+                                </a>';
+                            }
+                            else{
+                                echo '<a class="delete" title="" data-toggle="tooltip" 
+                                href='."avance/create/".$datos->id_planificacion.' 
+                                data-original-title="Registro de Avance">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                                </a>';
+                            }                       
+                                                    
+                        echo '
+                        </td>
+                    </tr>';
+                    }
                     
-        $cont1=$cont1+1;  
+                $cont1=$cont1+1;  
         ?>
         <?php         
                 }
@@ -266,12 +402,55 @@ array('label'=>'Crear Planificacion','url'=>array('/crear')),
             <thead>
               <tr>           
             ';
+        
+        $case='';
+        $metodo='';
+        $value_button='';
+        $visible=TRUE;
+        
+        foreach($filtro_clase as $datos){
+            if($datos->id_curso==$listado_unidad->id_curso &&
+                $datos->id_asignatura==$listado_unidad->id_asignatura){
+                $case=$datos->estado;
+                switch ($case) {
+                    case "Borrador":
+                        $metodo='poraprobar';
+                        $value_button='Enviar a Revisión';
+                        break;
+                    case "Por aprobar":
+                        $metodo='replanificar';
+                        $value_button='Replanificar';
+                        break;
+                    case "Aprobado":
+                        $metodo='#';
+                        $value_button='';
+                        $visible=FALSE;
+                        break;                   
+                }
+                                
+            }            
+        }
+        
          echo '
             <form action="impresion/clase" method="post" target="_blank">
             <input type="hidden" name="curso" value="'.$listado_unidad->id_curso.'" />
             <input type="hidden" name="asignatura" value="'.$listado_unidad->id_asignatura.'" />
+            <input type="hidden" name="id_profesor" value="'.Yii::app()->user->name.'" />
+            <input type="hidden" name="estado" value="'.$case.'" />
             <input type="submit" value="Vista de Impresión" />
            </form>';
+        
+        if($visible==TRUE){
+            echo '
+                <form action="planificacion/'.$metodo.'" method="post">
+                <input type="hidden" name="curso" value="'.$listado_unidad->id_curso.'" />
+                <input type="hidden" name="asignatura" value="'.$listado_unidad->id_asignatura.'" />
+                <input type="hidden" name="profesor" value="'.Yii::app()->user->name.'" />
+                <input type="hidden" name="tipo" value="Clase a clase" />
+                <input type="submit" value="'.$value_button.'" />
+               </form>';
+        }
+                   
            echo '
             </tr>
             <tr>
@@ -300,41 +479,75 @@ array('label'=>'Crear Planificacion','url'=>array('/crear')),
             echo '<td>'.$datos->fecha_termino.'</td>';
             echo '<td>';
              
-            if($datos->estado=="Borrador"){
-                echo '<span style="color:red;">Borrador</span>';                
+             if($datos->estado=="Borrador"){
+                echo '<span style="color:red;">Borrador</span>';  
+                echo '</td>';
+                echo '
+                <td class="button-column">
+                    <a class="view" title="" data-toggle="tooltip" 
+                       href='."planificacion/".$datos->id_planificacion.
+                        ' target="_blank" data-original-title="Detalles">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                    </a> 
+                    <a class="update" title="" data-toggle="tooltip" 
+                       href= '."planificacion/update/".$datos->id_planificacion.
+                        ' data-original-title="Modificar">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </a> 
+                    <a class="delete" title="" data-toggle="tooltip" 
+                       href='."planificacion/delete/".$datos->id_planificacion.
+                        ' data-original-title="Eliminar">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>                        
+                </td>
+            </tr>';
             }
             elseif ($datos->estado=="Por aprobar") {
-                echo '<span style="color:blue;">Por aprobar</span>';  
+                echo '<span style="color:blue;">Por aprobar</span>'; 
+                echo '</td>';
+                echo '
+                <td class="button-column">
+                    <a class="view" title="" data-toggle="tooltip" 
+                       href='."planificacion/".$datos->id_planificacion.
+                        ' target="_blank" data-original-title="Detalles">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                    </a>                                                    
+                </td>
+            </tr>';
             }
             elseif ($datos->estado=="Aprobado") {
                 echo '<span style="color:green;">Aprobado</span>';  
+                echo '</td>';
+                echo '
+                <td class="button-column">
+                    <a class="view" title="" data-toggle="tooltip" 
+                       href='."planificacion/".$datos->id_planificacion.
+                        ' target="_blank" data-original-title="Detalles">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                    </a>';
+                    // comprobar si existe al menos una fila que cumpla la condición especificada
+                    $exists = Avance::model()->exists('id_planificacion='.$datos->id_planificacion);
+                    if($exists==TRUE){
+                        $id_avance= Avance::model()->find('id_planificacion='.$datos->id_planificacion)->id_avance;
+                        echo '<a class="delete" title="" data-toggle="tooltip" 
+                        href='."avance/update/".$id_avance.' 
+                        data-original-title="Modificar Registro de Avance">
+                        <i class="glyphicon glyphicon-refresh"></i>
+                        </a>';
+                    }
+                    else{
+                        echo '<a class="delete" title="" data-toggle="tooltip" 
+                        href='."avance/create/".$datos->id_planificacion.' 
+                        data-original-title="Registro de Avance">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        </a>';
+                    }                       
+                     
+
+                echo '
+                </td>
+            </tr>';
             }
-            
-            echo '</td>';
-            echo '
-            <td class="button-column">
-                <a class="view" title="" data-toggle="tooltip" 
-                   href='; echo "planificacion/".$datos->id_planificacion;
-                   echo ' target="_blank" data-original-title="Detalles">
-                    <i class="glyphicon glyphicon-eye-open"></i>
-                </a> 
-                <a class="update" title="" data-toggle="tooltip" 
-                   href= '; echo "planificacion/update/".$datos->id_planificacion;                 
-                    echo ' data-original-title="Modificar">
-                    <i class="glyphicon glyphicon-pencil"></i>
-                </a> 
-                <a class="delete" title="" data-toggle="tooltip" 
-                   href='; echo "planificacion/delete/".$datos->id_planificacion;
-                    echo ' data-original-title="Eliminar">
-                    <i class="glyphicon glyphicon-trash"></i>
-                </a>  
-                 <a class="delete" title="" data-toggle="tooltip" 
-                   href='; echo "planificacion/revision/".$datos->id_planificacion;
-                   echo ' data-original-title="Enviar">
-                    <i class="glyphicon glyphicon-check"></i>
-                </a>
-            </td>
-        </tr>';
                     
         $cont2=$cont2+1;  
         ?>

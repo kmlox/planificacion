@@ -12,7 +12,9 @@ return array(
         //tema
         'theme'=>'blackboot',
         //'theme'=>'bootstrap',
-
+        
+        'language'=>'es',
+        //'sourceCode'=>'en',
 	// preloading 'log' component
 	'preload'=>array('log','bootstrap'),
 
