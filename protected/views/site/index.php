@@ -3,12 +3,75 @@
 
 $this->pageTitle=Yii::app()->name;
 ?>
+  
+<div class="jumbotron">
+  <h1>Planifica versión 2015</h1>
+ </div>
 
-<h1>Bienvenido a <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h1>
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+  </ol>
 
-<p> Planificaciones Curriculares, en base a objetivos y contenidos de aprendizaje aprobados por el Ministerio 
-    de Educaci&oacuten. Generando finalmente un resumen completo de sus actividades.</p>
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" role="listbox">
+    <div class="item active">
+      <img src="images/web/slide1.jpg" alt="...">     
+    </div>
+    <div class="item">
+      <img src="images/web/slide2.jpg" alt="...">
+    </div>
+    <div class="item">
+      <img src="images/web/slide3.jpg" alt="...">
+    </div>
+  </div>
 
-<p>Es una herramienta donde puede hacer an&aacutelisis de los resultados en las calificaciones de sus alumnos, por intermedio de gr&aacuteficos por curso y por <br />
-  cada uno de los estudiantes.</p>
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Anterior</span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Siguiente</span>
+  </a>
+</div>
+  
+<div class="row">
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+          <img src="images/web/plan.jpg" alt="plan" style="width:370px;height:210px;">
+          <div class="caption">
+            <h3>Portal Directivos</h3>
+            <p>Lleve un control completo de las planificaciones de su colegio
+            con la posibilidad de generar informes.
+            <p><a href="index.php/utp/seleccion" class="btn btn-primary" role="button">Ingresar</a></p>
+          </div> 
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+          <img src="images/web/clases.jpg" alt="clases" style="width:370px;height:210px;">
+          <div class="caption">
+            <h3>Portal Profesor</h3>
+            <p>Cree y organice sus planificaciones curriculares
+            <br>Clase a clase, por unidad, o anual.
+            <p><a href="index.php/profesor" class="btn btn-success" role="button">Ingresar</a></p>
+          </div> 
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+          <img src="images/web/asignaturas.jpg" alt="asignaturas" style="width:370px;height:210px;">
+          <div class="caption">
+            <h3>Portal Alumno</h3>
+            <p>En este portal puedes llevar un seguimiento de tus calificaciones para todas las asignaturas</p>
+            <p><a href="index.php/alumno" class="btn btn-warning" role="button">Ingresar</a></p>
+           </div> 
+        </div>
+    </div>
+</div>
 

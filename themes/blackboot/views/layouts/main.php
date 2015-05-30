@@ -16,10 +16,11 @@
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/bootstrap-responsive.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/style.css" />
 <!-- Le fav and touch icons -->
+<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/images/web/logo.ico" type="image/x-icon" />
 </head>
 
 <body>
-	<div class="navbar navbar-inverse navbar-fixed-top">
+	<!--div class="navbar navbar-inverse navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container-fluid">
 				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -27,7 +28,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</a>
-				<a class="brand" href="#"><?php echo Yii::app()->name ?></a>
+				<a class="brand" href="#"><?php /* echo Yii::app()->name ?></a>
 				<div class="nav-collapse">
 					<?php $this->widget('zii.widgets.CMenu',array(
 						'htmlOptions' => array( 'class' => 'nav' ),
@@ -48,12 +49,77 @@
 							array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 							array('label'=>'Salir ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 						),
-					)); ?>
+					)); */?>
 					
-				</div><!--/.nav-collapse -->
+				</div>
 			</div>
 		</div>
-	</div>
+	</div-->
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html"><?php echo Yii::app()->name ?></a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <?php $this->widget('zii.widgets.CMenu',array(
+						'encodeLabel' => false,
+    'htmlOptions' => array('class' => 'nav'),
+						'items'=>array(
+                                                        array(
+                                                            'label' => 'Dropdown <b class="caret"></b>',
+                                                            'url' => '#',
+                                                            'submenuOptions' => array('class' => 'dropdown-menu','role'=>'menu'),
+                                                            'items' => array(
+                                                                array(
+                                                                    'label' => 'Submenu Item 1',
+                                                                    'url' => array('/user/create'),
+                                                                ),
+                                                                array(
+                                                                    'label' => 'Submenu Item 1',
+                                                                    'url' => array('/user/list'),
+                                                                ),
+                                                            ),
+                                                            'itemOptions' => array('class' => 'dropdown'),
+                                                            'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown','role'=>'button','aria-expanded'=>"false"),
+                                                            
+                                                        ),
+							array('label'=>'Inicio', 'url'=>array('/site/index')),
+							array('label'=>'Menú Profesor', 'url'=>array('/profesor')),
+                                                        array('label'=>'Planificaciones', 'url'=>array('/planificacion')),
+                                                        array('label'=>'Alumno', 'url'=>array('/alumno')),
+                                                        array('label'=>'Evaluaciones', 'url'=>array('/evaluacion')),
+                                                        array('label'=>'OA', 'url'=>array('/oA')),
+                                                        array('label'=>'Indicadores', 'url'=>array('/indicador')),
+                                                        array('label'=>'AE', 'url'=>array('/aE')),
+                                                        array('label'=>'CMO', 'url'=>array('/cMO')),
+                                                        array('label'=>'OFV', 'url'=>array('/oFV')),
+                                                        array('label'=>'Contacto', 'url'=>array('/site/contact')),
+							array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
+							array('label'=>'Salir ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest),
+                                                        
+						),
+                        
+					)); 
+                    ?>
+                    
+                    
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
 	
 	<div class="cont">
 	<div class="container-fluid">
