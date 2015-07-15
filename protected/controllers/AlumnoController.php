@@ -27,8 +27,12 @@ public function accessRules()
 {
 return array(
 array('allow',  // allow all users to perform 'index' and 'view' actions
-'actions'=>array('index','view'),
-'users'=>array('*'),
+'actions'=>array('view'),
+'users'=>array('@'),
+),
+    array('allow',  // allow all users to perform 'index' and 'view' actions
+'actions'=>array('index','informe'),
+'roles'=>array('alumno'),
 ),
 array('allow', // allow authenticated user to perform 'create' and 'update' actions
 'actions'=>array('create','update'),
@@ -54,6 +58,35 @@ $this->render('view',array(
 'model'=>$this->loadModel($id),
 ));
 }
+
+ public function actionInforme()
+    {   
+        $id_asignatura=$_POST['id_asignatura'];
+        $nombre_asignatura=  Asignatura::model()->findbyPk($id_asignatura)->nombre_asignatura;
+        
+        $id_usuario="22445144-K";
+        $nombre_alumno=Usuario::model()->findbyPk($id_usuario)->nombre_usuario;
+        
+        $model_graph = Yii::app()->db->createCommand("CALL calificaciones_alumno("."'".$id_usuario."','".$id_asignatura."')")->setFetchMode(PDO::FETCH_OBJ)->queryAll();               
+        $array_notas=array();
+        $array_eval=array();
+        
+            foreach($model_graph as $row){
+                array_push($array_notas, floatval($row->nota));
+                array_push($array_eval, $row->nombre_evaluacion);
+            }   
+                
+                
+        $this->render('informe',array(
+            'nombre_alumno'=>$nombre_alumno,
+            'model_graph'=>$model_graph,
+            'array_notas'=>$array_notas,
+            'array_eval'=>$array_eval,
+            'nombre_asignatura'=>$nombre_asignatura,
+            'id_alumno'=>$id_usuario,
+        ));
+    }
+
 
 /**
 * Creates a new model.

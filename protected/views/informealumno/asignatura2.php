@@ -1,7 +1,20 @@
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
 
+<?php 
+
+
+            $id_curso=Alumno::model()->findbyPk($id_alumno)->id_curso;
+            $grado=Curso::model()->findbyPk($id_curso)->id_grado;
+            $data=Asignatura::model()->findAll('id_grado='.'"'.$grado.'"');
+
+            $data=CHtml::listData($data,'id_asignatura','nombre_asignatura');
+
+echo CHtml::dropDownList('id_nivel','',$data);		
+?>
+
 <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
 
 <script type="text/javascript">
 $(function () {
@@ -36,24 +49,20 @@ $(function () {
             x: -20 //center
         },
         subtitle: {
-           // text: <?php // echo '"Curso: '.$nombre_curso.'"';?>,
-            //x: -20
+            text: <?php echo '"Alumno(a): '.$nombre_alumno.'"';?>,
+            x: -20
         },
         xAxis: {
             categories: 
-            <?php echo json_encode($array_notas);?>
+            <?php echo json_encode($array_eval);?>
             
            
         },
         yAxis: {
             title: {
-                text: 'Cantidad de alumnos',
-               // max:2,
-                //min:0,
-                //range:10,
-                floor: 0,
-                ceiling: 50,
-                
+                text: 'Nota',
+                max:7,
+                min:1,
             },
             plotLines: [{
                 value: 0,
@@ -74,9 +83,8 @@ $(function () {
         [  
       
         <?php
-            $visitas = array('name' => $nombre_asignatura , 'data' => $array_eval);
-            echo json_encode($visitas).",";
-            
+            $visitas = array( 'name' => $nombre_asignatura , 'data' => $array_notas);
+            echo json_encode($visitas).",";           
             ?>
         ]
         ,

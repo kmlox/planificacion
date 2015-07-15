@@ -62,10 +62,14 @@
 <label class="control-label">Objetivos de Aprendizaje (OA)</label>
     <?php
         //Se cargan todas los OA correspondientes a la asignatura de todas las unidades
-        $oa=OA::model()->findAll("id_asignatura='".$id_asignatura."'"." and "."(id_profesor="."'".Yii::app()->user->name."'"." or "."id_profesor is NULL)");        
+        $oa=OA::model()->findAll("id_asignatura='".$id_asignatura."'"." and ".
+                "(id_profesor="."'".Yii::app()->user->name."'"." or "."id_profesor is NULL)");        
         //se consulta si se seleccionó alguna unidad previamente en sección crear planificación
         if($model->id_planificacion==NULL&&$id_unidad!=null){            
-            $oas = Yii::app()->db->createCommand("CALL filtro_unidad_OA(".$id_unidad.",'".$id_asignatura."','".Yii::app()->user->name."')")->setFetchMode(PDO::FETCH_OBJ)->queryAll();               
+            $oas = Yii::app()->db->createCommand("CALL filtro_unidad_OA(".$id_unidad.",'".
+                    $id_asignatura."','".Yii::app()->user->name."')")
+                    ->setFetchMode(PDO::FETCH_OBJ)
+                    ->queryAll();               
             $array_id=array();
             foreach($oas as $row){
                     array_push($array_id, $row->id_OA);                   

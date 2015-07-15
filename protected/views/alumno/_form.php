@@ -60,7 +60,10 @@ $this->widget('CMultiFileUpload', array(
   		'duplicate'=>'Archivo duplicado',
 ));
 ?></div>
-        
+
+<div>
+    <A HREF="http://www.htmlpoint.com">Descargar formato de planilla Excel</A>
+</div>
 <div class="form-actions">
 	<?php $this->widget('booster.widgets.TbButton', array(
 			'buttonType'=>'submit',

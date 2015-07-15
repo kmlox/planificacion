@@ -27,7 +27,7 @@ public function accessRules()
 {
 return array(
 array('allow',  // allow all users to perform 'index' and 'view' actions
-'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura','SelectAlumno','Asignatura'),
+'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura','SelectAlumno','Asignatura','Asignatura2','SelectGraph'),
 'users'=>array('*'),
 ),
 array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -144,6 +144,7 @@ $this->render('index',array(
             'array_notas'=>$array_notas,
             'array_eval'=>$array_eval,
             'nombre_asignatura'=>$nombre_asignatura,
+            'id_alumno'=>$id_usuario,
         ));
     }
 
@@ -204,5 +205,7 @@ $this->render('index',array(
             foreach ($data as $value=>$nombreasig)
             echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
         }
+        
+                
 }
 

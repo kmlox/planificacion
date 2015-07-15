@@ -12,7 +12,7 @@
       <th colspan="2" scope="col">&nbsp;</th>
     </tr>
     <tr>
-      <td colspan="2"><div align="center"><font size="5"><em>Profesor (a): </em></font></div></td>
+        <td colspan="2"><h1>Crear Planificación</h1></td>
     </tr>
     <tr>
       <td colspan="2">
@@ -30,30 +30,34 @@
         array('empty'=>'Seleccione Nivel')); 
         */
         ?>
+      </td>
         <td width="531">
+            <strong>Seleccione ítems requeridos</strong>
           <?php
        $this->menu=array(
 array('label'=>'Lista de Planificaciones','url'=>array('planificacion/index')),
 array('label'=>'Administrar Planificaciones','url'=>array('admin')),
 );
 ?>
-                 
+        </td>                 
     </tr>
   </table>
     
     <div class="row">
 		<table>
-  			<tr>
+                    <tr>
     			<td><span class="required">*</span>Nivel
-					<?php echo CHtml::dropDownList('id_nivel','',CHtml::ListData(Nivel::model()->findAll(),'id_nivel','nombre_nivel'),
-					array(
-					'prompt'=>'Seleccione Nivel',
-					'ajax'=>array(
-					'type'=>'POST',
-					'url'=>CController::createUrl('Planificacion/SelectGrado'),
-					'update'=>'#id_grado',
-					'data'=>array('id_nivel'=>'js:this.value'),
-					)));		
+					<?php   echo CHtml::dropDownList('id_nivel','',
+                                                CHtml::ListData(Nivel::model()->findAll(),
+                                                'id_nivel','nombre_nivel'),
+                                                    array(
+                                                    'prompt'=>'Seleccione Nivel',
+                                                    'ajax'=>array(
+                                                    'type'=>'POST',
+                                                    'url'=>CController::createUrl('Planificacion/SelectGrado'),
+                                                    'update'=>'#id_grado',
+                                                    'data'=>array('id_nivel'=>'js:this.value'),
+                                                )));		
 					?>
 				</td>
 				
@@ -83,9 +87,11 @@ array('label'=>'Administrar Planificaciones','url'=>array('admin')),
                                         'data'=>array('id_curso'=>'js:this.value'),
 					)));
 					?>		
-				</td>
+				</td>                              
                                 
-                                <td><span class="required">*</span>Asignatura
+  			</tr>
+                    <tr>
+                        <td><span class="required">*</span>Asignatura
 					<?php 		
 					echo CHtml::dropDownList('id_asignatura','',array(),
                                          array(
@@ -112,9 +118,11 @@ array('label'=>'Administrar Planificaciones','url'=>array('admin')),
 					)));
 					?>	                                   
                                 </td>
-  			</tr>
+                        <td></td>
+                    </tr>
                         <tr>
                                 <td>
+                                    <p><strong>Tipo de Planificación</strong></p>
                                     <label class="radio">
                                         <input placeholder="Radio buttons" id="TestForm_radioButtons_0" value="CC" type="radio" name="tipo" />
                                         Clase a Clase

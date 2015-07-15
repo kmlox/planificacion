@@ -13,7 +13,8 @@
 
 	<?php 
         echo $form->labelEx($model,'logrado');
-        echo $form->dropDownList($model,'logrado',array(1 => 'SI', 0 => 'NO'),array('empty'=>'Seleccione Opción')); ?>
+        echo $form->dropDownList($model,'logrado',array(10 => '10%', 20 => '20%',30 => '30%',
+            40 => '40%',50 => '50%',60 => '60%',70 => '70%',80 => '80%',90 => '90%',100 => '100%'),array('empty'=>'Seleccione Opción')); ?>
         <br><br>
         
 	<?php echo $form->textAreaGroup($model,'comentario', array('widgetOptions'=>array('htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'span8')))); ?>

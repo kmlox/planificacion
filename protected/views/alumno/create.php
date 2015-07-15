@@ -10,6 +10,6 @@ array('label'=>'Manage Alumno','url'=>array('admin')),
 );
 ?>
 
-<h1>Create Alumno</h1>
+<h1>Carga Masiva de Alumnos</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

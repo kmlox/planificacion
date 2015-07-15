@@ -67,7 +67,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html"><?php echo Yii::app()->name ?></a>
+                <a class="navbar-brand" href="../"><?php echo Yii::app()->name ?></a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -76,36 +76,62 @@
 						'encodeLabel' => false,
     'htmlOptions' => array('class' => 'nav'),
 						'items'=>array(
+                                                    array('label'=>'Inicio', 'url'=>array("../..".Yii::app()->baseUrl)),
+                                                        /*array('label'=>'Planificaciones', 'url'=>array('/planificacion')),
+                                                        array('label'=>'Evaluaciones', 'url'=>array('/evaluacion')),
                                                         array(
-                                                            'label' => 'Dropdown <b class="caret"></b>',
+                                                            'label' => 'Mis Items<b class="caret"></b>',
                                                             'url' => '#',
                                                             'submenuOptions' => array('class' => 'dropdown-menu','role'=>'menu'),
                                                             'items' => array(
                                                                 array(
-                                                                    'label' => 'Submenu Item 1',
-                                                                    'url' => array('/user/create'),
+                                                                    'label' => 'OA',
+                                                                    'url' => array('/oA'),
                                                                 ),
                                                                 array(
-                                                                    'label' => 'Submenu Item 1',
-                                                                    'url' => array('/user/list'),
+                                                                    'label' => 'Indicadores',
+                                                                    'url' => array('/indicador'),
+                                                                ),
+                                                                array(
+                                                                    'label' => 'AE',
+                                                                    'url' => array('/aE'),
+                                                                ),
+                                                                array(
+                                                                    'label' => 'CMO',
+                                                                    'url' => array('/cMO'),
+                                                                ),
+                                                                array(
+                                                                    'label' => 'OFV',
+                                                                    'url' => array('/oFV'),
                                                                 ),
                                                             ),
                                                             'itemOptions' => array('class' => 'dropdown'),
                                                             'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown','role'=>'button','aria-expanded'=>"false"),
                                                             
                                                         ),
-							array('label'=>'Inicio', 'url'=>array('/site/index')),
-							array('label'=>'Menú Profesor', 'url'=>array('/profesor')),
-                                                        array('label'=>'Planificaciones', 'url'=>array('/planificacion')),
-                                                        array('label'=>'Alumno', 'url'=>array('/alumno')),
-                                                        array('label'=>'Evaluaciones', 'url'=>array('/evaluacion')),
-                                                        array('label'=>'OA', 'url'=>array('/oA')),
-                                                        array('label'=>'Indicadores', 'url'=>array('/indicador')),
-                                                        array('label'=>'AE', 'url'=>array('/aE')),
-                                                        array('label'=>'CMO', 'url'=>array('/cMO')),
-                                                        array('label'=>'OFV', 'url'=>array('/oFV')),
+                                                    array(
+                                                            'label' => 'Reportes<b class="caret"></b>',
+                                                            'url' => '#',
+                                                            'submenuOptions' => array('class' => 'dropdown-menu','role'=>'menu'),
+                                                            'items' => array(
+                                                                array(
+                                                                    'label' => 'Notas Alumno',
+                                                                    'url' => array('/informealumno'),
+                                                                ),
+                                                                array(
+                                                                    'label' => 'Notas Curso',
+                                                                    'url' => array('/informecurso'),
+                                                                ),                                                                
+                                                            ),
+                                                            'itemOptions' => array('class' => 'dropdown'),
+                                                            'linkOptions' => array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown','role'=>'button','aria-expanded'=>"false"),
+                                                            
+                                                        ),
+                                                         * 
+                                                         */
                                                         array('label'=>'Contacto', 'url'=>array('/site/contact')),
-							array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
+                                                        array('label'=>'Acerca de este Sitio', 'url'=>array('/site/acerca')),
+							//array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 							array('label'=>'Salir ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest),
                                                         
 						),
@@ -145,45 +171,15 @@
 	<div class="extra">
 	  <div class="container">
 		<div class="row">
-			<div class="col-md-3">
-				<h4>Heading 1</h4>
+			<div align="center">
+				<h4>Planifica</h4>
 				<ul>
-					<li><a href="#">Subheading 1.1</a></li>
-					<li><a href="#">Subheading 1.2</a></li>
-					<li><a href="#">Subheading 1.3</a></li>
-					<li><a href="#">Subheading 1.4</a></li>
+					<li><img src=<?php echo Yii::app()->baseUrl."/images/web/logo.png " ?>alt="HTML5Icon" style="width:90px;height:90px;"></li>
+					
 				</ul>
 			</div> <!-- /span3 -->
 			
-			<div class="col-md-3">
-				<h4>Heading 2</h4>
-				<ul>
-					<li><a href="#">Subheading 2.1</a></li>
-					<li><a href="#">Subheading 2.2</a></li>
-					<li><a href="#">Subheading 2.3</a></li>
-					<li><a href="#">Subheading 2.4</a></li>
-				</ul>
-			</div> <!-- /span3 -->
 			
-			<div class="col-md-3">
-				<h4>Heading 3</h4>	
-				<ul>
-					<li><a href="#">Subheading 3.1</a></li>
-					<li><a href="#">Subheading 3.2</a></li>
-					<li><a href="#">Subheading 3.3</a></li>
-					<li><a href="#">Subheading 3.4</a></li>
-				</ul>
-			</div> <!-- /span3 -->
-			
-			<div class="col-md-3">
-				<h4>Heading 4</h4>
-				<ul>
-					<li><a href="#">Subheading 4.1</a></li>
-					<li><a href="#">Subheading 4.2</a></li>
-					<li><a href="#">Subheading 4.3</a></li>
-					<li><a href="#">Subheading 4.4</a></li>
-				</ul>
-				</div> <!-- /span3 -->
 			</div> <!-- /row -->
 		</div> <!-- /container -->
 	</div>

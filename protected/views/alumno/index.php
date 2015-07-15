@@ -1,17 +1,35 @@
-<?php
-$this->breadcrumbs=array(
-	'Alumnos',
-);
+<h1>Portal Alumnos</h1>
 
-$this->menu=array(
-array('label'=>'Create Alumno','url'=>array('create')),
-array('label'=>'Manage Alumno','url'=>array('admin')),
-);
+<h2>Mis notas</h2>
+<?php
+$alumno=Alumno::model()->findAll("id_alumno='22445144-K'");
+$id_curso="";
+foreach ($alumno as $row){
+    $id_curso=$row->id_curso;
+}
+
+$id_grado=Curso::model()->findbyPk($id_curso)->id_grado;
+
 ?>
 
-<h1>Alumnos</h1>
-
-<?php $this->widget('booster.widgets.TbListView',array(
-'dataProvider'=>$dataProvider,
-'itemView'=>'_view',
-)); ?>
+   <?php 
+    echo CHtml::beginForm('alumno/informe');
+    echo CHtml::dropDownList('id_asignatura','',CHtml::ListData(Asignatura::model()->findAll("id_grado="."'".$id_grado."'"),'id_asignatura','nombre_asignatura'),
+    array(
+    'prompt'=>'Selecciona Asignatura',
+    'ajax'=>array(
+    'type'=>'POST',
+    'url'=>CController::createUrl('Informecurso/SelectGrado'),
+    'update'=>'#id_grado',
+    'data'=>array('id_nivel'=>'js:this.value'),
+    )));		
+    ?>
+ <div class="form-actions"></br></p>
+	<?php $this->widget('booster.widgets.TbButton', array(
+		'buttonType'=>'submit',
+		'context'=>'warning',
+		'label'=>'Ver notas',
+	)); 
+        echo CHtml::endForm();  
+        ?>        
+</div>  

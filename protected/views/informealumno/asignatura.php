@@ -41,7 +41,7 @@ $(function () {
         },
         xAxis: {
             categories: 
-            <?php echo json_encode($array_eval); ?>
+            <?php echo json_encode($array_eval);?>
             
            
         },
@@ -71,7 +71,7 @@ $(function () {
       
         <?php
             $visitas = array( 'name' => $nombre_asignatura , 'data' => $array_notas);
-            echo json_encode($visitas);
+            echo json_encode($visitas).",";
             ?>
         ]
         ,

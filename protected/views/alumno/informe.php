@@ -36,24 +36,20 @@ $(function () {
             x: -20 //center
         },
         subtitle: {
-           // text: <?php // echo '"Curso: '.$nombre_curso.'"';?>,
-            //x: -20
+            text: <?php echo '"Alumno(a): '.$nombre_alumno.'"';?>,
+            x: -20
         },
         xAxis: {
             categories: 
-            <?php echo json_encode($array_notas);?>
+            <?php echo json_encode($array_eval);?>
             
            
         },
         yAxis: {
             title: {
-                text: 'Cantidad de alumnos',
-               // max:2,
-                //min:0,
-                //range:10,
-                floor: 0,
-                ceiling: 50,
-                
+                text: 'Nota',
+                floor: 1,
+                ceiling: 7,
             },
             plotLines: [{
                 value: 0,
@@ -74,9 +70,8 @@ $(function () {
         [  
       
         <?php
-            $visitas = array('name' => $nombre_asignatura , 'data' => $array_eval);
+            $visitas = array( 'name' => $nombre_asignatura , 'data' => $array_notas);
             echo json_encode($visitas).",";
-            
             ?>
         ]
         ,

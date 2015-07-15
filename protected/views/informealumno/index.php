@@ -77,8 +77,9 @@ array('label'=>'Administrar Planificaciones','url'=>array('admin')),
 					)));
 					?>		
 				</td>
-                                
-                                <td><span class="required">*</span>Alumno
+  			</tr>
+                    <tr>
+                        <td><span class="required">*</span>Alumno
 					<?php 		
 					echo CHtml::dropDownList('id_usuario','',array(),
                                          array(
@@ -99,18 +100,21 @@ array('label'=>'Administrar Planificaciones','url'=>array('admin')),
                           		'prompt'=>'Seleccione Asignatura',
 					'ajax'=>array(
 					'type'=>'POST',
-					//'url'=>CController::createUrl('Planificacion/SelectAsignatura'),
-					//'update'=>'#'.CHtml::activeId($model,'id_asignatura'),
-                                        'data'=>array('id_asignatura'=>'js:this.value'),
+					//'url'=>CController::createUrl('Informealumno/SelectGraph'),
+					//'update'=>'#graph',
+                                        //'data'=>array('id_asignatura'=>'js:this.value','id_usuario'=>'js:this.value'),
 					)));
 					?>	                                   
                                 </td>
-  			</tr>                        
+                        <td></td>
+                        
+                    </tr>
   		</table>
   		
 	</div>
 </div>
- <div class="form-actions"></br></p>
+    
+<div class="form-actions"></br></p>
 	<?php $this->widget('booster.widgets.TbButton', array(
 		'buttonType'=>'submit',
 		'context'=>'primary',

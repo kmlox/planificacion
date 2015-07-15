@@ -21,7 +21,7 @@
     <tr>
       <td width="259">
         <?php
-        echo CHtml::beginForm('informealumno/asignatura');
+        echo CHtml::beginForm('informecurso/asignatura');
         ?>
         <td width="531">
           <?php
@@ -76,9 +76,10 @@ array('label'=>'Administrar Planificaciones','url'=>array('admin')),
                                         'data'=>array('id_curso'=>'js:this.value'),
 					)));
 					?>		
-				</td>
-                            
-                            <td>
+				</td> 
+  			</tr> 
+                    <tr>
+                        <td>
                                     <span class="required">*</span>Asignatura
 					<?php 		
 					echo CHtml::dropDownList('id_asignatura','',array(),
@@ -86,13 +87,28 @@ array('label'=>'Administrar Planificaciones','url'=>array('admin')),
                           		'prompt'=>'Seleccione Asignatura',
 					'ajax'=>array(
 					'type'=>'POST',
+					'url'=>CController::createUrl('Informecurso/SelectEvaluacion'),
+					'update'=>'#id_evaluacion',
+                                        'data'=>array('id_asignatura'=>'js:this.value'),
+					)));
+					?>	                                   
+                            </td>
+                            <td>
+                                    <span class="required">*</span>Evaluación
+					<?php 		
+					echo CHtml::dropDownList('id_evaluacion','',array(),
+                                         array(
+                          		'prompt'=>'Seleccione Evaluación',
+					'ajax'=>array(
+					'type'=>'POST',
 					//'url'=>CController::createUrl('Planificacion/SelectAsignatura'),
 					//'update'=>'#'.CHtml::activeId($model,'id_asignatura'),
                                         'data'=>array('id_asignatura'=>'js:this.value'),
 					)));
 					?>	                                   
-                                </td>
-  			</tr>                        
+                            </td>
+                        <td></td>
+                    </tr>
   		</table>
   		
 	</div>

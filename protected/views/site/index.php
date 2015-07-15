@@ -5,7 +5,8 @@ $this->pageTitle=Yii::app()->name;
 ?>
   
 <div class="jumbotron">
-  <h1>Planifica versión 2015</h1>
+  <h1>Planifica V.2015</h1>
+  <h2 align="center">Crea, Organiza, Administra e Informa</h2>
  </div>
 
 <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
@@ -16,16 +17,16 @@ $this->pageTitle=Yii::app()->name;
     <li data-target="#carousel-example-generic" data-slide-to="2"></li>
   </ol>
 
-  <!-- Wrapper for slides -->
+  <!--slides -->
   <div class="carousel-inner" role="listbox">
     <div class="item active">
-      <img src="images/web/slide1.jpg" alt="...">     
+      <img src=<?php echo Yii::app()->baseUrl."/images/web/slide1.jpg"?> alt="...">     
     </div>
     <div class="item">
-      <img src="images/web/slide2.jpg" alt="...">
+      <img src=<?php echo Yii::app()->baseUrl."/images/web/slide2.jpg"?> alt="...">
     </div>
     <div class="item">
-      <img src="images/web/slide3.jpg" alt="...">
+      <img src=<?php echo Yii::app()->baseUrl."/images/web/slide3.jpg"?> alt="...">
     </div>
   </div>
 
@@ -43,7 +44,7 @@ $this->pageTitle=Yii::app()->name;
 <div class="row">
     <div class="col-sm-6 col-md-4">
         <div class="thumbnail">
-          <img src="images/web/plan.jpg" alt="plan" style="width:370px;height:210px;">
+          <img src=<?php echo Yii::app()->baseUrl."/images/web/plan.jpg"?> alt="plan" style="width:370px;height:210px;">
           <div class="caption">
             <h3>Portal Directivos</h3>
             <p>Lleve un control completo de las planificaciones de su colegio
@@ -54,7 +55,7 @@ $this->pageTitle=Yii::app()->name;
     </div>
     <div class="col-sm-6 col-md-4">
         <div class="thumbnail">
-          <img src="images/web/clases.jpg" alt="clases" style="width:370px;height:210px;">
+          <img src=<?php echo Yii::app()->baseUrl."/images/web/clases.jpg"?> alt="clases" style="width:370px;height:210px;">
           <div class="caption">
             <h3>Portal Profesor</h3>
             <p>Cree y organice sus planificaciones curriculares
@@ -65,7 +66,7 @@ $this->pageTitle=Yii::app()->name;
     </div>
     <div class="col-sm-6 col-md-4">
         <div class="thumbnail">
-          <img src="images/web/asignaturas.jpg" alt="asignaturas" style="width:370px;height:210px;">
+          <img src=<?php echo Yii::app()->baseUrl."/images/web/asignaturas.jpg"?> alt="asignaturas" style="width:370px;height:210px;">
           <div class="caption">
             <h3>Portal Alumno</h3>
             <p>En este portal puedes llevar un seguimiento de tus calificaciones para todas las asignaturas</p>

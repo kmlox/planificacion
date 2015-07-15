@@ -27,7 +27,7 @@ public function accessRules()
 {
 return array(
 array('allow',  // allow all users to perform 'index' and 'view' actions
-'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura'),
+'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura','SelectEvaluacion','asignatura'),
 'users'=>array('*'),
 ),
 array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -54,6 +54,37 @@ $this->render('view',array(
 'model'=>$this->loadModel($id),
 ));
 }
+
+ public function actionAsignatura()
+    {   
+        $id_asignatura=$_POST['id_asignatura'];
+        $id_evaluacion=$_POST['id_evaluacion'];
+        
+        $nombre_asignatura=  Asignatura::model()->findbyPk($id_asignatura)->nombre_asignatura;
+        
+        $id_curso=$_POST['id_curso'];
+        $curso=Curso::model()->findbyPk($id_curso);
+        $grado=Grado::model()->findbyPk($curso->id_grado);
+        $nombre_curso=$grado->nombre_grado." - ".$curso->nombre_curso;
+        
+        $model_graph = Yii::app()->db->createCommand("CALL notas_curso_evaluacion("."'".$id_evaluacion."')")->setFetchMode(PDO::FETCH_OBJ)->queryAll();               
+        $array_notas=array();
+        $array_eval=array();
+        
+            foreach($model_graph as $row){
+                array_push($array_notas, floatval($row->nota));
+                array_push($array_eval, (int)$row->cantidad);
+            }   
+                
+                
+        $this->render('asignatura',array(
+            
+            'model_graph'=>$model_graph,
+            'array_notas'=>$array_notas,
+            'array_eval'=>$array_eval,
+            'nombre_asignatura'=>$nombre_asignatura,
+        ));
+    }
 
 /**
 * Creates a new model.
@@ -160,5 +191,19 @@ $this->render('index',array(
             foreach ($data as $value=>$nombreasig)
             echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
         }
+        
+        public function actionSelectEvaluacion(){
+
+            //array de tipo int perteneciente a clave primaria
+            $data=  Evaluacion::model()->findAll('id_asignatura=:id_asignatura',array(':id_asignatura'=>(string) $_POST['id_asignatura']));
+
+            $data=CHtml::listData($data,'id_evaluacion','nombre_evaluacion');
+
+            echo "<option value=''>Seleccione Evaluación</option>";
+            foreach ($data as $value=>$nombreevaluacion)
+            echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreevaluacion),true);
+
+
+	}
 }
 
