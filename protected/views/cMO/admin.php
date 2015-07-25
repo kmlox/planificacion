@@ -1,12 +1,12 @@
 <?php
 $this->breadcrumbs=array(
-	'Objetivos Fundamentales Verticales'=>array('index'),
-	'Administración de OFV',
+	'Contenidos Mínimos Obligatorios'=>array('index'),
+	'Administración de CMO',
 );
 
 $this->menu=array(
-array('label'=>'Listado de OFV','url'=>array('index')),
-array('label'=>'Crear OFV','url'=>array('create')),
+array('label'=>'Listado de CMO','url'=>array('index')),
+array('label'=>'Crear CMO','url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -15,7 +15,7 @@ $('.search-form').toggle();
 return false;
 });
 $('.search-form form').submit(function(){
-$.fn.yiiGridView.update('ofv-grid', {
+$.fn.yiiGridView.update('cmo-grid', {
 data: $(this).serialize()
 });
 return false;
@@ -23,7 +23,7 @@ return false;
 ");
 ?>
 
-<h1>Administración de OFV</h1>
+<h1>Administración de CMO</h1>
 
 <p>
 	Puede ocupar opcionalmente estos operadores (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>
@@ -39,28 +39,29 @@ return false;
 </div><!-- search-form -->
 
 <?php $this->widget('booster.widgets.TbGridView',array(
-'id'=>'ofv-grid',
+'id'=>'cmo-grid',
 'dataProvider'=>$model->search(),
 'filter'=>$model,
-'columns'=>array(
+'columns'=>array(    
     array(
-		'name'=>'descripcion_OFV',
-                'header'=>'Descripción OFV',
+		'name'=>'descripcion_CMO',
+                'header'=>'Descripción CMO',
     ),
     array(
 		'name'=>'id_asignatura',
                 'header'=>'Asignatura',
                 'value'=>'$data->relAsignatura->nombre_asignatura'
     ),
+		//'id_asignatura',
 		//'id_profesor',
 array(
 'class'=>'CButtonColumn',
     'template' => '{view}{update}{delete}',
-                 'viewButtonUrl' =>'Yii::app()->createUrl("/oFV/view/".$data->primaryKey)',
+                 'viewButtonUrl' =>'Yii::app()->createUrl("/cMO/view/".$data->primaryKey)',
                  'viewButtonImageUrl'=>Yii::app()->request->baseUrl.'/images/web/detalles.png',
-                 'updateButtonUrl' =>'Yii::app()->createUrl("/oFV/update/".$data->primaryKey)',
+                 'updateButtonUrl' =>'Yii::app()->createUrl("/cMO/update/".$data->primaryKey)',
                  'updateButtonImageUrl'=>Yii::app()->request->baseUrl.'/images/web/actualizar.png', 
-                 'deleteButtonUrl' =>'Yii::app()->createUrl("/oFV/eliminar?id=".$data->primaryKey)',
+                 'deleteButtonUrl' =>'Yii::app()->createUrl("/cMO/eliminar?id=".$data->primaryKey)',
                  'deleteButtonImageUrl'=>Yii::app()->request->baseUrl.'/images/web/eliminar.png', 
         
 ),

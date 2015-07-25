@@ -27,7 +27,13 @@
         <?php
          echo CHtml::button('Eliminar',
                     array('submit'=>array('eliminar?id='.$data->id_OA),
-                    'confirm' => '¿Esta seguro que desea eliminar este OA?',));          
+                    'confirm' => '¿Está seguro que desea eliminar este OA? Recuerde que al eliminar'
+                        . ' este OA se eliminarán consigo todos los Indicadores dependientes',));          
+        echo ' ';
+        
+        echo CHtml::button('Actualizar',
+                    array('submit'=>array('update?id='.$data->id_OA))); 
+                
         ?>
         <br />
                

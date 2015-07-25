@@ -1,15 +1,15 @@
 <?php
 $this->breadcrumbs=array(
 	'Aprendizajes Esperados'=>array('index'),
-	'Crear',
+	'Crear Aprendizajes Esperados',
 );
 
 $this->menu=array(
-array('label'=>'Lista de AE','url'=>array('index')),
-//array('label'=>'Manage AE','url'=>array('admin')),
+array('label'=>'Listado de Aprendizajes Esperados','url'=>array('index')),
+array('label'=>'Administrar Aprendizajes Esperados','url'=>array('admin')),
 );
 ?>
 
-<h1>Crear AE</h1>
+<h1>Crear Aprendizajes Esperados</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

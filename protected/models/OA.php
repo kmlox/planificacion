@@ -24,8 +24,19 @@ class OA extends CActiveRecord
 	{
 		return 'OA';
 	}
-
-	/**
+        
+        protected function beforeSave()
+        {
+            //Se pregunta si es profesor, para almacenar el identificador en la tabla OA
+            //Pero si es administrador, se deja en null para ser utilizado por todos
+            if(Profesor::model()->exists('id_profesor='.Yii::app()->user->name)){
+                $this->id_profesor=Yii::app()->user->name;
+            }
+            
+            return parent::beforeSave();
+        }
+        
+        /**
 	 * @return array validation rules for model attributes.
 	 */
 	public function rules()
@@ -51,7 +62,7 @@ class OA extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'idAsignatura' => array(self::BELONGS_TO, 'Asignatura', 'id_asignatura'),
+			'relAsignatura' => array(self::BELONGS_TO, 'Asignatura', 'id_asignatura'),
 			'idProfesor' => array(self::BELONGS_TO, 'Profesor', 'id_profesor'),
 			'indicadors' => array(self::HAS_MANY, 'Indicador', 'id_oa'),
 			'unidads' => array(self::MANY_MANY, 'Unidad', 'unidad_tiene_OA(id_OA, id_unidad)'),

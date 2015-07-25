@@ -1,12 +1,12 @@
 <?php
 $this->breadcrumbs=array(
-	'Objetivos Fundamentales Verticales'=>array('index'),
-	'Administración de OFV',
+	'Indicadores'=>array('index'),
+	'Administración de Indicadores',
 );
 
 $this->menu=array(
-array('label'=>'Listado de OFV','url'=>array('index')),
-array('label'=>'Crear OFV','url'=>array('create')),
+array('label'=>'Lista de Indicadores','url'=>array('index')),
+array('label'=>'Crear Indicador','url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -15,7 +15,7 @@ $('.search-form').toggle();
 return false;
 });
 $('.search-form form').submit(function(){
-$.fn.yiiGridView.update('ofv-grid', {
+$.fn.yiiGridView.update('indicador-grid', {
 data: $(this).serialize()
 });
 return false;
@@ -23,7 +23,7 @@ return false;
 ");
 ?>
 
-<h1>Administración de OFV</h1>
+<h1>Administración de Indicadores</h1>
 
 <p>
 	Puede ocupar opcionalmente estos operadores (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>
@@ -39,28 +39,29 @@ return false;
 </div><!-- search-form -->
 
 <?php $this->widget('booster.widgets.TbGridView',array(
-'id'=>'ofv-grid',
+'id'=>'indicador-grid',
 'dataProvider'=>$model->search(),
 'filter'=>$model,
 'columns'=>array(
+    
     array(
-		'name'=>'descripcion_OFV',
-                'header'=>'Descripción OFV',
-    ),
-    array(
-		'name'=>'id_asignatura',
-                'header'=>'Asignatura',
-                'value'=>'$data->relAsignatura->nombre_asignatura'
-    ),
-		//'id_profesor',
+		'name'=>'descripcion_indicador',
+                'header'=>'Descripción Indicador',
+        ),
+     array(
+		'name'=>'id_oa',
+                'header'=>'Código OA',
+                'value' =>'substr($data->id_oa,4,8)'
+        ),
+		
 array(
 'class'=>'CButtonColumn',
     'template' => '{view}{update}{delete}',
-                 'viewButtonUrl' =>'Yii::app()->createUrl("/oFV/view/".$data->primaryKey)',
+                 'viewButtonUrl' =>'Yii::app()->createUrl("/indicador/view/".$data->primaryKey)',
                  'viewButtonImageUrl'=>Yii::app()->request->baseUrl.'/images/web/detalles.png',
-                 'updateButtonUrl' =>'Yii::app()->createUrl("/oFV/update/".$data->primaryKey)',
+                 'updateButtonUrl' =>'Yii::app()->createUrl("/indicador/update/".$data->primaryKey)',
                  'updateButtonImageUrl'=>Yii::app()->request->baseUrl.'/images/web/actualizar.png', 
-                 'deleteButtonUrl' =>'Yii::app()->createUrl("/oFV/eliminar?id=".$data->primaryKey)',
+                 'deleteButtonUrl' =>'Yii::app()->createUrl("/indicador/eliminar?id=".$data->primaryKey)',
                  'deleteButtonImageUrl'=>Yii::app()->request->baseUrl.'/images/web/eliminar.png', 
         
 ),

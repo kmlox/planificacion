@@ -50,7 +50,7 @@ class OFV extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'idAsignatura' => array(self::BELONGS_TO, 'Asignatura', 'id_asignatura'),
+			'relAsignatura' => array(self::BELONGS_TO, 'Asignatura', 'id_asignatura'),
 			'idProfesor' => array(self::BELONGS_TO, 'Profesor', 'id_profesor'),
 			'planificacions' => array(self::MANY_MANY, 'Planificacion', 'planificacion_tiene_OFV(id_OFV, id_planificacion)'),
 			'unidads' => array(self::MANY_MANY, 'Unidad', 'unidad_tiene_OFV(id_OFV, id_unidad)'),

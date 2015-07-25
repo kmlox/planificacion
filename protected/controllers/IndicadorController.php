@@ -18,159 +18,181 @@ return array(
 );
 }
 
-/**
-* Specifies the access control rules.
-* This method is used by the 'accessControl' filter.
-* @return array access control rules
-*/
-public function accessRules()
-{
-return array(
-array('allow',  // allow all users to perform 'index' and 'view' actions
-'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura','SelectOa','eliminar','SelectDescripcion','admin'),
-'users'=>array('*'),
-),
-array('allow', // allow authenticated user to perform 'create' and 'update' actions
-'actions'=>array('create','update'),
-'users'=>array('@'),
-),
-array('allow', // allow admin user to perform 'admin' and 'delete' actions
-'actions'=>array('admin','delete'),
-'users'=>array('admin'),
-),
-array('deny',  // deny all users
-'users'=>array('*'),
-),
-);
-}
-
-/**
-* Displays a particular model.
-* @param integer $id the ID of the model to be displayed
-*/
-public function actionView($id)
-{
-$this->render('view',array(
-'model'=>$this->loadModel($id),
-));
-}
-
-/**
-* Creates a new model.
-* If creation is successful, the browser will be redirected to the 'view' page.
-*/
-public function actionCreate()
-{
-$model=new Indicador;
-
-// Uncomment the following line if AJAX validation is needed
-// $this->performAjaxValidation($model);
-
-if(isset($_POST['Indicador']))
-{
-$model->attributes=$_POST['Indicador'];
-if($model->save())
-$this->redirect(array('view','id'=>$model->id_indicador));
-}
-
-$this->render('create',array(
-'model'=>$model,
-));
-}
-
-/**
-* Updates a particular model.
-* If update is successful, the browser will be redirected to the 'view' page.
-* @param integer $id the ID of the model to be updated
-*/
-public function actionUpdate($id)
-{
-$model=$this->loadModel($id);
-
-// Uncomment the following line if AJAX validation is needed
-// $this->performAjaxValidation($model);
-
-if(isset($_POST['Indicador']))
-{
-$model->attributes=$_POST['Indicador'];
-if($model->save())
-$this->redirect(array('view','id'=>$model->id_indicador));
-}
-
-$this->render('update',array(
-'model'=>$model,
-));
-}
-
-/**
-* Deletes a particular model.
-* If deletion is successful, the browser will be redirected to the 'admin' page.
-* @param integer $id the ID of the model to be deleted
-*/
-public function actionDelete($id)
-{
-if(Yii::app()->request->isPostRequest)
-{
-// we only allow deletion via POST request
-$this->loadModel($id)->delete();
-
-// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-if(!isset($_GET['ajax']))
-$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-}
-else
-throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
-}
-
- public function actionEliminar($id)
+    /**
+    * Specifies the access control rules.
+    * This method is used by the 'accessControl' filter.
+    * @return array access control rules
+    */
+    public function accessRules()
     {
-        $indicador=Indicador::model()->findbyPk($id);
-        if($indicador->id_profesor==Yii::app()->user->name){
+        return array(
+            array('allow',  // allow all users to perform 'index' and 'view' actions
+            'actions'=>array('index','view','create','update','eliminar','admin','SelectCurso','SelectAsignatura','SelectOa','SelectDescripcion'),
+            'roles'=>array('profesor','admin'),
+            ),
+            array('deny',  // deny all users
+            'users'=>array('*'),
+            ),
+        );
+    }
+
+    /**
+    * Displays a particular model.
+    * @param integer $id the ID of the model to be displayed
+    */
+    public function actionView($id)
+    {
+        $model=Indicador::model()->findbyPk($id);
+        
+        if($model==NULL){
+            $this->redirect(array('index'));
+        }
+        else{                
+            if(Profesor::model()->exists('id_profesor='.'"'.Yii::app()->user->name.'"')){           
+                if($model->id_profesor==Yii::app()->user->name){
+                    $this->render('view',array(
+                    'model'=>$model,   
+                    //'model'=>$this->loadModel($id),
+                    ));
+                }
+                else{
+                    $this->redirect(array('index'));
+                }                
+            }
+            else{
+                $this->render('view',array(
+                    'model'=>$model,
+                ));
+            }            
+        } 
+    }
+
+    /**
+    * Creates a new model.
+    * If creation is successful, the browser will be redirected to the 'view' page.
+    */
+    public function actionCreate()
+    {
+        $model=new Indicador;
+
+        // Uncomment the following line if AJAX validation is needed
+        // $this->performAjaxValidation($model);
+
+        if(isset($_POST['Indicador']))
+        {
+            $model->attributes=$_POST['Indicador'];
+            if($model->save())
+                $this->redirect(array('view','id'=>$model->id_indicador));
+        }
+
+        $this->render('create',array(
+        'model'=>$model,
+        ));
+    }
+
+    /**
+    * Updates a particular model.
+    * If update is successful, the browser will be redirected to the 'view' page.
+    * @param integer $id the ID of the model to be updated
+    */
+    public function actionUpdate($id)
+    {
+        $model=$this->loadModel($id);
+
+        if(isset($_POST['Indicador']))
+        {
+            $model->attributes=$_POST['Indicador'];
+            if($model->save())
+                $this->redirect(array('view','id'=>$model->id_indicador));
+        }
+        elseif($model==NULL){
+            $this->redirect(array('index'));
+        }     
+        else{                
+            if(Profesor::model()->exists('id_profesor='.'"'.Yii::app()->user->name.'"')){           
+                if($model->id_profesor==Yii::app()->user->name){
+                    $this->render('update',array(
+                    'model'=>$model,
+                    ));
+                }
+                else{
+                    $this->redirect(array('index'));
+                }
+            }
+            else{
+                 $this->render('update',array(
+                'model'=>$model,
+                ));            
+            }
+        }
+    }
+
+    /**
+    * Deletes a particular model.
+    * If deletion is successful, the browser will be redirected to the 'admin' page.
+    * @param integer $id the ID of the model to be deleted
+    */
+    public function actionEliminar($id)
+    {
+        $model=Indicador::model()->findbyPk($id);
+        if($model->id_profesor!=NULL){
+            if($model->id_profesor==Yii::app()->user->name){
+                Yii::app()->db->createCommand()->delete('indicador', 'id_indicador=:id', array(':id'=>$id));
+            }
+        }
+        else{
             Yii::app()->db->createCommand()->delete('indicador', 'id_indicador=:id', array(':id'=>$id));
         }
-        $this->redirect('index');
-        
+                
+        $this->redirect('index');      
     }
-/**
-* Lists all models.
-*/
-public function actionIndex()
-{
-    
-    $dataProvider=new CActiveDataProvider('Indicador',array('criteria'=>array('condition'=>'id_profesor='.'"'.Yii::app()->user->name.'"')));
- 
-    $this->render('index',array(
-    'dataProvider'=>$dataProvider,
-    ));
-}
 
-/**
-* Manages all models.
-*/
-public function actionAdmin()
-{
-$model=new Indicador('search');
-$model->unsetAttributes();  // clear any default values
-if(isset($_GET['Indicador']))
-$model->attributes=$_GET['Indicador'];
-$model->id_profesor=Yii::app()->user->name;
-$this->render('admin',array(
-'model'=>$model,
-));
-}
+    /**
+    * Lists all models.
+    */
+    public function actionIndex()
+    {
+        if(Profesor::model()->exists('id_profesor='.'"'.Yii::app()->user->name.'"')){
+            $dataProvider=new CActiveDataProvider('Indicador',array('criteria'=>array('condition'=>'id_profesor='.'"'.Yii::app()->user->name.'"')));
+        }
+        else {
+             $dataProvider=new CActiveDataProvider('Indicador');
+        }
+        $this->render('index',array(
+        'dataProvider'=>$dataProvider,
+        ));
+    }
 
-/**
-* Returns the data model based on the primary key given in the GET variable.
-* If the data model is not found, an HTTP exception will be raised.
-* @param integer the ID of the model to be loaded
-*/
-public function loadModel($id)
-{
-$model=Indicador::model()->findByPk($id);
-if($model===null)
-throw new CHttpException(404,'The requested page does not exist.');
-return $model;
-}
+    /**
+    * Manages all models.
+    */
+    public function actionAdmin()
+    {
+        $model=new Indicador('search');
+        $model->unsetAttributes();  // clear any default values
+        if(isset($_GET['Indicador']))
+            $model->attributes=$_GET['Indicador'];
+        if(Profesor::model()->exists('id_profesor='.'"'.Yii::app()->user->name.'"')){
+            $model->id_profesor=Yii::app()->user->name;
+        }
+        
+        $this->render('admin',array(
+        'model'=>$model,
+        ));
+    }
+
+    /**
+    * Returns the data model based on the primary key given in the GET variable.
+    * If the data model is not found, an HTTP exception will be raised.
+    * @param integer the ID of the model to be loaded
+    */
+    public function loadModel($id)
+    {
+    $model=Indicador::model()->findByPk($id);
+    if($model===null)
+    throw new CHttpException(404,'The requested page does not exist.');
+    return $model;
+    }
 
 /**
 * Performs the AJAX validation.
@@ -185,21 +207,6 @@ Yii::app()->end();
 }
 }
 
-    //Metodo para seleccionar grado y cargar en el dropdownlist anidado.
-    //Se debe agregar m�todo en accessRules para poder ejecutar
-    public function actionSelectGrado(){
-
-            //array de tipo int perteneciente a clave primaria
-            $data=Grado::model()->findAll('id_nivel=:id_nivel',array(':id_nivel'=>(int) $_POST['id_nivel']));
-
-            $data=CHtml::listData($data,'id_grado','nombre_grado');
-
-            echo "<option value=''>Seleccione Grado</option>";
-            foreach ($data as $value=>$nombregrado)
-            echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombregrado),true);
-
-
-    }
     //Metodo para seleccionar asignatura y cargar en el dropdownlist anidado.
     //Se debe agregar método en accessRules para poder ejecutar
     public function actionSelectAsignatura(){		

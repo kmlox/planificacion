@@ -4,8 +4,11 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-array('label'=>'Crear Objetivos de Aprendizaje','url'=>array('create')),
-//array('label'=>'Administrar Objetivos de Aprendizaje','url'=>array('admin')),
+//array('label'=>'Lista de Objetivos de Aprendizaje','url'=>array('index')),
+array('label'=>'Crear Objetivo de Aprendizaje','url'=>array('create')),
+//array('label'=>'Update OA','url'=>array('update','id'=>$model->id_OA)),
+//array('label'=>'Delete OA','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id_OA),'confirm'=>'Are you sure you want to delete this item?')),
+array('label'=>'Administrar Objetivos de Aprendizaje','url'=>array('admin')),
 );
 ?>
 

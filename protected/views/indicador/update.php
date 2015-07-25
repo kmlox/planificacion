@@ -8,8 +8,8 @@ $this->breadcrumbs=array(
 	$this->menu=array(
 	array('label'=>'Listado de Indicadores','url'=>array('index')),
 	array('label'=>'Crear Indicador','url'=>array('create')),
-	//array('label'=>'View Indicador','url'=>array('view','id'=>$model->id_indicador)),
-	//array('label'=>'Manage Indicador','url'=>array('admin')),
+	array('label'=>'Ver detalles Indicador','url'=>array('view','id'=>$model->id_indicador)),
+	array('label'=>'Administrar Indicadores','url'=>array('admin')),
 	);
 	?>
 

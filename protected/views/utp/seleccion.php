@@ -28,7 +28,7 @@ return false;
 <h1>Selección de Profesor</h1>
 
 <p align="center">
-	Seleccione un profesor para revisar cada una de sus planificaciones
+	Seleccione un profesor para revisar sus planificaciones
 </p>
 
 <?php $this->widget('booster.widgets.TbGridView',array(

@@ -1,12 +1,12 @@
 <?php
 $this->breadcrumbs=array(
-	'Objetivos Fundamentales Verticales'=>array('index'),
-	'Administración de OFV',
+	'Objetivos de Aprendizaje'=>array('index'),
+	'Administración de Objetivos de Aprendizaje',
 );
 
 $this->menu=array(
-array('label'=>'Listado de OFV','url'=>array('index')),
-array('label'=>'Crear OFV','url'=>array('create')),
+array('label'=>'Lista de Objetivos de Aprendizaje','url'=>array('index')),
+array('label'=>'Crear Objetivo de Aprendizaje','url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -15,7 +15,7 @@ $('.search-form').toggle();
 return false;
 });
 $('.search-form form').submit(function(){
-$.fn.yiiGridView.update('ofv-grid', {
+$.fn.yiiGridView.update('oa-grid', {
 data: $(this).serialize()
 });
 return false;
@@ -23,7 +23,7 @@ return false;
 ");
 ?>
 
-<h1>Administración de OFV</h1>
+<h1>Administración de Objetivos de Aprendizaje</h1>
 
 <p>
 	Puede ocupar opcionalmente estos operadores (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>
@@ -39,30 +39,35 @@ return false;
 </div><!-- search-form -->
 
 <?php $this->widget('booster.widgets.TbGridView',array(
-'id'=>'ofv-grid',
+'id'=>'oa-grid',
 'dataProvider'=>$model->search(),
 'filter'=>$model,
 'columns'=>array(
+		
     array(
-		'name'=>'descripcion_OFV',
-                'header'=>'Descripción OFV',
-    ),
+		'name'=>'id_OA',
+                'header'=>'Código OA',
+                'value' =>'substr($data->id_OA,4,8)'
+        ),
+    array(
+		'name'=>'descripcion_OA',
+                'header'=>'Descripción OA',
+        ),
     array(
 		'name'=>'id_asignatura',
                 'header'=>'Asignatura',
-                'value'=>'$data->relAsignatura->nombre_asignatura'
-    ),
-		//'id_profesor',
+                'value' =>'$data->relAsignatura->nombre_asignatura'
+        ),
 array(
-'class'=>'CButtonColumn',
-    'template' => '{view}{update}{delete}',
-                 'viewButtonUrl' =>'Yii::app()->createUrl("/oFV/view/".$data->primaryKey)',
+//'class'=>'booster.widgets.TbButtonColumn',
+'class' => 'CButtonColumn',
+           'template' => '{view}{update}{delete}',
+                 'viewButtonUrl' =>'Yii::app()->createUrl("/oA/view?id=".$data->primaryKey)',
                  'viewButtonImageUrl'=>Yii::app()->request->baseUrl.'/images/web/detalles.png',
-                 'updateButtonUrl' =>'Yii::app()->createUrl("/oFV/update/".$data->primaryKey)',
+                 'updateButtonUrl' =>'Yii::app()->createUrl("/oA/update?id=".$data->primaryKey)',
                  'updateButtonImageUrl'=>Yii::app()->request->baseUrl.'/images/web/actualizar.png', 
-                 'deleteButtonUrl' =>'Yii::app()->createUrl("/oFV/eliminar?id=".$data->primaryKey)',
+                 'deleteButtonUrl' =>'Yii::app()->createUrl("/oA/eliminar?id=".$data->primaryKey)',
                  'deleteButtonImageUrl'=>Yii::app()->request->baseUrl.'/images/web/eliminar.png', 
-        
-),
+        ),  
 ),
 )); ?>

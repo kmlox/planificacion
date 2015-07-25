@@ -8,8 +8,8 @@ $this->breadcrumbs=array(
 	$this->menu=array(
 	array('label'=>'Listado de CMO','url'=>array('index')),
 	array('label'=>'Crear CMO','url'=>array('create')),
-	//array('label'=>'View CMO','url'=>array('view','id'=>$model->id_CMO)),
-	//array('label'=>'Manage CMO','url'=>array('admin')),
+	array('label'=>'Detalles CMO','url'=>array('view','id'=>$model->id_CMO)),
+	array('label'=>'Administración de CMO','url'=>array('admin')),
 	);
 	?>
 

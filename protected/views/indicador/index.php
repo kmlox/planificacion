@@ -5,7 +5,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 array('label'=>'Crear Indicador','url'=>array('create')),
-//array('label'=>'Administrar Indicadores','url'=>array('admin')),
+array('label'=>'Administrar Indicadores','url'=>array('admin')),
 );
 ?>
 

@@ -1,7 +1,7 @@
 <?php
 $this->breadcrumbs=array(
-	'Ofvs'=>array('index'),
-	$model->id_OFV,
+	'Objetivos Fundamentales Verticales'=>array('index'),
+	//$model->id_OFV,
 );
 
 $this->menu=array(
@@ -13,14 +13,29 @@ array('label'=>'Administrar OFV','url'=>array('admin')),
 );
 ?>
 
-<h1>Detalle Objetivos Fundamentales Verticales #<?php echo $model->id_OFV; ?></h1>
+<h1>Detalle OFV</h1>
+<?php   $asignatura=Asignatura::model()->findbyPk($model->id_asignatura);
+        $grado=Grado::model()->findbyPk($asignatura->id_grado);
+        $asignatura->nombre_asignatura
+?>
 
 <?php $this->widget('booster.widgets.TbDetailView',array(
 'data'=>$model,
 'attributes'=>array(
-		'id_OFV',
-		'descripcion_OFV',
-		'id_asignatura',
-		'id_profesor',
+       array(
+                    'label' => 'Curso',
+                    'value' => $grado->nombre_grado,
+        ),
+        array(
+                    'label' => 'Asignatura',
+                    'value' => $asignatura->nombre_asignatura,
+        ),
+        array(
+                    'label' => 'Descripción OFV',
+                    'value' => $model->descripcion_OFV,
+        ),
+                //'id_OFV',
+		//'id_asignatura',
+		//'id_profesor',
 ),
 )); ?>

@@ -5,7 +5,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 array('label'=>'Crear OFV','url'=>array('create')),
-//array('label'=>'Administrar OFV','url'=>array('admin')),
+array('label'=>'Administrar OFV','url'=>array('admin')),
 );
 ?>
 

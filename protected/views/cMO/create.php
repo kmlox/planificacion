@@ -6,7 +6,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 array('label'=>'Lista de CMO','url'=>array('index')),
-//array('label'=>'Administrar CMO','url'=>array('admin')),
+array('label'=>'Administrar CMO','url'=>array('admin')),
 );
 ?>
 

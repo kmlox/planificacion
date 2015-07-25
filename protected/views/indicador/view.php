@@ -8,8 +8,8 @@ $this->menu=array(
 array('label'=>'Lista de Indicadores','url'=>array('index')),
 array('label'=>'Crear Indicador','url'=>array('create')),
 array('label'=>'Modificar Indicador','url'=>array('update','id'=>$model->id_indicador)),
-//array('label'=>'Eliminar Indicador','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id_indicador),'confirm'=>'Are you sure you want to delete this item?')),
-//array('label'=>'Administrar Indicadores','url'=>array('admin')),
+array('label'=>'Eliminar Indicador','url'=>'eliminar?id='.$model->id_indicador,'linkOptions'=>array('confirm'=>'¿Está seguro que quiere eliminar este indicador?')),
+array('label'=>'Administrar Indicadores','url'=>array('admin')),
 );
 ?>
 

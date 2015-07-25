@@ -58,12 +58,26 @@ class UtpController extends Controller
         
         public function actionSeleccion()
 	{
-                $profesores=new Usuario();
-                
-                $profesores->rol='profesor';
-		$this->render('seleccion',array(
-			'model'=>$profesores,                        
-                        ));
+            $profesores=new Usuario('search');                
+            $profesores->rol='profesor';
+
+            if(isset($_GET['Usuario']))
+                    $model->attributes=$_GET['Usuario'];
+
+            $this->render('seleccion',array(
+                    'model'=>$profesores,                        
+                    ));
+
+            /*
+             * $profesores=new Usuario();                
+            $profesores->rol='profesor';
+
+            $this->render('seleccion',array(
+                    'model'=>$profesores,                        
+                    ));
+             */
+
+
 	}
 
 	/**

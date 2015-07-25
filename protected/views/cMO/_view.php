@@ -17,7 +17,7 @@
 	<?php echo CHtml::encode($data->descripcion_CMO); ?>
 	<br />
 
-	<b></b>
+	<br>
         <?php
          echo CHtml::button('Eliminar',
                     array('submit'=>array('eliminar?id='.$data->id_CMO),

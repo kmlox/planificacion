@@ -1,26 +1,40 @@
 <?php
 $this->breadcrumbs=array(
-	'Cmos'=>array('index'),
-	$model->id_CMO,
+	'Contenidos Mínimos Obligatorios'=>array('index'),
+	//$model->id_CMO,
 );
 
 $this->menu=array(
-array('label'=>'List CMO','url'=>array('index')),
-array('label'=>'Create CMO','url'=>array('create')),
-array('label'=>'Update CMO','url'=>array('update','id'=>$model->id_CMO)),
-array('label'=>'Delete CMO','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id_CMO),'confirm'=>'Are you sure you want to delete this item?')),
-array('label'=>'Manage CMO','url'=>array('admin')),
+array('label'=>'Listado de CMO','url'=>array('index')),
+array('label'=>'Crear CMO','url'=>array('create')),
+array('label'=>'Modificar CMO','url'=>array('update','id'=>$model->id_CMO)),
+array('label'=>'Eliminar CMO','url'=>'eliminar?id='.$model->id_CMO,'linkOptions'=>array('confirm'=>'¿Está seguro que quiere eliminar este CMO?')),
+array('label'=>'Administar CMO','url'=>array('admin')),
 );
 ?>
 
-<h1>View CMO #<?php echo $model->id_CMO; ?></h1>
-
+<h1>Detalles CMO</h1>
+<?php   $asignatura=Asignatura::model()->findbyPk($model->id_asignatura);
+        $grado=Grado::model()->findbyPk($asignatura->id_grado);
+        $asignatura->nombre_asignatura
+?>
 <?php $this->widget('booster.widgets.TbDetailView',array(
 'data'=>$model,
 'attributes'=>array(
-		'id_CMO',
-		'descripcion_CMO',
-		'id_asignatura',
-		'id_profesor',
+		//'id_CMO',
+        array(
+            'label' => 'Curso',
+            'value' => $grado->nombre_grado,
+        ),
+        array(
+                    'label' => 'Asignatura',
+                    'value' => $asignatura->nombre_asignatura,
+        ),
+                array(
+                    'label' => 'Descripción CMO',
+                    'value' => $model->descripcion_CMO,
+                ),
+		//'id_asignatura',
+		//'id_profesor',
 ),
 )); ?>

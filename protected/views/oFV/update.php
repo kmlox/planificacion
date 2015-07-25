@@ -8,11 +8,11 @@ $this->breadcrumbs=array(
 	$this->menu=array(
 	array('label'=>'Listado de OFV','url'=>array('index')),
 	array('label'=>'Crear OFV','url'=>array('create')),
-	//array('label'=>'View OFV','url'=>array('view','id'=>$model->id_OFV)),
-	//array('label'=>'Manage OFV','url'=>array('admin')),
+	array('label'=>'Detalles OFV','url'=>array('view','id'=>$model->id_OFV)),
+	array('label'=>'Administración de OFV','url'=>array('admin')),
 	);
 	?>
 
-	<h1>Modificar OFV <?php echo $model->id_OFV; ?></h1>
+	<h1>Modificar OFV <?php //echo $model->id_OFV; ?></h1>
 
 <?php echo $this->renderPartial('_form',array('model'=>$model)); ?>

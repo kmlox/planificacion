@@ -7,6 +7,7 @@
  * @property string $id_usuario
  * @property string $nombre_usuario
  * @property string $password
+ * @property string $email
  * @property string $rol
  *
  * The followings are the available model relations:
@@ -34,12 +35,12 @@ class Usuario extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id_usuario, nombre_usuario, password, rol', 'required'),
-			array('id_usuario', 'length', 'max'=>12),
+			array('id_usuario', 'length', 'max'=>10),
 			array('nombre_usuario', 'length', 'max'=>100),
-			array('password, rol', 'length', 'max'=>45),
+			array('password, email, rol', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_usuario, nombre_usuario, password, rol', 'safe', 'on'=>'search'),
+			array('id_usuario, nombre_usuario, password, email, rol', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -55,7 +56,6 @@ class Usuario extends CActiveRecord
 			'alumno' => array(self::HAS_ONE, 'Alumno', 'id_alumno'),
 			'directivo' => array(self::HAS_ONE, 'Directivo', 'id_directivo'),
 			'profesor' => array(self::HAS_ONE, 'Profesor', 'id_profesor'),
-                        'relUsuario'=> array(self::HAS_ONE, 'Planificacion', 'id_profesor'),
 		);
 	}
 
@@ -68,6 +68,7 @@ class Usuario extends CActiveRecord
 			'id_usuario' => 'Id Usuario',
 			'nombre_usuario' => 'Nombre Usuario',
 			'password' => 'Password',
+			'email' => 'Email',
 			'rol' => 'Rol',
 		);
 	}
@@ -93,6 +94,7 @@ class Usuario extends CActiveRecord
 		$criteria->compare('id_usuario',$this->id_usuario,true);
 		$criteria->compare('nombre_usuario',$this->nombre_usuario,true);
 		$criteria->compare('password',$this->password,true);
+		$criteria->compare('email',$this->email,true);
 		$criteria->compare('rol',$this->rol,true);
 
 		return new CActiveDataProvider($this, array(
@@ -110,8 +112,4 @@ class Usuario extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-        
-        public function getNombre($id_usuario){
-            return CHtml::listData(Usuario::model()->findbyPk($id_usuario),'id_usuario','nombre_usuario');
-        }
 }

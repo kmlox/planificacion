@@ -15,12 +15,13 @@
 	<?php echo CHtml::encode($data->descripcion_OFV); ?>
 	<br />
         
-        <b></b>
+        <br>
         <?php
-         echo CHtml::button('Eliminar',
+        echo CHtml::button('Eliminar',
                     array('submit'=>array('eliminar?id='.$data->id_OFV),
                     'confirm' => '¿Esta seguro que desea eliminar este OFV?',));  
-          echo CHtml::button('Modificar',
+        echo " ";
+        echo CHtml::button('Modificar',
                     array('submit'=>array('oFV/update/'.$data->id_OFV),
                     ));  
         ?>

@@ -5,7 +5,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 array('label'=>'Crear Aprendizajes Esperados','url'=>array('create')),
-//array('label'=>'Administrar AE','url'=>array('admin')),
+array('label'=>'Administrar Aprendizajes Esperados','url'=>array('admin')),
 );
 ?>
 

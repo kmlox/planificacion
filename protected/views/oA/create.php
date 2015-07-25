@@ -6,7 +6,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 array('label'=>'Listado de Objetivos de Aprendizaje','url'=>array('index')),
-//array('label'=>'Administrar Objetivos de Aprendizaje','url'=>array('admin')),
+array('label'=>'Administrar Objetivos de Aprendizaje','url'=>array('admin')),
 );
 ?>
 
