@@ -28,15 +28,7 @@ public $layout='//layouts/column2';
     return array(
     array('allow',  // allow all users to perform 'index' and 'view' actions
     'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura','Libroclases','Actualizar','Guardar'),
-    'users'=>array('*'),
-    ),
-    array('allow', // allow authenticated user to perform 'create' and 'update' actions
-    'actions'=>array('create','update'),
-    'users'=>array('@'),
-    ),
-    array('allow', // allow admin user to perform 'admin' and 'delete' actions
-    'actions'=>array('admin','delete'),
-    'users'=>array('admin'),
+    'roles'=>array('profesor','admin'),
     ),
     array('deny',  // deny all users
     'users'=>array('*'),
@@ -137,7 +129,7 @@ public $layout='//layouts/column2';
         echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombrecurso),true);
 
     }
-
+/*
     public function actionSelectAsignatura(){		
         $id_curso=(string)$_POST['id_curso'];
 
@@ -150,7 +142,31 @@ public $layout='//layouts/column2';
         foreach ($data as $value=>$nombreasig)
         echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
     }
-    
+ * 
+ */
+   public function actionSelectAsignatura(){		
+        $id_curso=(string)$_POST['id_curso'];
+        $grado=Curso::model()->findbyPk($id_curso)->id_grado;
+        if(Profesor::model()->exists('id_profesor='.'"'.Yii::app()->user->name.'"')){           
+        
+            $asignatura_profesor = Yii::app()->db->createCommand("CALL asignatura_profesor('".Yii::app()->user->name."','".$grado."')")->setFetchMode(PDO::FETCH_OBJ)->queryAll();               
+
+            $array_id=array();
+
+            foreach($asignatura_profesor as $row){
+                array_push($array_id, $row->id_asignatura);
+            }
+            $data = Asignatura::model()->findAllByAttributes(array("id_asignatura"=>$array_id));
+        }
+        else{
+            $data=Asignatura::model()->findAll('id_grado='.'"'.$grado.'"');
+        }
+        $data=CHtml::listData($data,'id_asignatura','nombre_asignatura');
+
+        echo "<option value=''>Seleccione Asignatura</option>";
+        foreach ($data as $value=>$nombreasig)
+        echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
+    } 
     public function actionActualizar(){
         
         $id_alumnos = Alumno::model()->findAll('id_curso='.'"'.$_POST['id_curso'].'"');

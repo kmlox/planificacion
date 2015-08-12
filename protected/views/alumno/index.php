@@ -2,7 +2,7 @@
 
 <h2>Mis notas</h2>
 <?php
-$alumno=Alumno::model()->findAll("id_alumno='22445144-K'");
+$alumno=Alumno::model()->findAll("id_alumno='".Yii::app()->user->name."'");
 $id_curso="";
 foreach ($alumno as $row){
     $id_curso=$row->id_curso;
@@ -14,6 +14,8 @@ $id_grado=Curso::model()->findbyPk($id_curso)->id_grado;
 
    <?php 
     echo CHtml::beginForm('alumno/informe');
+    echo '<input type="hidden" name="id_alumno" value='.Yii::app()->user->name.'>';
+    
     echo CHtml::dropDownList('id_asignatura','',CHtml::ListData(Asignatura::model()->findAll("id_grado="."'".$id_grado."'"),'id_asignatura','nombre_asignatura'),
     array(
     'prompt'=>'Selecciona Asignatura',

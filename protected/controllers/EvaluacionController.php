@@ -294,18 +294,27 @@ class EvaluacionController extends Controller
 		echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombrecurso),true);
 		
 	}
-        public function actionSelectAsignatura(){		
-		$id_curso=$_POST['id_curso'];
-                $grado=Curso::model()->findbyPk($id_curso)->id_grado;
-                $data=Asignatura::model()->findAll('id_grado='.'"'.$grado.'"');
+       
+    public function actionSelectAsignatura(){		
+            $id_curso=$_POST['id_curso'];
+            $grado=Curso::model()->findbyPk($id_curso)->id_grado;
+            
+            $asignatura_profesor = Yii::app()->db->createCommand("CALL asignatura_profesor('".Yii::app()->user->name."','".$grado."')")->setFetchMode(PDO::FETCH_OBJ)->queryAll();               
+            
+            $array_id=array();
+            
+            foreach($asignatura_profesor as $row){
+                array_push($array_id, $row->id_asignatura);
+            }
+            $data = Asignatura::model()->findAllByAttributes(array("id_asignatura"=>$array_id));
 
-                $data=CHtml::listData($data,'id_asignatura','nombre_asignatura');
+            
+            $data=CHtml::listData($data,'id_asignatura','nombre_asignatura');
 
-                echo "<option value=''>Seleccione Asignatura</option>";
-                foreach ($data as $value=>$nombreasig)
-                echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
-    }
-    
+            echo "<option value=''>Seleccione Asignatura</option>";
+            foreach ($data as $value=>$nombreasig)
+            echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
+        }
     /**
     * Returns the data model based on the primary key given in the GET variable.
     * If the data model is not found, an HTTP exception will be raised.

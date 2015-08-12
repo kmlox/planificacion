@@ -34,7 +34,7 @@ $this->menu=array(
 
 ?>
 
-<h1>Detalles de Planificacion<p>Profesor: <?php echo Usuario::model()->findbyPk($model->id_profesor)->nombre_usuario;?>
+<h1>Detalles de la Planificación<p>Profesor: <?php echo Usuario::model()->findbyPk($model->id_profesor)->nombre_usuario;?>
         <br>
         Curso: <?php $curso=Curso::model()->findbyPk($model->id_curso);
         $grado=Grado::model()->findbyPk($curso->id_grado);

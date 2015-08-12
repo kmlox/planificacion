@@ -70,7 +70,7 @@
             //Form de Creacion
             if ($model->id_planificacion==null){
                 foreach ($cmo as $data){
-                    $string_cmo=$string_cmo."{title:'".$data->descripcion_CMO."',folder:true,key:'".$data->id_CMO."'},";
+                    $string_cmo=$string_cmo."{title:'".$data->descripcion_CMO."',key:'".$data->id_CMO."'},";
                    
                     $text=$text.$string_cmo;
                     $string_cmo='';
@@ -86,10 +86,10 @@
                 $text='';
                 foreach ($cmo as $data){
                     if (in_array($data->id_CMO, $var)) {
-                        $string_cmo=$string_cmo."{title:'".$data->descripcion_CMO."',folder:true,key:'".$data->id_CMO."',selected:true},";
+                        $string_cmo=$string_cmo."{title:'".$data->descripcion_CMO."',key:'".$data->id_CMO."',selected:true},";
                     }
                     else{
-                        $string_cmo=$string_cmo."{title:'".$data->descripcion_CMO."',folder:true,key:'".$data->id_CMO."'},";
+                        $string_cmo=$string_cmo."{title:'".$data->descripcion_CMO."',key:'".$data->id_CMO."'},";
                     }                        
                   
                     $text=$text.$string_cmo;
@@ -105,7 +105,7 @@
 <script type="text/javascript">
     var treeData = [
     <?php 
-        echo $text;
+        echo "{title:'CMO',folder:true,children:[".$text."]}";
     ?>	
     ];
 	
@@ -199,7 +199,7 @@
             //Form de Creacion
             if ($model->id_planificacion==null){
                 foreach ($ofv as $data){
-                    $string_ofv=$string_ofv."{title:'".$data->descripcion_OFV."',folder:true,key:'".$data->id_OFV."'},";
+                    $string_ofv=$string_ofv."{title:'".$data->descripcion_OFV."',key:'".$data->id_OFV."'},";
                     $text=$text.$string_ofv;
                     $string_ofv='';
                 }                
@@ -215,10 +215,10 @@
                 $text='';
                 foreach ($ofv as $data){
                         if (in_array($data->id_OFV, $var)) {
-                            $string_ofv=$string_ofv."{title:'".$data->descripcion_OFV."',folder:true,key:'".$data->id_OFV."',selected:true},";
+                            $string_ofv=$string_ofv."{title:'".$data->descripcion_OFV."',key:'".$data->id_OFV."',selected:true},";
                         }
                         else{
-                            $string_ofv=$string_ofv."{title:'".$data->descripcion_OFV."',folder:true,key:'".$data->id_OFV."'},";
+                            $string_ofv=$string_ofv."{title:'".$data->descripcion_OFV."',key:'".$data->id_OFV."'},";
                         }                        
                   
                     $text=$text.$string_ofv;
@@ -234,7 +234,7 @@
 <script type="text/javascript">
     var treeData2 = [
     <?php 
-        echo $text;
+        echo "{title:'OFV',folder:true,children:[".$text."]}";
     ?>	
     ];
 	
@@ -329,7 +329,7 @@
             //Form de Creacion
             if ($model->id_planificacion==null){
                 foreach ($ae as $data){
-                    $string_ae=$string_ae."{title:'".$data->descripcion_AE."',folder:true,key:'".$data->id_AE."'},";
+                    $string_ae=$string_ae."{title:'".$data->descripcion_AE."',key:'".$data->id_AE."'},";
                     
                     $text=$text.$string_ae;
                     $string_ae='';
@@ -346,10 +346,10 @@
                 $text='';
                 foreach ($ae as $data){
                     if (in_array($data->id_AE, $var)) {
-                            $string_ae=$string_ae."{title:'".$data->descripcion_AE."',folder:true,key:'".$data->id_AE."',selected:true},";
+                            $string_ae=$string_ae."{title:'".$data->descripcion_AE."',key:'".$data->id_AE."',selected:true},";
                     }
                     else{
-                        $string_ae=$string_ae."{title:'".$data->descripcion_AE."',folder:true,key:'".$data->id_AE."'},";
+                        $string_ae=$string_ae."{title:'".$data->descripcion_AE."',key:'".$data->id_AE."'},";
                     }                        
 
                     $text=$text.$string_ae;
@@ -365,7 +365,7 @@
 <script type="text/javascript">
     var treeData3 = [
     <?php 
-        echo $text;
+        echo "{title:'AE',folder:true,children:[".$text."]}";
     ?>	
     ];
 	

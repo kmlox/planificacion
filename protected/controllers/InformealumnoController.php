@@ -192,7 +192,7 @@ $this->render('index',array(
             foreach ($data as $value=>$nombrealumnos)
             echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombrealumnos),true);
         }
-         
+        /*
         public function actionSelectAsignatura(){		
             $id_alumno=(string)$_POST['id_usuario'];
             $id_curso=Alumno::model()->findbyPk($id_alumno)->id_curso;
@@ -201,6 +201,33 @@ $this->render('index',array(
 
             $data=CHtml::listData($data,'id_asignatura','nombre_asignatura');
             
+            echo "<option value=''>Seleccione Asignatura</option>";
+            foreach ($data as $value=>$nombreasig)
+            echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
+        }
+         * 
+         */
+        public function actionSelectAsignatura(){		
+            $id_alumno=(string)$_POST['id_usuario'];
+            $id_curso=Alumno::model()->findbyPk($id_alumno)->id_curso;
+            $grado=Curso::model()->findbyPk($id_curso)->id_grado;
+            
+            if(Profesor::model()->exists('id_profesor='.'"'.Yii::app()->user->name.'"')){           
+                $asignatura_profesor = Yii::app()->db->createCommand("CALL asignatura_profesor('".Yii::app()->user->name."','".$grado."')")->setFetchMode(PDO::FETCH_OBJ)->queryAll();               
+
+                $array_id=array();
+
+                foreach($asignatura_profesor as $row){
+                    array_push($array_id, $row->id_asignatura);
+                }
+                $data = Asignatura::model()->findAllByAttributes(array("id_asignatura"=>$array_id));
+            }
+            else{
+                $data=Asignatura::model()->findAll('id_grado='.'"'.$grado.'"');
+            }
+            
+            $data=CHtml::listData($data,'id_asignatura','nombre_asignatura');
+
             echo "<option value=''>Seleccione Asignatura</option>";
             foreach ($data as $value=>$nombreasig)
             echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);

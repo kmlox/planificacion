@@ -26,23 +26,23 @@ class UtpController extends Controller
 	 */
 	public function accessRules()
 	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','Replanificaranual','Aprobaranual','Poraprobar','Replanificar','aprobar','seleccion','revision'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
+            return array(
+                array('allow',  // allow all users to perform 'index' and 'view' actions
+                        'actions'=>array('index','view','Replanificaranual','Aprobaranual','Poraprobar','Replanificar','aprobar','revision'),
+                        'users'=>array('@'),
+                ),
+                array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                        'actions'=>array('create','update'),
+                        'users'=>array('@'),
+                ),
+                array('allow', // allow admin user to perform 'admin' and 'delete' actions
+                        'actions'=>array('admin','delete'),
+                        'users'=>array('admin'),
+                ),
+                array('deny',  // deny all users
+                        'users'=>array('*'),
+                ),
+            );
 	}
 
 	/**
@@ -56,30 +56,7 @@ class UtpController extends Controller
 		));
 	}
         
-        public function actionSeleccion()
-	{
-            $profesores=new Usuario('search');                
-            $profesores->rol='profesor';
-
-            if(isset($_GET['Usuario']))
-                    $model->attributes=$_GET['Usuario'];
-
-            $this->render('seleccion',array(
-                    'model'=>$profesores,                        
-                    ));
-
-            /*
-             * $profesores=new Usuario();                
-            $profesores->rol='profesor';
-
-            $this->render('seleccion',array(
-                    'model'=>$profesores,                        
-                    ));
-             */
-
-
-	}
-
+        
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
@@ -156,16 +133,22 @@ class UtpController extends Controller
         
         public function actionRevision($rut)
 	{
-            
-            $dataProvider=new CActiveDataProvider('Profesor');
-            $id_profesor=$rut;
-            //$id_profesor=$_POST['id_profesor'];
-            $model_profesor=  Usuario::model()->findbyPK($id_profesor);
-            $this->render('revision',array(
+            if(Profesor::model()->exists('id_profesor='.'"'.$rut.'"')){   
+                $dataProvider=new CActiveDataProvider('Profesor');
+                $id_profesor=$rut;
+                //$id_profesor=$_POST['id_profesor'];
+                $model_profesor=  Usuario::model()->findbyPK($id_profesor);
+                $this->render('revision',array(
                     'dataProvider'=>$dataProvider,
                     'id_profesor'=>$id_profesor,
                     'model_profesor'=>$model_profesor,
-            ));
+                )); 
+            }
+            else{
+                $mensaje = "El Rut especificado no corresponde a un profesor";
+                print "<script>alert('$mensaje'),window.location.href = '../../usuario/admin';</script>";         
+            }
+            
 	}
 
 

@@ -193,6 +193,7 @@ return array(
     
     //Metodo para seleccionar asignatura y cargar en el dropdownlist anidado.
     //Se debe agregar método en accessRules para poder ejecutar
+    /*
     public function actionSelectAsignatura(){		
         //array de tipo string perteneciente a clave primaria
         $data=Asignatura::model()->findAll('id_grado=:id_grado',array(':id_grado'=>(string) $_POST['id_grado']));
@@ -202,7 +203,32 @@ return array(
         foreach ($data as $value=>$nombre_asig)
         echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombre_asig),true);
     }
-    
+     * 
+     */
+    public function actionSelectAsignatura(){		
+        $grado=(string) $_POST['id_grado'];
+
+        if(Profesor::model()->exists('id_profesor='.'"'.Yii::app()->user->name.'"')){           
+
+        $asignatura_profesor = Yii::app()->db->createCommand("CALL asignatura_profesor('".Yii::app()->user->name."','".$grado."')")->setFetchMode(PDO::FETCH_OBJ)->queryAll();               
+
+        $array_id=array();
+
+        foreach($asignatura_profesor as $row){
+            array_push($array_id, $row->id_asignatura);
+        }
+        $data = Asignatura::model()->findAllByAttributes(array("id_asignatura"=>$array_id));
+        }
+        else{
+            $data=Asignatura::model()->findAll('id_grado=:id_grado',array(':id_grado'=>(string) $_POST['id_grado']));
+        }
+
+        $data=CHtml::listData($data,'id_asignatura','nombre_asignatura');
+
+        echo "<option value=''>Seleccione Asignatura</option>";
+        foreach ($data as $value=>$nombreasig)
+        echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
+    }
     /**
     * Manages all models.
     */

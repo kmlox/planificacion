@@ -49,7 +49,7 @@ $this->pageTitle=Yii::app()->name;
             <h3>Portal Directivos</h3>
             <p>Lleve un control completo de las planificaciones de su colegio
             con la posibilidad de generar informes.
-            <p><a href="index.php/utp/seleccion" class="btn btn-primary" role="button">Ingresar</a></p>
+            <p><a href="index.php/usuario/admin" class="btn btn-primary" role="button">Ingresar</a></p>
           </div> 
         </div>
     </div>

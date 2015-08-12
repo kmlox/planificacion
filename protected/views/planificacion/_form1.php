@@ -81,7 +81,7 @@
         echo '<a href="#" id="btnSelectAll">Seleccionar Todo</a>'
     . '-<a href="#" id="btnDeselectAll">Deseleccionar Todo</a>';
         $text='';
-        $child='children: [{title: "Indicadores",children: [';
+        $child='children: [{title: "Indicadores",folder:true,children: [';
         $end_child="]},]},";  
         $string_indicadores='';
 
@@ -89,7 +89,7 @@
         if ($model->id_planificacion==null){
             foreach ($oa as $data){
                 $codigooa=substr($data->id_OA,4,8);
-                $text=$text."{title:'"."[".$codigooa."] ".$data->descripcion_OA."',folder:true,key:'".$data->id_OA."',";
+                $text=$text."{title:'"."[".$codigooa."] ".$data->descripcion_OA."',key:'".$data->id_OA."',";
 
                 $indicadores=Indicador::model()->findAll("id_oa="."'".$data->id_OA."'");
                 foreach ($indicadores as $row){

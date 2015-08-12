@@ -71,14 +71,12 @@ $this->render('view',array(
         $array_notas=array();
         $array_eval=array();
         
-            foreach($model_graph as $row){
-                array_push($array_notas, floatval($row->nota));
-                array_push($array_eval, (int)$row->cantidad);
-            }   
+        foreach($model_graph as $row){
+            array_push($array_notas, floatval($row->nota));
+            array_push($array_eval, (int)$row->cantidad);
+        }   
                 
-                
-        $this->render('asignatura',array(
-            
+        $this->render('asignatura',array(            
             'model_graph'=>$model_graph,
             'array_notas'=>$array_notas,
             'array_eval'=>$array_eval,
@@ -178,7 +176,7 @@ $this->render('index',array(
             echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombrecurso),true);
 		
 	}
-	
+	/*
         public function actionSelectAsignatura(){		
             $id_curso=(string)$_POST['id_curso'];
            
@@ -191,7 +189,32 @@ $this->render('index',array(
             foreach ($data as $value=>$nombreasig)
             echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
         }
-        
+         * 
+         */
+        public function actionSelectAsignatura(){		
+            $id_curso=$_POST['id_curso'];
+            $grado=Curso::model()->findbyPk($id_curso)->id_grado;
+            if(Profesor::model()->exists('id_profesor='.'"'.Yii::app()->user->name.'"')){           
+
+                $asignatura_profesor = Yii::app()->db->createCommand("CALL asignatura_profesor('".Yii::app()->user->name."','".$grado."')")->setFetchMode(PDO::FETCH_OBJ)->queryAll();               
+
+                $array_id=array();
+
+                foreach($asignatura_profesor as $row){
+                    array_push($array_id, $row->id_asignatura);
+                }
+                $data = Asignatura::model()->findAllByAttributes(array("id_asignatura"=>$array_id));
+            }
+            else{
+                $data=Asignatura::model()->findAll('id_grado='.'"'.$grado.'"');
+            }
+            
+            $data=CHtml::listData($data,'id_asignatura','nombre_asignatura');
+
+            echo "<option value=''>Seleccione Asignatura</option>";
+            foreach ($data as $value=>$nombreasig)
+            echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
+        }
         public function actionSelectEvaluacion(){
 
             //array de tipo int perteneciente a clave primaria

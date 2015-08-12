@@ -48,7 +48,7 @@ class Profesor extends CActiveRecord
 		return array(
 			'evaluacions' => array(self::HAS_MANY, 'Evaluacion', 'id_profesor'),
 			'planificacions' => array(self::HAS_MANY, 'Planificacion', 'id_profesor'),
-			'idProfesor' => array(self::BELONGS_TO, 'Usuario', 'id_profesor'),
+			'relUsuario' => array(self::BELONGS_TO, 'Usuario', 'id_profesor'),
 			'asignaturas' => array(self::MANY_MANY, 'Asignatura', 'profesor_has_asignatura(id_profesor, id_asignatura)'),
 		);
 	}

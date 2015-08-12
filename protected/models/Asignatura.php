@@ -58,7 +58,7 @@ class Asignatura extends CActiveRecord
 			'cMOs' => array(self::HAS_MANY, 'CMO', 'id_asignatura'),
 			'oAs' => array(self::HAS_MANY, 'OA', 'id_asignatura'),
 			'oFVs' => array(self::HAS_MANY, 'OFV', 'id_asignatura'),
-			'idGrado' => array(self::BELONGS_TO, 'Grado', 'id_grado'),
+			'relGrado' => array(self::BELONGS_TO, 'Grado', 'id_grado'),
 			'evaluacions' => array(self::HAS_MANY, 'Evaluacion', 'id_asignatura'),
 			'planificacions' => array(self::HAS_MANY, 'Planificacion', 'id_asignatura'),
 			'profesors' => array(self::MANY_MANY, 'Profesor', 'profesor_tiene_asignatura(id_asignatura, id_profesor)'),

@@ -8,6 +8,18 @@ $this->breadcrumbs=array(
 	'Login',
 );
 ?>
+<style type="text/css">
+  .uneditable-input {
+  display: inline-block;
+  height: 28px;
+  padding: 4px;
+  margin-bottom: 9px;
+  font-size: 13px;
+  line-height: 18px;
+  color: #555555;
+  width: initial;
+}
+</style>
 
 <h1>Login</h1>
 

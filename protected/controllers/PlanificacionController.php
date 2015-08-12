@@ -26,23 +26,23 @@ class PlanificacionController extends Controller
 	 */
 	public function accessRules()
 	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura','SelectUnidad','Replanificaranual','Aprobaranual','Poraprobar','Replanificar','aprobar'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
+            return array(
+                array('allow',  // allow all users to perform 'index' and 'view' actions
+                        'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura','SelectUnidad','Replanificaranual','Aprobaranual','Poraprobar','Replanificar','aprobar'),
+                        'users'=>array('*'),
+                ),
+                array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                        'actions'=>array('create','update'),
+                        'users'=>array('@'),
+                ),
+                array('allow', // allow admin user to perform 'admin' and 'delete' actions
+                        'actions'=>array('admin','delete'),
+
+                ),
+                array('deny',  // deny all users
+                        'users'=>array('*'),
+                ),
+            );
 	}
 
 	/**
@@ -272,20 +272,20 @@ class PlanificacionController extends Controller
                 }
                 
                 if(!empty($_POST['Planificacion']['OFVIds'])){
-                        $ofvselected=$_POST['Planificacion']['OFVIds'];
-                        /*Utiliza tabulador y nueva línea como caracteres de tokenización 
-                        *ya que las id de evaluaciones vienen en una cadena de caracteres
-                        *separados por una coma*/
-                        $tok = strtok($ofvselected, ",");
-                        Yii::app()->db->createCommand()->delete('planificacion_tiene_OFV', 'id_planificacion=:id_planificacion', array(':id_planificacion'=>$id_planificacion));
-                    
-                        while ($tok !== false) {
-                            /*se pregunta si es numerico ya que los id de indicadores
-                            * seleccionados son tipo INT */
-                            Yii::app()->db->createCommand()->insert('planificacion_tiene_OFV',array('id_planificacion'=>$id_planificacion,'id_OFV'=>$tok));
-                            $tok = strtok(" ,");  
-                        }
+                    $ofvselected=$_POST['Planificacion']['OFVIds'];
+                    /*Utiliza tabulador y nueva línea como caracteres de tokenización 
+                    *ya que las id de evaluaciones vienen en una cadena de caracteres
+                    *separados por una coma*/
+                    $tok = strtok($ofvselected, ",");
+                    Yii::app()->db->createCommand()->delete('planificacion_tiene_OFV', 'id_planificacion=:id_planificacion', array(':id_planificacion'=>$id_planificacion));
+
+                    while ($tok !== false) {
+                        /*se pregunta si es numerico ya que los id de indicadores
+                        * seleccionados son tipo INT */
+                        Yii::app()->db->createCommand()->insert('planificacion_tiene_OFV',array('id_planificacion'=>$id_planificacion,'id_OFV'=>$tok));
+                        $tok = strtok(" ,");  
                     }
+                }
 
                 if(!empty($_POST['Planificacion']['AEIds'])){
                     $aeselected=$_POST['Planificacion']['AEIds'];
@@ -411,22 +411,22 @@ class PlanificacionController extends Controller
 	 */
 	public function actionIndex()
 	{       
-                $criteria=new CDbCriteria(array(
-                                /*
-                                'order'=>'status desc',
-                                'with'   => array('userToProject'=>array('alias'=>'user')),
-                                'condition'=>'status='.Project::STATUS_FINISHED.' OR user.id = 6',
-                                */
-                                'condition'=>'id_profesor="'.Yii::app()->user->id.'"',
-                        ));
-
-                $dataProvider=new CActiveDataProvider('Planificacion', array(
-                            'criteria'=>$criteria,
+            $criteria=new CDbCriteria(array(
+                            /*
+                            'order'=>'status desc',
+                            'with'   => array('userToProject'=>array('alias'=>'user')),
+                            'condition'=>'status='.Project::STATUS_FINISHED.' OR user.id = 6',
+                            */
+                            'condition'=>'id_profesor="'.Yii::app()->user->id.'"',
                     ));
-		//$dataProvider=new CActiveDataProvider('Planificacion');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+
+            $dataProvider=new CActiveDataProvider('Planificacion', array(
+                        'criteria'=>$criteria,
+                ));
+            //$dataProvider=new CActiveDataProvider('Planificacion');
+            $this->render('index',array(
+                    'dataProvider'=>$dataProvider,
+            ));
 	}
 
 	/**
@@ -434,14 +434,18 @@ class PlanificacionController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Planificacion('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Planificacion']))
-			$model->attributes=$_GET['Planificacion'];
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
+            $model=new Planificacion('search');
+            $model->unsetAttributes();  // clear any default values
+            if(isset($_GET['Planificacion']))
+                    $model->attributes=$_GET['Planificacion'];
+            if(Profesor::model()->exists('id_profesor='.'"'.Yii::app()->user->name.'"')){
+                $nombre_usuario=Usuario::model()->find("id_usuario='".Yii::app()->user->name."'")->nombre_usuario;
+                
+                $model->id_profesor=$nombre_usuario;
+            }
+            $this->render('admin',array(
+                    'model'=>$model,
+            ));
 	}
 
 	/**
@@ -453,10 +457,10 @@ class PlanificacionController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Planificacion::model()->findByPk($id);
-		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
-		return $model;
+            $model=Planificacion::model()->findByPk($id);
+            if($model===null)
+                    throw new CHttpException(404,'The requested page does not exist.');
+            return $model;
 	}
 
 	/**
@@ -465,11 +469,11 @@ class PlanificacionController extends Controller
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='planificacion-form')
-		{
-			echo CActiveForm::validate($model);
-			Yii::app()->end();
-		}
+            if(isset($_POST['ajax']) && $_POST['ajax']==='planificacion-form')
+            {
+                    echo CActiveForm::validate($model);
+                    Yii::app()->end();
+            }
 	}
         
         public function loadjscss()
@@ -493,67 +497,88 @@ class PlanificacionController extends Controller
 	//Se debe agregar m�todo en accessRules para poder ejecutar
 	public function actionSelectGrado(){
 
-		//array de tipo int perteneciente a clave primaria
-		$data=Grado::model()->findAll('id_nivel=:id_nivel',array(':id_nivel'=>(int) $_POST['id_nivel']));
+            //array de tipo int perteneciente a clave primaria
+            $data=Grado::model()->findAll('id_nivel=:id_nivel',array(':id_nivel'=>(int) $_POST['id_nivel']));
 
-		$data=CHtml::listData($data,'id_grado','nombre_grado');
+            $data=CHtml::listData($data,'id_grado','nombre_grado');
 
-		echo "<option value=''>Seleccione Grado</option>";
-		foreach ($data as $value=>$nombregrado)
-		echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombregrado),true);
+            echo "<option value=''>Seleccione Grado</option>";
+            foreach ($data as $value=>$nombregrado)
+            echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombregrado),true);
 
 
 	}
 	//Metodo para seleccionar curso y cargar en el dropdownlist anidado.
 	//Se debe agregar método en accessRules para poder ejecutar
 	public function actionSelectCurso(){
-		//array de tipo string perteneciente a clave primaria
-		$data=Curso::model()->findAll('id_grado=:id_grado',array(':id_grado'=>(string) $_POST['id_grado']));
-		$data=CHtml::listData($data,'id_curso','nombre_curso');
+            //array de tipo string perteneciente a clave primaria
+            $data=Curso::model()->findAll('id_grado=:id_grado',array(':id_grado'=>(string) $_POST['id_grado']));
+            $data=CHtml::listData($data,'id_curso','nombre_curso');
 
-		echo "<option value=''>Seleccione Curso</option>";
-		foreach ($data as $value=>$nombrecurso)
-		echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombrecurso),true);
-		
+            echo "<option value=''>Seleccione Curso</option>";
+            foreach ($data as $value=>$nombrecurso)
+            echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombrecurso),true);
 	}
-	
+	/*
 	public function actionSelectAsignatura(){		
-		$id_curso=$_POST['id_curso'];
-                $grado=Curso::model()->findbyPk($id_curso)->id_grado;
-                $data=Asignatura::model()->findAll('id_grado='.'"'.$grado.'"');
+            $id_curso=$_POST['id_curso'];
+            $grado=Curso::model()->findbyPk($id_curso)->id_grado;
+            $data=Asignatura::model()->findAll('id_grado='.'"'.$grado.'"');
 
-                $data=CHtml::listData($data,'id_asignatura','nombre_asignatura');
+            $data=CHtml::listData($data,'id_asignatura','nombre_asignatura');
 
-                echo "<option value=''>Seleccione Asignatura</option>";
-                foreach ($data as $value=>$nombreasig)
-                echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
+            echo "<option value=''>Seleccione Asignatura</option>";
+            foreach ($data as $value=>$nombreasig)
+            echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
         }
-        
+         * 
+         */
+        public function actionSelectAsignatura(){		
+            $id_curso=$_POST['id_curso'];
+            $grado=Curso::model()->findbyPk($id_curso)->id_grado;
+            
+            $asignatura_profesor = Yii::app()->db->createCommand("CALL asignatura_profesor('".Yii::app()->user->name."','".$grado."')")->setFetchMode(PDO::FETCH_OBJ)->queryAll();               
+            
+            $array_id=array();
+            
+            foreach($asignatura_profesor as $row){
+                array_push($array_id, $row->id_asignatura);
+            }
+            $data = Asignatura::model()->findAllByAttributes(array("id_asignatura"=>$array_id));
+
+            
+            $data=CHtml::listData($data,'id_asignatura','nombre_asignatura');
+
+            echo "<option value=''>Seleccione Asignatura</option>";
+            foreach ($data as $value=>$nombreasig)
+            echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombreasig),true);
+        }
+                
         public function actionSelectUnidad(){		
-		$id_asignatura=(string)$_POST['id_asignatura'];
-                
-                $grado= Asignatura::model()->findbyPk($id_asignatura)->id_grado;
-                $total_unidades=0;
-                
-                if($grado=='1B'||$grado=='2B'||$grado=='3B'||$grado=='4B'||$grado=='5B'||$grado=='6B'){
-                    $total_unidades=Yii::app()->db->createCommand("SELECT total_unidades_c1("."'".$id_asignatura."'".")")->queryScalar();    
-                }
-                elseif ($grado=='7B'||$grado=='8B'||$grado=='1M'||$grado=='2M'||$grado=='3M'||$grado=='4M') {
-                    $total_unidades=Yii::app()->db->createCommand("SELECT total_unidades_c2("."'".$id_asignatura."'".")")->queryScalar();    
-                }
-                
-                
-                $array_id=array();
-                for($i=1;$i<=$total_unidades;$i++){
-                    array_push($array_id, $i);                   
-                }                
-                $result = Unidad::model()->findAllByAttributes(array("id_unidad"=>$array_id));
-                
-                $data=CHtml::listData($result,'id_unidad','nombre_unidad');
-		
-		echo "<option value=''>Seleccionar Todas</option>";
-		foreach ($data as $value=>$nombre_unidad)
-		echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombre_unidad),true);
+            $id_asignatura=(string)$_POST['id_asignatura'];
+
+            $grado= Asignatura::model()->findbyPk($id_asignatura)->id_grado;
+            $total_unidades=0;
+
+            if($grado=='1B'||$grado=='2B'||$grado=='3B'||$grado=='4B'||$grado=='5B'||$grado=='6B'){
+                $total_unidades=Yii::app()->db->createCommand("SELECT total_unidades_c1("."'".$id_asignatura."'".")")->queryScalar();    
+            }
+            elseif ($grado=='7B'||$grado=='8B'||$grado=='1M'||$grado=='2M'||$grado=='3M'||$grado=='4M') {
+                $total_unidades=Yii::app()->db->createCommand("SELECT total_unidades_c2("."'".$id_asignatura."'".")")->queryScalar();    
+            }
+
+
+            $array_id=array();
+            for($i=1;$i<=$total_unidades;$i++){
+                array_push($array_id, $i);                   
+            }                
+            $result = Unidad::model()->findAllByAttributes(array("id_unidad"=>$array_id));
+
+            $data=CHtml::listData($result,'id_unidad','nombre_unidad');
+
+            echo "<option value=''>Seleccionar Todas</option>";
+            foreach ($data as $value=>$nombre_unidad)
+            echo CHtml::tag('option', array('value'=>$value),CHtml::encode($nombre_unidad),true);
 	}
         
         public function actionAprobaranual($id){

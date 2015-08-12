@@ -48,7 +48,7 @@
             
             //Dropdown Asignatura
             echo '<br><br><span class="required">*</span>Asignatura<p></p>';
-            echo $form->dropDownList($model,'id_asignatura' ,CHtml::listData(Asignatura::model()->findAll(),'id_asignatura','nombre_asignatura'),
+            echo $form->dropDownList($model,'id_asignatura' ,array(),
             array(
             'prompt'=>'Seleccione Asignatura',
             'ajax'=>array(

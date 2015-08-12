@@ -45,6 +45,18 @@
     ?>
     <td width="69" bordercolor="#000000"><strong>Prom</strong></td>
   </tr>
+<style type="text/css">
+  .uneditable-input {
+  display: inline-block;
+  height: 28px;
+  padding: 4px;
+  margin-bottom: 9px;
+  font-size: 13px;
+  line-height: 18px;
+  color: #555555;
+  width: initial;
+}
+</style>
   <?php 
   
   foreach ($alumnos as $row){
@@ -62,25 +74,12 @@
                 $nota=$calificaciones->nota;
             }
             
-            echo '<td bordercolor="#000000">'
+           echo '<td bordercolor="#000000">'
             . '<input type="text" size="2" maxlength="3" name="'.$row->id_usuario.",".$filas->id_evaluacion.'"'
             . 'value="'.$nota.'"></input></td>';                     
            
         }
        
-       /*
-         $notas= Yii::app()->db->createCommand("CALL calificaciones_alumno("
-                ."'".$row->id_usuario."',"."'".$asignatura->id_asignatura."')"
-                )->setFetchMode(PDO::FETCH_OBJ)->queryAll(); 
-         foreach ($notas as $filas){
-             echo '<td bordercolor="#000000">'
-             . '<input type="text" size="1" maxlength="3" name="'.$row->id_usuario.",".$filas->id_evaluacion.'"'
-             . 'value="'.$filas->nota.'"></input></td>';
-          
-         }
-         
-        * 
-        */
         $promedio=Yii::app()->db->createCommand("SELECT promedio_asignatura_alumno("
                 ."'".$row->id_usuario."',"."'".$asignatura->id_asignatura."')"                
                 )->queryScalar();  

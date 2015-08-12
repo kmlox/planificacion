@@ -89,7 +89,7 @@
 	<?php $this->widget('booster.widgets.TbButton', array(
 		'buttonType'=>'submit',
 		'context'=>'primary',
-		'label'=>'Crear Informe',
+		'label'=>'Ir a Libro de Clases',
 	)); 
         echo CHtml::endForm();  
         ?>        

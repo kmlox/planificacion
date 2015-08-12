@@ -6,8 +6,9 @@
         'enctype' => 'multipart/form-data')
 )); ?>
 
-<p class="note">Los datos con <span class="required">*</span> son requeridos</p>
-<?php echo $form->errorSummary($model); ?>
+<p class="note">Los datos con <span class="required">*</span> son
+requeridos</p>
+
 <div class="row">
 
 		<?php echo CHtml::dropDownList('id_nivel','',CHtml::ListData(Nivel::model()->findAll(),'id_nivel','nombre_nivel'),
@@ -37,38 +38,27 @@
 		);
 		?>
 
-		<?php 
-                echo $form->error($model,'id_curso');
-                echo $form->dropDownList($model,'id_curso', array(),
+		<?php echo $form->dropDownList($model, 'id_curso', 
+		CHtml::listData(Curso::model()->findAll(), 'id_curso','nombre_curso'),
 		array('prompt' => 'Seleccione Curso', 
 		)); 
- ?>
-	
+                ?>
+    
+                <?php echo $form->hiddenField($model,'id_alumno',array('type'=>"hidden",'value'=>$id_alumno)); ?>
+
+ 
+	<?php echo $form->error($model,'id_curso'); ?>
+
 	
 </div>
 
-<div class="row"><?php
-$this->widget('CMultiFileUpload', array(
-     	'model'=>$model,
-		'name'=>'Alumno',
-     	'attribute'=>'Alumno',
-     	'accept'=>'xlsx',
-     	'options'=>array(),
-     	'denied'=>'Archivo no soportado',
-     	'max'=>1, // max 1 files  
-  		'duplicate'=>'Archivo duplicado',
-));
-?></div>
-<br>
-<div>
-    <A HREF=<?php echo '../../plantillas/plantilla_alumnos.xlsx';?>>Descargar formato de planilla Excel</A>
-</div>
 <div class="form-actions">
 	<?php $this->widget('booster.widgets.TbButton', array(
 			'buttonType'=>'submit',
 			'context'=>'primary',
-			'label'=>$model->isNewRecord ? 'Importar' : 'Actualizar',
+			'label'=>$model->isNewRecord ? 'Guardar Cambios' : 'Actualizar',
 		)); ?>
 </div>
+
 
 <?php $this->endWidget(); ?>

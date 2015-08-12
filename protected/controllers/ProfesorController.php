@@ -37,7 +37,7 @@ class ProfesorController extends Controller
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+				'roles'=>array('admin'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -62,23 +62,58 @@ class ProfesorController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Profesor;
+            ProfesorController::loadjscss();
+            $model=new Profesor;
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+            // Uncomment the following line if AJAX validation is needed
+            // $this->performAjaxValidation($model);
 
-		if(isset($_POST['Profesor']))
-		{
-			$model->attributes=$_POST['Profesor'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id_profesor));
-		}
+            if(isset($_POST['Profesor']))
+            {
+                $model->attributes=$_POST['Profesor'];
+                if($model->save()){
+                    if(!empty($_POST['Profesor']['Asignaturas'])){
+                        $id_profesor=$model->id_profesor;
+                        $selected=$_POST['Profesor']['Asignaturas'];
+                        /*Utiliza tabulador y nueva línea como caracteres de tokenización 
+                        *ya que las id de evaluaciones vienen en una cadena de caracteres
+                        *separados por una coma*/
+                        $tok = strtok($selected, ",");
+                        while ($tok !== false) {
+                            /*se pregunta si es numerico ya que los id de indicadores
+                            * seleccionados son tipo INT */
+                            if(Asignatura::model()->exists("id_asignatura='".$tok."'")){
+                                Yii::app()->db->createCommand()->insert('profesor_tiene_asignatura',array('id_profesor'=>$id_profesor,'id_asignatura'=>$tok));
+                            }
+                            $tok = strtok(" ,");
+                        }
+                    }
+                    $this->redirect(array('usuario/view?id='.$model->id_profesor));
+                }
+            }
 
-		$this->render('create',array(
-			'model'=>$model,
-		));
+            $this->render('create',array(
+                    'model'=>$model,
+            ));
 	}
-
+        
+         public function loadjscss()
+        {            
+            //Direccion donde se encuentra .js y .css
+            $baseUrl = Yii::app()->baseUrl; 
+            //Javascript para ejecutar extension de indicadores
+            $cs = Yii::app()->getClientScript();
+            //comentado ya que utiliza jquery de carpeta asset generado por bootstrap
+            //$cs->registerScriptFile($baseUrl.'/js/jquery.js');
+            $cs->registerScriptFile($baseUrl.'/js/jquery-ui.js');
+            $cs->registerScriptFile($baseUrl.'/js/jquery.fancytree.js');
+            $cs->registerScriptFile($baseUrl.'/js/jquery-ui.min.js');
+            $cs->registerScriptFile($baseUrl.'/js/prettify.js');
+            //Cascading Style Sheets para ejecutar extension de indicadores
+            $cs->registerCssFile($baseUrl.'/css/prettify.css');
+            $cs->registerCssFile($baseUrl.'/css/sample.css');
+            $cs->registerCssFile($baseUrl.'/css/ui.fancytree.css');
+        }
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
@@ -86,21 +121,41 @@ class ProfesorController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['Profesor']))
-		{
-			$model->attributes=$_POST['Profesor'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id_profesor));
-		}
-
-		$this->render('update',array(
-			'model'=>$model,
-		));
+            ProfesorController::loadjscss();
+            $model=Profesor::model()->findbyPk($id);
+        
+            if(isset($_POST['Profesor']))
+            {
+                $model->attributes=$_POST['Profesor'];
+                $concatenar='';
+                if(!empty($_POST['Profesor']['Asignaturas'])){
+                    $selected=$_POST['Profesor']['Asignaturas'];
+                    /*Utiliza tabulador y nueva línea como caracteres de tokenización 
+                    *ya que las id de evaluaciones vienen en una cadena de caracteres
+                    *separados por una coma*/
+                    $tok = strtok($selected, ",");
+                    $concatenar=$tok." ";
+                    Yii::app()->db->createCommand()->delete('profesor_tiene_asignatura', 'id_profesor=:id_profesor', array(':id_profesor'=>$id));
+                    while ($tok !== false) {
+                        if(Asignatura::model()->exists("id_asignatura='".$tok."'")){
+                            Yii::app()->db->createCommand()->insert('profesor_tiene_asignatura',array('id_profesor'=>$id,'id_asignatura'=>$tok));
+                        }
+                        $tok = strtok(" ,");
+                    }
+                }
+                    
+            // if($model->save())
+            $this->redirect(array('usuario/view?id='.$id));
+              
+            }
+            elseif($model==NULL){
+                $this->redirect(array('index'));
+            }     
+            else{ 
+                $this->render('update',array(
+                'model'=>$model,
+                ));            
+            }            
 	}
 
 	/**
