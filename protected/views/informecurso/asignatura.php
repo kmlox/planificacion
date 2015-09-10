@@ -40,6 +40,15 @@ $(function () {
             //x: -20
         },
         xAxis: {
+            title: {
+                text: 'Nota',
+               // max:2,
+                //min:0,
+                //range:10,
+                floor: 0,
+                ceiling: 50,
+                
+            },
             categories: 
             <?php echo json_encode($array_notas);?>
             
@@ -48,7 +57,7 @@ $(function () {
         yAxis: {
             title: {
                 text: 'Cantidad de alumnos',
-               // max:2,
+                //max:2,
                 //min:0,
                 //range:10,
                 floor: 0,

@@ -23,30 +23,26 @@ return array(
 * This method is used by the 'accessControl' filter.
 * @return array access control rules
 */
-public function accessRules()
-{
-return array(
-array('allow',  // allow all users to perform 'index' and 'view' actions
-'actions'=>array('view'),
-'users'=>array('@'),
-),
-    array('allow',  // allow all users to perform 'index' and 'view' actions
-'actions'=>array('index','informe'),
-'roles'=>array('alumno'),
-),
-array('allow', // allow authenticated user to perform 'create' and 'update' actions
-'actions'=>array('create','update'),
-'users'=>array('@'),
-),
-array('allow', // allow admin user to perform 'admin' and 'delete' actions
-'actions'=>array('admin','delete'),
-'roles'=>array('admin'),
-),
-array('deny',  // deny all users
-'users'=>array('*'),
-),
-);
-}
+    public function accessRules()
+    {
+        return array(
+            array('allow',  // allow all users to perform 'index' and 'view' actions
+            'actions'=>array('index','informe'),
+            "roles"=>array('alumno'),
+            ),
+            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+            'actions'=>array('create','update'),
+            'users'=>array('@'),
+            ),
+            array('allow', // allow admin user to perform 'admin' and 'delete' actions
+            'actions'=>array('view','admin','delete'),
+            'roles'=>array('admin'),
+            ),
+            array('deny',  // deny all users
+            'users'=>array('*'),
+            ),
+        );
+    }
 
 /**
 * Displays a particular model.
@@ -60,7 +56,8 @@ $this->render('view',array(
 }
 
  public function actionInforme()
-    {   
+    {  
+        AlumnoController::loadjscss();
         $id_asignatura=$_POST['id_asignatura'];
         $nombre_asignatura=  Asignatura::model()->findbyPk($id_asignatura)->nombre_asignatura;
         
@@ -86,6 +83,18 @@ $this->render('view',array(
             'id_alumno'=>$id_usuario,
         ));
     }
+    public function loadjscss()
+        {            
+            //Direccion donde se encuentra .js y .css
+            $baseUrl = Yii::app()->baseUrl; 
+            //Javascript para ejecutar extension de indicadores
+            $cs = Yii::app()->getClientScript();
+            //comentado ya que utiliza jquery de carpeta asset generado por bootstrap
+            //$cs->registerScriptFile($baseUrl.'/js/jquery.js');
+            $cs->registerScriptFile($baseUrl.'/js/highcharts.js');
+            $cs->registerScriptFile($baseUrl.'/js/exporting.js');
+            
+        }
 
 
     /**

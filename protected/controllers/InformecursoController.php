@@ -56,7 +56,8 @@ $this->render('view',array(
 }
 
  public function actionAsignatura()
-    {   
+    {
+        InformecursoController::loadjscss();
         $id_asignatura=$_POST['id_asignatura'];
         $id_evaluacion=$_POST['id_evaluacion'];
         
@@ -83,6 +84,19 @@ $this->render('view',array(
             'nombre_asignatura'=>$nombre_asignatura,
         ));
     }
+    
+        public function loadjscss()
+        {            
+            //Direccion donde se encuentra .js y .css
+            $baseUrl = Yii::app()->baseUrl; 
+            //Javascript para ejecutar extension de indicadores
+            $cs = Yii::app()->getClientScript();
+            //comentado ya que utiliza jquery de carpeta asset generado por bootstrap
+            //$cs->registerScriptFile($baseUrl.'/js/jquery.js');
+            $cs->registerScriptFile($baseUrl.'/js/highcharts.js');
+            $cs->registerScriptFile($baseUrl.'/js/exporting.js');
+            
+        }
 
 /**
 * Creates a new model.

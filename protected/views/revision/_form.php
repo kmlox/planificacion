@@ -10,12 +10,15 @@ if($exists==FALSE){
     echo '<div class="alert alert-danger" role="alert">No existe un Registro de Avance en esta planificación</div>';
 }
 else{
-    $logro=Avance::model()->find('id_planificacion='.$id)->logrado;
+    $avance=Avance::model()->find('id_planificacion='.$id);
+    $logro=$avance->logrado;
     if((int)$logro<100){
-        echo '<div class="alert alert-warning" role="alert">El Registro de Avance realizado por el profesor es del : <strong>'.$logro.'%</strong></div>';
+        echo '<div class="alert alert-warning" role="alert">El Registro de Avance realizado por el profesor es del : <strong>'.$logro.'%</strong>';
+        echo '<p>Comentario: '.$avance->comentario.'</p></div>';
     }
     else{
-        echo '<div class="alert alert-success" role="alert">El Registro de Avance realizado por el profesor es del : <strong>'.$logro.'%</strong></div>';
+        echo '<div class="alert alert-success" role="alert">El Registro de Avance realizado por el profesor es del : <strong>'.$logro.'%</strong>';
+         echo '<p>Comentario: '.$avance->comentario.'</p></div>';
     }
 }
 

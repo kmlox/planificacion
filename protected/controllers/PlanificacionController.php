@@ -29,16 +29,12 @@ class PlanificacionController extends Controller
             return array(
                 array('allow',  // allow all users to perform 'index' and 'view' actions
                         'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura','SelectUnidad','Replanificaranual','Aprobaranual','Poraprobar','Replanificar','aprobar'),
-                        'users'=>array('*'),
+                        'roles'=>array('profesor','directivo'),
                 ),
                 array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                        'actions'=>array('create','update'),
-                        'users'=>array('@'),
-                ),
-                array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                        'actions'=>array('admin','delete'),
-
-                ),
+                        'actions'=>array('create','update','admin','delete'),
+                        'roles'=>array('profesor','directivo'),
+                ),                
                 array('deny',  // deny all users
                         'users'=>array('*'),
                 ),
@@ -51,9 +47,26 @@ class PlanificacionController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
+            $planificacion=Planificacion::model()->findbyPK($id);
+            $es_profesor=Usuario::model()->exists("id_usuario="."'".Yii::app()->user->name."' and "."rol='profesor'");
+            $es_utp=Usuario::model()->exists("id_usuario="."'".Yii::app()->user->name."' and "."rol='directivo'");
+
+            if($es_profesor){
+                if($planificacion!=null&&$planificacion->id_profesor==Yii::app()->user->name){
+                    $this->render('view',array(
+                            'model'=>$this->loadModel($id),
+                    ));
+                }
+                else{
+                    $mensaje = "Error no se pueden cargar planificaciones de otro docente";
+                    echo "<script>alert('$mensaje')</script>";  
+                }            
+            } 
+            elseif($es_utp){
+                $this->render('view',array(
+                            'model'=>$this->loadModel($id),
+                    ));
+            }
 	}
 
 	/**

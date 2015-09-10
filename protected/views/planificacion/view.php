@@ -16,6 +16,7 @@ if($model->estado=='Borrador'&& $es_profesor){
     array('label'=>'Modificar Planificacion','url'=>array('update','id'=>$model->id_planificacion)),
     array('label'=>'Eliminar Planificacion','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id_planificacion),'confirm'=>'¿Esta ud seguro(a) que desea eliminar esta planificación?')),
     array('label'=>'Administrar Planificaciones','url'=>array('admin')),
+    array('label'=>'Portal Profesor','url'=>array('/portal/profesor')),
     );
 }
 elseif ($model->estado!='Borrador'&&$es_profesor){
@@ -23,6 +24,7 @@ elseif ($model->estado!='Borrador'&&$es_profesor){
     array('label'=>'Lista de Planificaciones','url'=>array('index')),
     array('label'=>'Crear Planificacion','url'=>array('/crear')),
     array('label'=>'Administrar Planificaciones','url'=>array('admin')),
+    array('label'=>'Portal Profesor','url'=>array('/portal/profesor')),
     );
 }
 elseif ($es_utp || $es_admin) {

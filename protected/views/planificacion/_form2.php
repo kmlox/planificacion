@@ -180,12 +180,12 @@
             //se consulta si se seleccionó alguna unidad previamente en sección crear planificación
             //y si el formulario es para creación, de otro modo se cargan todos los OA
             if($model->id_planificacion==NULL&&$id_unidad!=null){
-                $ofvs = Yii::app()->db->createCommand("CALL filtro_unidad(".$id_unidad.',"'.$id_asignatura.'"'.")")->setFetchMode(PDO::FETCH_OBJ)->queryAll();               
+                $ofvs = Yii::app()->db->createCommand("CALL filtro_unidad_OFV('".$id_asignatura."',".$id_unidad.",'".Yii::app()->user->name."'".")")->setFetchMode(PDO::FETCH_OBJ)->queryAll();               
 
                 $array_id=array();
-
-                foreach(ofvs as $row){
-                        array_push($array_id, $row->id_CMO);                   
+                
+                foreach($ofvs as $row){
+                    array_push($array_id, $row->id_OFV);                   
                 }
                 //Se cargan las OA correspondientes a la unidad seleccionada en sección crear planificación
                 $ofv = OFV::model()->findAllByAttributes(array("id_OFV"=>$array_id));
@@ -310,7 +310,7 @@
             //se consulta si se seleccionó alguna unidad previamente en sección crear planificación
             //y si el formulario es para creación, de otro modo se cargan todos los OA
             if($model->id_planificacion==NULL&&$id_unidad!=null){
-                $aes = Yii::app()->db->createCommand("CALL filtro_unidad(".$id_unidad.',"'.$id_asignatura.'"'.")")->setFetchMode(PDO::FETCH_OBJ)->queryAll();               
+                $aes = Yii::app()->db->createCommand("CALL filtro_unidad_AE('".$id_asignatura."',".$id_unidad.",'".Yii::app()->user->name."'".")")->setFetchMode(PDO::FETCH_OBJ)->queryAll();               
 
                 $array_id=array();
 

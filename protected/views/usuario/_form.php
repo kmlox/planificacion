@@ -11,11 +11,11 @@
     echo $form->textFieldGroup($model,'id_usuario',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>10)))); 
     echo $form->passwordFieldGroup($model,'password',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>45)))); 
     echo $form->textFieldGroup($model,'nombre_usuario',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>100)))); 
-    echo $form->textFieldGroup($model,'email',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>45)))); 
+    echo $form->emailFieldGroup($model,'email',array('widgetOptions'=>array('htmlOptions'=>array('class'=>'span5','maxlength'=>45)))); 
 ?>
 <div class="form-group">
-         <label class="control-label">Rol</label>
-	<?php echo $form->Dropdownlist($model,'rol', array('profesor' => 'Profesor', 'alumno' => 'Alumno','admin' => 'Administrativo','directivo' => 'Directivo'),
+         <label class="control-label">Rol<span class="required">*</span></label>
+	<?php echo $form->Dropdownlist($model,'rol', array('profesor' => 'Profesor', 'alumno' => 'Alumno','admin' => 'Administrador','directivo' => 'Directivo'),
                 array(
                 'prompt'=>'Seleccione Rol',               
                 ));         

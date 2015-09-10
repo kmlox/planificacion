@@ -120,12 +120,23 @@ echo "<input type='hidden' name='id_grado' value='".$id_grado."' >";
     $this->widget(
         'booster.widgets.TbButton',
         array(
-            'label' => 'Actualizar Datos',
-            'context' => 'success',
+            'label' => 'Guardar Cambios',
+            'context' => 'primary',
             'buttonType'=>'submit',
+           // 'buttonName'=>'guardar',
              
         )
-);     
+    ); 
+    echo " ";
+    $this->widget(
+        'booster.widgets.TbButton',
+        array(
+            'label' => 'Actualizar Datos',
+            'context' => 'success',
+            'buttonType'=>'submit',             
+        )
+    ); 
+    
     echo CHtml::endForm();
 
 ?>

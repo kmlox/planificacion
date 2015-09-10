@@ -28,7 +28,7 @@ public $layout='//layouts/column2';
     return array(
     array('allow',  // allow all users to perform 'index' and 'view' actions
     'actions'=>array('index','view','SelectGrado','SelectCurso','SelectAsignatura','Libroclases','Actualizar','Guardar'),
-    'roles'=>array('profesor','admin'),
+    'roles'=>array('profesor'),
     ),
     array('deny',  // deny all users
     'users'=>array('*'),
@@ -226,6 +226,7 @@ public $layout='//layouts/column2';
             //echo "<p></p>";      
         }            
         
+        if(isset($_POST['yt1'])){
         echo "
         <form name='fr' action='libroclases' method='POST'>
         <input type='hidden' name='id_curso' value='".$_POST['id_curso']."' >
@@ -235,10 +236,72 @@ public $layout='//layouts/column2';
         <script type='text/javascript'>
         document.fr.submit();
         </script>";
+        }
+        else{
+            $this->redirect("../profesor");
+        }
         
     }
     
     public function actionGuardar(){
+        $id_alumnos = Alumno::model()->findAll('id_curso='.'"'.$_POST['id_curso'].'"');
+        
+        $array_id=array();
+        foreach($id_alumnos as $data){
+            array_push($array_id, $data->id_alumno);                  
+        }                
+        
+        $alumnos = Usuario::model()->findAllByAttributes(array("id_usuario"=>$array_id));
+        
+        $n_evaluaciones=Yii::app()->db->createCommand("SELECT n_evaluaciones("
+                ."'".$_POST['id_curso']."',"."'".$_POST['id_asignatura']."')"                
+                )->queryScalar();               
+        
+        $evaluaciones= Yii::app()->db->createCommand("CALL evaluaciones_curso("
+                ."'".$_POST['id_curso']."',"."'".$_POST['id_asignatura']."')"
+                )->setFetchMode(PDO::FETCH_OBJ)->queryAll();           
+        
+        foreach ($alumnos as $row){
+            foreach ($evaluaciones as $filas){
+            $calificaciones=Calificacion::model()->find("id_alumno="."'".$row->id_usuario."' and "
+                    . "id_evaluacion=".$filas->id_evaluacion);
+            
+                $notas=$_POST[$row->id_usuario.",".$filas->id_evaluacion];
+                
+                //Si nota del formulario es un número
+                if(is_numeric($notas)) { 
+                    //Si existe anteriormente una nota almacenada en la base de datos
+                    if($calificaciones!=NULL){
+                        //si las notas son distintas y dentro del rango
+                        if($calificaciones->nota!=$notas && $notas>=1 && $notas<=7){                                
+                            //se actualiza nota con la almacenada anteriormente
+                            Yii::app()->db->createCommand()
+                            ->update('calificacion', array('nota'=>$notas),
+                            'id_alumno=:id_alumno and id_evaluacion=:id_evaluacion',
+                            array(':id_alumno'=>$row->id_usuario,':id_evaluacion'=>$filas->id_evaluacion));
+                       } 
+                    }
+                    //Si no existe una nota almacenada en la base de datos
+                    else{ 
+                        //Se almacena nota en la base de datos
+                        Yii::app()->db->createCommand()
+                        ->insert('calificacion',
+                        array('id_alumno'=>$row->id_usuario,'id_evaluacion'=>$filas->id_evaluacion,'nota'=>$notas));
+                    }                    
+                }
+                //Si se borró nota en el formulario
+                elseif($notas==NULL){
+                    //Se elimina nota almacenada
+                    Yii::app()->db->createCommand()
+                    ->delete('calificacion','id_alumno=:id_alumno and id_evaluacion=:id_evaluacion',
+                    array(':id_alumno'=>$row->id_usuario,':id_evaluacion'=>$filas->id_evaluacion));                                
+                }
+                //echo $notas." ";
+            }
+            //echo "<p></p>";      
+        }            
+        
+        redirect("portal");
         
     }
     

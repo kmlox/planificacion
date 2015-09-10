@@ -1,7 +1,7 @@
 <?php
 $this->breadcrumbs=array(
-	'Avance'=>array('index'),
-	'Registro de Avance',
+	//'Avance'=>array('index'),
+	'Registro de Progreso y Avance',
 );
 /*
 $this->menu=array(
@@ -11,6 +11,6 @@ array('label'=>'Manage Avance','url'=>array('admin')),
  */
 ?>
 
-<h1>Registro de Avance</h1>
+<h1>Registro de Progreso y Avance</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model,'id'=>$id)); ?>

@@ -175,12 +175,21 @@ throw new CHttpException(400,'Invalid request. Please do not repeat this request
         $model=AE::model()->findbyPk($id);
         
         if($model->id_profesor!=NULL){
-            if($model->id_profesor==Yii::app()->user->name){
+            //Profesor sólo puede eliminar sus AE
+            if(Profesor::model()->exists('id_profesor='.'"'.Yii::app()->user->name.'"') 
+                    && $model->id_profesor==Yii::app()->user->name){            
                 Yii::app()->db->createCommand()->delete('AE', 'id_AE=:id', array(':id'=>$id));
+            }
+            else{
+                //administrador puede eliminar AE de profesores
+                 Yii::app()->db->createCommand()->delete('AE', 'id_AE=:id', array(':id'=>$id));
             }
         }
         else{
-            Yii::app()->db->createCommand()->delete('AE', 'id_AE=:id', array(':id'=>$id));
+            //Sólo administradores pueden eliminar AE del sistema
+            if(Usuario::model()->exists('id_usuario='.'"'.Yii::app()->user->name.'" and rol="admin"')) {
+                Yii::app()->db->createCommand()->delete('AE', 'id_AE=:id', array(':id'=>$id));
+            }
         }
         
         $this->redirect('index');        

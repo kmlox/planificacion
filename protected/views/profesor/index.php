@@ -1,6 +1,7 @@
 <?php
 $this->menu=array(
-array('label'=>'Crear Planificacion','url'=>array('/crear')),
+array('label'=>'Crear Planificación','url'=>array('/crear')),
+    array('label'=>'Portal Profesor','url'=>array('/portal/profesor')),
 );
 ?>
 <?php $collapse = $this->beginWidget('booster.widgets.TbCollapse'); ?>

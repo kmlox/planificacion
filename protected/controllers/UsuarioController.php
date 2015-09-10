@@ -33,7 +33,11 @@ class UsuarioController extends Controller
     array('allow',  // allow all users to perform 'index' and 'view' actions
     'actions'=>array('admin'),
     'roles'=>array('admin','directivo'),
-    ),   
+    ),
+    array('allow',  // allow all users to perform 'index' and 'view' actions
+    'actions'=>array('configuracion'),
+    'users'=>array('@'),
+    ),  
     array('deny',  // deny all users
     'users'=>array('*'),
     ),
@@ -66,7 +70,7 @@ class UsuarioController extends Controller
         {
             $model->attributes=$_POST['Usuario'];
             if($this->validaRut($model->id_usuario)){
-                if(!Usuario::model()->exists('id_usuario='.$model->id_usuario)){
+                if(Usuario::model()->exists('id_usuario='."'".$model->id_usuario."'")==false){
                     $model->password=sha1($model->password);
                     if($model->save()){
                         if($model->rol=='admin'||$model->rol=='directivo'){
@@ -296,6 +300,43 @@ class UsuarioController extends Controller
         { 
             return false; 
         } 
-    } 
-   
+    }
+    public function actionConfiguracion()
+    {
+        $model=new CambiarPassword();
+        $msg='';
+
+        if(isset($_POST["CambiarPassword"])){
+            $model->attributes=$_POST["CambiarPassword"];
+            if(!$model->validate()){
+               $msg='<div class="alert alert-danger" role="alert">Error en el formulario</div>'; 
+            }
+            else{
+                $pk=Yii::app()->user->name;
+                $password=Usuario::model()->find("id_usuario='".$pk."'")->password;
+                if(sha1($model->password)==$password){                    
+                    $result=Yii::app()->db->createCommand()
+                    ->update('usuario', array(
+                        'password'=>sha1($model->nuevo_password),
+                    ), 'id_usuario=:id', array(':id'=>$pk));
+                    if($result){                        
+                        $msg='<div class="alert alert-success" role="alert">El cambio de password se realizó exitosamente</div>';
+                    }
+                    else{
+                        $msg='<div class="alert alert-danger" role="alert">Error al cambiar password</div>';
+                    }
+                }
+                else{
+                    $msg='<div class="alert alert-danger" role="alert">Error de Password</div>';
+                }
+            }                    
+        }
+
+
+        $this->render('configuracion',array(
+            'model'=>$model,
+            'msg'=>$msg,
+        ));
+
+    }   
 }

@@ -122,6 +122,7 @@ $this->render('index',array(
 
     public function actionAsignatura()
     {   
+        InformealumnoController::loadjscss();
         $id_asignatura=$_POST['id_asignatura'];
         $nombre_asignatura=  Asignatura::model()->findbyPk($id_asignatura)->nombre_asignatura;
         
@@ -147,6 +148,18 @@ $this->render('index',array(
             'id_alumno'=>$id_usuario,
         ));
     }
+    public function loadjscss()
+        {            
+            //Direccion donde se encuentra .js y .css
+            $baseUrl = Yii::app()->baseUrl; 
+            //Javascript para ejecutar extension de indicadores
+            $cs = Yii::app()->getClientScript();
+            //comentado ya que utiliza jquery de carpeta asset generado por bootstrap
+            //$cs->registerScriptFile($baseUrl.'/js/jquery.js');
+            $cs->registerScriptFile($baseUrl.'/js/highcharts.js');
+            $cs->registerScriptFile($baseUrl.'/js/exporting.js');
+            
+        }
 
 //Metodo para seleccionar grado y cargar en el dropdownlist anidado.
 	//Se debe agregar método en accessRules para poder ejecutar

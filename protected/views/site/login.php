@@ -18,12 +18,19 @@ $this->breadcrumbs=array(
   line-height: 18px;
   color: #555555;
   width: initial;
+  float: none;  
+}
+form label {  
+  float: none;
+  width: 140px;
+  padding-top: 5px;
+  text-align: left;
 }
 </style>
 
 <h1>Login</h1>
 
-<p align="center">Por favor, ingrese sus datos de usuario y contraseña</p>
+<p class="bg-success" align="center">Por favor, ingrese sus datos de usuario y contraseña</p><br>
 
 <div class="form" align="center">
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -34,28 +41,30 @@ $this->breadcrumbs=array(
 	),
 )); ?>
 
-	<p class="note" align="center">Los datos con <span class="required">*</span> son requeridos</p>
+	<!--p class="note" align="center">Los datos con <span class="required">*</span> son requeridos</p-->
 
 	<div class="row" align="center">
-		<?php echo $form->labelEx($model,'username'); ?>
+		<?php echo "Usuario<br>"; //$form->labelEx($model,'username'); ?>
 		<?php echo $form->textField($model,'username'); ?>
 		<?php echo $form->error($model,'username'); ?>
 	</div>
 
 	<div class="row" align="center">
-		<?php echo $form->labelEx($model,'password'); ?>
+		<?php echo "Contraseña<br>"; //$form->labelEx($model,'password'); ?>
 		<?php echo $form->passwordField($model,'password'); ?>
 		<?php echo $form->error($model,'password'); ?>		
 	</div>
-
-	<div class="row rememberMe" align="center">
-		<?php echo $form->checkBox($model,'rememberMe'); ?>
-		<?php echo '<p align="left">&nbsp;Recordar contraseña</p>'; ?>
-		<?php echo $form->error($model,'rememberMe'); ?>
-	</div>
-
-	<div class="row buttons" align="center">
-		<?php echo CHtml::submitButton('Login'); ?>
+    <br><br>
+	<div align="center">
+        <?php  $this->widget(
+        'booster.widgets.TbButton',
+        array(
+            'label' => 'Iniciar Sesión',
+            'context' => 'primary',
+            'buttonType'=>'submit',
+            
+        )
+        );  ?>
 	</div>
 
 <?php $this->endWidget(); ?>

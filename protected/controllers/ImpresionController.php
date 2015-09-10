@@ -130,7 +130,7 @@ class ImpresionController extends Controller
             $nombre_asignatura= Asignatura::model()->findbyPk($asignatura)->nombre_asignatura;
             $estado=(string)$_POST['estado'];
             $this->layout="//layouts/main2";
-            $planificaciones=Planificacion::model()->findAll("id_profesor="."'".Yii::app()->user->name."'"." and "."tipo='Unidad'".
+            $planificaciones=Planificacion::model()->findAll("id_profesor="."'".$id_profesor."'"." and "."tipo='Unidad'".
                     " and "."id_curso="."'".$curso."'". " and "."id_asignatura="."'".$asignatura."'");
             /*
             //PDF

@@ -65,43 +65,61 @@ $model=new Avance;
 
 // Uncomment the following line if AJAX validation is needed
 // $this->performAjaxValidation($model);
+    $planificacion=Planificacion::model()->findbyPK($id);
+    if($planificacion!=null&&$planificacion->id_profesor==Yii::app()->user->name){
+        if(isset($_POST['Avance']))
+        {
+            $model->attributes=$_POST['Avance'];
+            if($model->save())
+                $this->redirect('../../profesor');
+        }
+    
 
-if(isset($_POST['Avance']))
-{
-$model->attributes=$_POST['Avance'];
-if($model->save())
-$this->redirect('../../profesor');
+        $this->render('create',array(
+        'model'=>$model,
+            'id'=>$id,
+        ));
+    }
+    else{
+        $mensaje = "Registro de Progreso y Avance no corresponde a su planificaciones";
+        echo "<script>alert('$mensaje')</script>";  
+    }
+
 }
 
-$this->render('create',array(
-'model'=>$model,
-    'id'=>$id,
-));
-}
+    /**
+    * Updates a particular model.
+    * If update is successful, the browser will be redirected to the 'view' page.
+    * @param integer $id the ID of the model to be updated
+    */
+    public function actionUpdate($id)
+    {
+        $model=$this->loadModel($id);
+        
+        // Uncomment the following line if AJAX validation is needed
+        // $this->performAjaxValidation($model);
+        $avance=Avance::model()->findbyPK($id);
+        if($avance!=null){
+            $planificacion=Planificacion::model()->findbyPK($avance->id_planificacion);
+            if($planificacion!=null&&$planificacion->id_profesor==Yii::app()->user->name){
+                if(isset($_POST['Avance']))
+                {
+                $model->attributes=$_POST['Avance'];
+                if($model->save())
+                $this->redirect('../../profesor');
+                }
 
-/**
-* Updates a particular model.
-* If update is successful, the browser will be redirected to the 'view' page.
-* @param integer $id the ID of the model to be updated
-*/
-public function actionUpdate($id)
-{
-$model=$this->loadModel($id);
-
-// Uncomment the following line if AJAX validation is needed
-// $this->performAjaxValidation($model);
-
-if(isset($_POST['Avance']))
-{
-$model->attributes=$_POST['Avance'];
-if($model->save())
-$this->redirect('../../profesor');
-}
-
-$this->render('update',array(
-'model'=>$model,
-));
-}
+                $this->render('update',array(
+                'model'=>$model,
+                ));
+            }
+            else{
+                $mensaje = "Registro de Progreso y Avance no corresponde a su planificaciones";
+                echo "<script>alert('$mensaje')</script>";  
+            }
+        }
+        
+    }
 
 /**
 * Deletes a particular model.

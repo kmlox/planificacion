@@ -74,7 +74,7 @@ class SiteController extends Controller
 					"Content-Type: text/plain; charset=UTF-8";
 
 				mail(Yii::app()->params['adminEmail'],$subject,$model->body,$headers);
-				Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
+				Yii::app()->user->setFlash('contact','Gracias por contactarnos. Le responderemos lo antes posible.');
 				$this->refresh();
 			}
 		}
@@ -113,6 +113,11 @@ class SiteController extends Controller
 	public function actionLogout()
 	{
 		Yii::app()->user->logout();
-		$this->redirect(Yii::app()->homeUrl);
+		$this->redirect("/planificacion");
+	}
+        public function actionAcerca()
+	{
+	    // display the login form
+            $this->render('acerca',array());
 	}
 }

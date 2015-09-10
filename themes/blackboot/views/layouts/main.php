@@ -20,42 +20,7 @@
 </head>
 
 <body>
-	<!--div class="navbar navbar-inverse navbar-fixed-top">
-		<div class="navbar-inner">
-			<div class="container-fluid">
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</a>
-				<a class="brand" href="#"><?php /* echo Yii::app()->name ?></a>
-				<div class="nav-collapse">
-					<?php $this->widget('zii.widgets.CMenu',array(
-						'htmlOptions' => array( 'class' => 'nav' ),
-						'activeCssClass'	=> 'active',
-						'items'=>array(
-							array('label'=>'Inicio', 'url'=>array('/site/index')),
-							//array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
-                                                        array('label'=>'Menú Profesor', 'url'=>array('/profesor')),
-                                                        array('label'=>'Planificaciones', 'url'=>array('/planificacion')),
-                                                        array('label'=>'Alumno', 'url'=>array('/alumno')),
-                                                        array('label'=>'Evaluaciones', 'url'=>array('/evaluacion')),
-                                                        array('label'=>'OA', 'url'=>array('/oA')),
-                                                        array('label'=>'Indicadores', 'url'=>array('/indicador')),
-                                                        array('label'=>'AE', 'url'=>array('/aE')),
-                                                        array('label'=>'CMO', 'url'=>array('/cMO')),
-                                                        array('label'=>'OFV', 'url'=>array('/oFV')),
-                                                        array('label'=>'Contacto', 'url'=>array('/site/contact')),
-							array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-							array('label'=>'Salir ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
-						),
-					)); */?>
-					
-				</div>
-			</div>
-		</div>
-	</div-->
-    
+	    
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">

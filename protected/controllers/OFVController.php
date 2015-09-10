@@ -137,12 +137,20 @@ return array(
         $model=OFV::model()->findbyPk($id);
         
         if($model->id_profesor!=NULL){
-            if($model->id_profesor==Yii::app()->user->name){
+            //Profesor sólo puede eliminar sus OFV
+            if(Profesor::model()->exists('id_profesor='.'"'.Yii::app()->user->name.'"') 
+                    && $model->id_profesor==Yii::app()->user->name){            
+                Yii::app()->db->createCommand()->delete('OFV', 'id_OFV=:id', array(':id'=>$id));
+            }
+            else{
                 Yii::app()->db->createCommand()->delete('OFV', 'id_OFV=:id', array(':id'=>$id));
             }
         }
         else{
-            Yii::app()->db->createCommand()->delete('OFV', 'id_OFV=:id', array(':id'=>$id));
+            //Sólo administradores pueden eliminar OFV del sistema
+            if(Usuario::model()->exists('id_usuario='.'"'.Yii::app()->user->name.'" and rol="admin"')) {
+                Yii::app()->db->createCommand()->delete('OFV', 'id_OFV=:id', array(':id'=>$id));
+            }
         }
         
         $this->redirect('index');     

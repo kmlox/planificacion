@@ -1,6 +1,6 @@
-<h1>Portal Alumnos</h1>
+<h1>Registro de Notas</h1>
 
-<h2>Mis notas</h2>
+<h2>Seleccione Asignatura</h2>
 <?php
 $alumno=Alumno::model()->findAll("id_alumno='".Yii::app()->user->name."'");
 $id_curso="";

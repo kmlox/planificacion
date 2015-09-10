@@ -141,7 +141,7 @@ div.errorMessage {
     padding: 8px 35px 8px 14px;
     width:auto;
     margin-bottom:10px; 
-    float:left; margin-left:20px;
+    margin-left:20px;
     border: 1px solid #EED3D7;
    -webkit-border-radius: 4px;
      -moz-border-radius: 4px;
@@ -200,6 +200,7 @@ input[type="color"],
   line-height: 18px;
   color: #555555;
   width: initial;
+  float: initial;
 }
 input,
 textarea {

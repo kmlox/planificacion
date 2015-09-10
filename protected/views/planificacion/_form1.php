@@ -212,7 +212,7 @@
 <!--------------------------------------------------------------------------------------------------------------------------------------------->
 <label class="control-label">Evaluación(es)</label>
     <?php
-        //Se cargan todas los OA correspondientes a la asignatura de todas las unidades
+        //Se cargan todas los Evalucion
         $evaluacion=  Evaluacion::model()->findAll("id_asignatura='".$id_asignatura."'"." and "."id_curso='".$id_curso."'"." and "."id_profesor='".Yii::app()->user->name."'");
 
         echo '<a href="#" id="btnSelectAll2">Seleccionar Todo</a>'
@@ -249,7 +249,7 @@
             }
 
         }
-       // echo $text2;
+        //echo $text;
     ?>
 
 <script type="text/javascript">

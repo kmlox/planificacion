@@ -1,6 +1,7 @@
 <?php
 $this->menu=array(
-array('label'=>'Seleccionar Profesor','url'=>array('seleccion')),
+array('label'=>'Seleccionar Profesor','url'=>array('/usuario/admin')),
+array('label'=>'Portal Directivo','url'=>array('/portal/directivo')),
 );
 ?>
 <?php $collapse = $this->beginWidget('booster.widgets.TbCollapse'); ?>

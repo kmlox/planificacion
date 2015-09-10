@@ -2,39 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Seleccion Informe</title>
+<title>Informe de Notas por Curso</title>
 <style type="text/css"></style></head>
 <body>
-
-<div align="center">
-  <table width="800" border="0">
-    <tr>
-      <th colspan="2" scope="col">&nbsp;</th>
-    </tr>
-    <tr>
-    </tr>
-    <tr>
-      <td colspan="2">
-	 
-	</td>
-    </tr>
-    <tr>
-      <td width="259">
+    <h1>Informe de Notas por Curso</h1>
         <?php
         echo CHtml::beginForm('informecurso/asignatura');
+        $this->menu=array(
+            array('label'=>'Lista de Planificaciones','url'=>array('planificacion/index')),
+            array('label'=>'Administrar Planificaciones','url'=>array('admin')),
+        );
         ?>
-        <td width="531">
-          <?php
-       $this->menu=array(
-array('label'=>'Lista de Planificaciones','url'=>array('planificacion/index')),
-array('label'=>'Administrar Planificaciones','url'=>array('admin')),
-);
-?>
                  
-    </tr>
-  </table>
-    
-    <div class="row">
+<div class="row">
 		<table>
   			<tr>
     			<td><span class="required">*</span>Nivel
